@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/styles/general.css">
+    <link rel="stylesheet" href="/styles/admin.css">
+</head>
+<body>
+    <%- include('partials/header',({"user":userName})); %>
+    <div class="main-container">
+        <% if(err == undefined){ %>
+            <h5 style="color:red; background-color: black;text-align: center;" id="err"><%= err %></h5>
+        <% } %>
+        
+        <div class="product-container">
+            <% for(key in product){ %>
+                        <%- include('partials/adminItem',({"item":product[key]})); %>
+                <%}%>
+        </div>
+    </div>
+    <div id="addNewProduct" onclick="newProductPage()">
+        <div id="vertical" class="buttonline"></div>
+        <div id="horizontal" class="buttonline"></div>
+    </div>
+</body>
+<script src="/javascript/adminDashboard.js" ></script>
+</html>

@@ -1,0 +1,50 @@
+<header class="flex-row js-bt ai-cn">
+    <div class="nav">
+        <div>
+            <a href="/"><img class="logo" src="/image/login/logo_steam.svg"></a>
+        </div>
+        <% if( user===undefined ) { %>
+        <div class="nav-btn-cluster">
+            <button id="login-btn" class="btn">Login</button>
+        </div>
+        <% }else if(user == 'admin'){ %>
+        <div class="flex-row nav-btn-cluster">
+            <button onclick="window.location.href='adminDashboard'" class="btn">AdmiDashBoard</button>
+            <button onclick="window.location.href='product'" class="btn">Product</button>
+            <button onclick="window.location.href='myCart'"  class="btn">Cart</button>
+            <button id="logout-btn" class="btn">Logout</button>
+        </div>
+        <%}else{%>
+        <div class="flex-row nav-btn-cluster">
+            <p style="margin-right: 20px;" class="dark-text"><%=user%></p>
+            <button onclick="window.location.href='product'" class="btn">Product</button>
+            <button onclick="window.location.href='myCart'" class="btn">Cart</button>
+            <button id="logout-btn" class="btn">Logout</button>
+        </div>
+        <%}%>
+    </div>
+</header>
+
+<script>
+var loginBtn = document.getElementById('login-btn');
+var logoutBtn = document.getElementById('logout-btn');
+
+if(logoutBtn==null){
+    loginBtn.addEventListener('click',loginFun);
+}else{
+    logoutBtn.addEventListener('click',logoutFun);
+}
+
+function loginFun(){
+    window.location.href = "/login";
+}
+
+function signupFun(){
+    window.location.href = "/signup";
+}
+
+function logoutFun(){
+    // console.log('test');
+    window.location.href = "/logout";
+}
+</script>

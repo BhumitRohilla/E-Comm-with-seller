@@ -1,0 +1,217 @@
+<style>
+    .container{
+        background-image: linear-gradient(to left, #3f4854,#444b56);
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        padding: 5px;
+        color: #9fa3a8;
+        box-sizing: border-box;
+        max-height: 110px;
+        font-size: 1.7vw;
+        box-shadow: 0px 0px 6px rgba(16, 16, 16, 0.665);
+        border-radius: 4px;
+    }
+    .img-container{
+        box-sizing: border-box;
+        width: 22%;
+        height: 100%;
+    }
+    .img{
+        box-sizing: border-box;
+        display: block;
+        width: 100%;
+        aspect-ratio: 12/6;
+    }
+    .text-container{
+        padding: 4px;
+    }
+    .svg-window{
+        width: 1.3vw;
+    }
+    .title{
+        font-family: malvo-font-thin;
+        font-weight: 300;
+        color: white;
+    }
+    .tag{
+        background-color: #545c66;
+        box-sizing: border-box;
+        padding: 2px;
+        font-size: 1.6vw;
+        border-radius: 4px;
+    }
+    .text-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+    }
+    .container-hover:hover{
+        transform: scale(1.1);
+        background-image: linear-gradient(to top,#32353b, #3b3e45);
+    }
+    .Positive{
+        color: rgb(15, 192, 15);
+    }
+    .Mixed{
+        color: yellow;
+    }
+    .Bad{
+        color: red;
+    }
+
+    .onPressed{
+        z-index: 400;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        position: fixed;
+        margin: auto auto;
+        overflow-y: scroll;
+        background-image: linear-gradient(to top,#32353b, #3b3e45);
+        max-width: 700px;
+        width: 90%;
+        height: 700px;
+        max-height: 500px;
+    }
+
+    @media only screen and (min-width: 908px) {
+        .container{
+            font-size: 15px;
+        }
+        .tag{
+            font-size: 15px;
+        }
+        .svg-window{
+            width: 12px;
+        }
+    }
+
+    .buyButton{
+        background-image: linear-gradient(to right,rgb(96, 212, 107) 50%,rgb(79, 197, 91));
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+    }
+
+    .buyButton:hover{
+        background-image: linear-gradient(to right,rgb(128, 233, 138) 50%,rgb(112, 221, 123));
+    }
+
+    .buyButton:active{
+    
+        background-image: linear-gradient(to right,rgb(96, 212, 107) 50%,rgb(79, 197, 91));
+        outline: 2px solid rgb(96, 212, 107) ;
+    }
+    @media only screen and (max-width: 500px) {
+        .container-hover:hover{
+            transform: scale(1);
+        }
+    }
+</style>
+
+<div class="container container-hover" id="<%= item.id %>" onclick="showDetails( '<%= item.id %>' )">
+    <div style="display: flex;height: fit-content;">
+        <div class="img-container">
+            <img class="img" src="/image/product/<%=item.img%>" alt="">
+        </div>
+        <div class="text-container">
+            <h3 class="title"><%= item.title %></h3>
+            <div>
+                <% item.tag.forEach((element)=>{ %>
+                <span class="tag"><%=  element %></span>
+                <% }); %>
+            </div>
+            <div style="display: flex; align-items: flex-end;gap: 3px">
+                <div> <%=item.date%></div>
+                <div>
+                    <svg class="svg-window" version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" class="SVGIcon_Button SVGIcon_WindowsLogo" width="100%" height="100%" viewBox="0 0 128 128" enable-background="new 0 0 128 128"><rect fill="#FFFFFF" width="60.834" height="60.835"></rect><rect x="67.165" fill="#FFFFFF" width="60.835" height="60.835"></rect><rect y="67.164" fill="#FFFFFF" width="60.834" height="60.836"></rect><rect x="67.165" y="67.164" fill="#FFFFFF" width="60.835" height="60.836"></rect></svg>
+                </div>
+            </div>
+            <div><span class='<%= item.status%>'> <%= item.status %> </span><span>| <%= item.userReviews %> User Reviews</span></div>
+        </div>
+    </div>
+    <div class="about-game" style="visibility: collapse;overflow: hidden;">
+        <p  ><%=item["about-game"]%></p>
+    </div>
+</div>
+
+
+<script >
+
+
+function showDetails(element){
+    
+    //GET number of product present in cart here element is id
+    let request = new XMLHttpRequest;
+    let quantitySpan = document.createElement('span');
+    
+    quantitySpan.classList.add('quantitySpan');
+    quantitySpan.innerText = 0;
+    
+    request.open("GET",`/getProductValue/${element}`);
+    request.send();
+    request.addEventListener('load',function(){
+        quantitySpan.innerText = request.response;
+    })
+    
+    
+    let blur = document.createElement('div');
+    blur.classList.add('blur-back');
+    document.body.appendChild(blur);
+    element = document.getElementById(element);
+    previousData = element.innerHTML;
+    console.log(element);
+    element.classList.add('onPressed');
+    element.classList.remove('container-hover');
+    element.setAttribute('onclick',`removeDetails('${element.id}')`);
+    document.body.style.overflow= "hidden";
+    let img = element.getElementsByClassName('img-container')[0];
+    console.log(img);
+    let data = element.getElementsByClassName('text-container')[0];
+    img.style.width = '50%';
+    let aboutGame = element.getElementsByClassName('about-game')[0];
+    aboutGame.style.visibility='visible';
+    let button = document.createElement('buttton');
+    button.innerText = "BUY";
+    button.classList.add('submit-btn')
+    button.classList.add('buyButton');
+    button.appendChild(quantitySpan);
+    button.addEventListener('click',function(evt){
+        evt.stopPropagation();
+        buy(element,quantitySpan);
+    });
+    element.appendChild(button);
+    console.log(button);
+}
+
+function buy(element,quantitySpan){
+    console.log(element.id);
+    let request = new XMLHttpRequest;
+    request.open("GET",`/buyProduct/${element.id}`);
+    request.send();
+    request.addEventListener('load',function(){
+        if(request.status == 201 ){
+            quantitySpan.innerText = parseInt(quantitySpan.innerText) + 1;
+        }
+        if(request.status == 204){
+            alert('Out of stocks');
+        }
+    })
+}
+
+function removeDetails(element){
+    console.log(element);
+    element = document.getElementById(element);
+    element.classList.add('container-hover');
+    element.classList.remove('onPressed');
+    element.setAttribute('onclick',`showDetails('${element.id}')`)
+    let blur = document.getElementsByClassName('blur-back')[0];
+    blur.remove();
+    document.body.style.overflow = "initial";
+    element.innerHTML = previousData;
+    
+}
+
+
+</script>

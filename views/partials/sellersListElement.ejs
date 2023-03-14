@@ -1,0 +1,7 @@
+
+<h1 class="seller-heading"><%= seller.userName %></h1>
+<div class="product-container">
+        <% seller.product.forEach( (item) =>{ %>
+            <%- include('./adminItem',({item}));%>
+        <% }) %>
+</div> 

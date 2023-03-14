@@ -14,8 +14,10 @@ const upload = multer({'dest':'public/image/product/'});
 const path = require('path');
 const {MongoClient} = require('mongodb');
 const {checkUser,getUser,insertUser,updateUser} = require('./func/userFunc');
-const {getProducts,getSingleProduct,decreaseOneStock,getAllProduct,addProduct,updateProduct,deleteSingleProduct} = require('./func/productFunc');
+const {getProducts,getSingleProduct,decreaseOneStock,getAllProduct,addProduct,updateProduct,deleteSingleProduct,getAllProductArrayForm} = require('./func/productFunc');
 const {getQuantity,addToCart,removeFromCart,getUserCart,getUserCartItem,deleteFromCart} = require('./func/cartFunction');
+const {getAllSellers,getOneSeller,createNewSeller,updateSeller} = require('./func/sellerFunc');
+const sendInvitationMail = require('./func/sendInvitationMail');
 
 app.set('view engine','ejs');
 app.use(express.static('public'));
@@ -491,26 +493,45 @@ app.route('/myCart')
 })
 
 
-
+// * Done upto Hear
 
 app.route('/adminDashboard')
 .get(adminAuth,async (req,res)=>{
+    // let err = req.session.err;
+    // if(err!=undefined){
+    //     delete req.session.err;
+    // }
+    // // TODO: Error Handling to be added;
+    // let allProduct;
+    // try{
+    //     allProduct = await getAllProduct(db);
+    // }
+    // catch(err){
+    //     res.statusCode = 404;
+    //     res.setHeader('Content-Type','text/plain');
+    //     res.send();
+    //     return ;
+    // }
+    // res.render('adminDashboard',{"userName":req.session.user.userName,"err":err,"product":allProduct});  
     let err = req.session.err;
-    if(err!=undefined){
+    if(err != undefined){
         delete req.session.err;
     }
-    // TODO: Error Handling to be added;
+    let sellers;
     let allProduct;
     try{
-        allProduct = await getAllProduct(db);
+        sellers = await getAllSellers(db);
+        allProduct = await getAllProductArrayForm(db);
     }
     catch(err){
         res.statusCode = 404;
         res.setHeader('Content-Type','text/plain');
         res.send();
-        return ;
     }
-    res.render('adminDashboard',{"userName":req.session.user.userName,"err":err,"product":allProduct});  
+
+    let commpleteList = getList(sellers,allProduct);
+
+    res.render('adminDashboard',{"userName":req.session.user.userName,"err":err,"sellers":commpleteList});
 })
 
 
@@ -648,6 +669,101 @@ app.route('/adminDashboard/updateProduct/:pid')
 });
 
 
+app.route('/newSeller/:key')
+.get(async (req,res)=>{
+    let {key} = req.params;
+    let sellerDetails;
+    try{
+        sellerDetails = await getOneSeller({'userCreateKey':key},db);
+        console.log(sellerDetails);
+    }
+    catch(err){
+        res.statusCode = 404;
+        res.send();
+        return ;
+    }
+    if(sellerDetails == null){
+        res.send(404);
+        return ;
+    }
+    res.render('newSeller',({'email':sellerDetails.email}));
+})
+.post(async (req,res)=>{
+    let {key} = req.params;
+    let {userName,name,password} = req.body;
+    let sellerDetails ;
+    try{
+        if(userName == "" || name == "" || password == "" ){
+            res.statusCode = 303;
+        }else{
+            let data = {userName,name,password};
+            sellerDetails = await getOneSeller({'userCreateKey':key},db);
+            if(sellerDetails == null){
+                res.statusCode = 404;
+            }else{
+                await updateSeller({'userCreateKey':key},data,db);
+                res.statusCode = 200;
+            }
+        }
+    }
+    catch(err){
+        console.log(err);
+        res.statusCode = 500;
+    }
+    res.setHeader('Content-Type','text/plain');
+    res.send();
+});
+
+
+
+
+
+
+
+
+
+app.route('/adminDashboard/newSeller')
+.get((req,res)=>{
+    res.render('newSeller');
+})
+.post(adminAuth,async (req,res)=>{
+    let {email} = req.body;
+    let sellerCheck;
+    try{
+        sellerCheck = await getOneSeller({email},db);
+    }
+    catch(err){
+        console.log(err);
+        res.statusCode = 500;
+        res.send();
+    }
+    if(sellerCheck != null){
+        res.statusCode = 409;
+        res.send();
+    }else{
+        try{
+            let userCreateKey = crypto.randomBytes(6).toString('hex');
+            sendInvitationMail(email,userCreateKey,async function(err){
+                if(!err){
+                    await createNewSeller(email,userCreateKey,db);
+                    res.statusCode = 200;
+                    res.send();
+                }else{
+                    res.statusCode = 403;
+                    res.send();
+                }
+            })
+            
+        }
+        catch(err){
+            console.log(err);
+            res.statusCode = 500;
+            res.send();
+        }
+    }
+    
+});
+
 
 
 
@@ -657,8 +773,6 @@ app.post('/deleteProduct',(req,res)=>{
         req.data+=chunk;
     })
     req.on('end',function(){
-        // console.log(req.data);
-        // deletElement(req.data)
         deleteSingleProduct(req.data,db)
         .then(function(){
             res.setHeader('Content-Type','text/plain');
@@ -674,16 +788,20 @@ app.post('/deleteProduct',(req,res)=>{
     })
 })
 
+
+
 app.get('*',(req,res)=>{
     res.sendStatus(404);
 })
+
+
 
 app.listen(process.env.PORT,process.env.HOSTNAME,function(){
     console.log(`server running at http://${process.env.HOSTNAME}:${process.env.PORT}`);
 });
 
 
-// * Done upto Hear
+
 
 // function deletElement(id){
 // //     return db.collection('product').deleteOne({id});
@@ -797,6 +915,23 @@ app.listen(process.env.PORT,process.env.HOSTNAME,function(){
 //     return cart.product[pid].quantity;
 // }
 
+
+function getList(sellers,products){
+    let result = {};
+    sellers.forEach((seller)=>{
+        let obj = {};
+        obj.sellerId = seller.id;
+        obj.userName = seller.userName;
+        obj.product = [];
+        result[obj.sellerId] = obj;
+    })
+
+    products.forEach((product)=>{
+        result[product.sellerId].product.push(product);
+    })
+
+    return result;
+}
 
 
 function checkProductValues(obj){

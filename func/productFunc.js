@@ -75,6 +75,9 @@ async function getAllProduct(db){
     return obj;
 }
 
+function getAllProductArrayForm(db){
+    return findAll(db,collection,{});
+}
 
 async function addProduct(obj,db){
     //TODO: Remove This Dependency;
@@ -102,4 +105,4 @@ function deleteSingleProduct(pid,db){
     return deleteOne(db,collection,{"id":pid});
 }
 
-module.exports = {getProducts,getSingleProduct,decreaseOneStock,increaseOneStock,getAllProduct,addProduct,updateProduct,deleteSingleProduct};
+module.exports = {getProducts,getSingleProduct,decreaseOneStock,increaseOneStock,getAllProduct,addProduct,updateProduct,deleteSingleProduct,getAllProductArrayForm};

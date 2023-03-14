@@ -53,7 +53,7 @@
 header{
     position: sticky;
     top: 0px;
-    z-index: 1000;
+    z-index: 2;
 }
 
 .flex-row{
@@ -195,7 +195,7 @@ header{
     width: 100vw;
     height: 100vh;
     filter: blur(100px);
-    z-index: 2;
+    z-index: 3;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
@@ -227,5 +227,4 @@ header{
     align-items: center;
 
 }
-
 

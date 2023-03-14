@@ -13,10 +13,11 @@ module.exports = function(email,subject,text,html,callback){
       sgMail
         .send(msg)
         .then(() => {
-          // console.log(msg)
+          console.log(msg)
           callback(undefined);
         })
         .catch((error) => {
+          console.log(error);
           callback(error);
         })
 }

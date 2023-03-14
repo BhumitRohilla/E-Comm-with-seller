@@ -14,17 +14,22 @@
         <% if(err == undefined){ %>
             <h5 style="color:red; background-color: black;text-align: center;" id="err"><%= err %></h5>
         <% } %>
-        
-        <div class="product-container">
-            <% for(key in product){ %>
-                        <%- include('partials/adminItem',({"item":product[key]})); %>
-                <%}%>
+        <div class="seller-container">
+            <%for(key in sellers){ %>
+                <%- include('partials/sellersListElement',({"seller":sellers[key]})) %>
+            <%}%>
         </div>
     </div>
-    <div id="addNewProduct" onclick="newProductPage()">
+    <div id="addNewSeller">
         <div id="vertical" class="buttonline"></div>
         <div id="horizontal" class="buttonline"></div>
     </div>
+    <!-- <div id="newSellerDiv">
+        <h2 class="seller-heading">Enter Seller Email</h2>
+        <input onclick="window.event.stopPropagation()" class="input-form" onkeydown="checkKey()" id="email" type="email" placeholder="Enter Seller Email" title="Seller Email">
+        <p id="err-msg">This Is Dummy Error</p>
+        <button class="submit-btn submit" id="seller-add-btn">Send Invite</button>
+    </div>  -->
 </body>
-<script src="/javascript/adminDashboard.js" ></script>
+<script src="/javascript/adminDashboard.js"  ></script>
 </html>

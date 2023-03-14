@@ -1,40 +1,132 @@
-var strWindowFeatures = "location=yes,height=700,width=1080,scrollbars=yes,status=yes";
-function newProductPage(){
-    //TODO : Remove This Hard Codded Address
-    window.open(window.location.toString()+"/addNewProduct/",'_black',strWindowFeatures);
+// var strWindowFeatures = "location=yes,height=700,width=1080,scrollbars=yes,status=yes";
+let newSellerBtn = document.getElementById('addNewSeller');
+let btnInside = '<div id="vertical" class="buttonline"></div><div id="horizontal" class="buttonline"></div>';
+newSellerBtn.addEventListener('click',newSellerPage);
+
+let emailInput ;
+let submitBtn;
+let openBtnInside='<h2 class="seller-heading">Enter Seller Email</h2><input onclick="window.event.stopPropagation()" class="input-form" onkeydown="checkKey()" id="email" pattern=".+@+." type="email" placeholder="Enter Seller Email" title="Seller Email"><p id="err-msg">This Is Dummy Error</p><button class="submit-btn submit" id="seller-add-btn">Send Invite</button>'
+let timeId = null;
+
+function newSellerPage(){
+    // window.open(window.location.href+'/newSeller/','_blank',strWindowFeatures);
+    newSellerBtn.setAttribute('id','newSellerDiv');
+    newSellerBtn.removeEventListener('click',newSellerPage);
+    newSellerBtn.addEventListener('click',closeDiv);
+    newSellerBtn.innerHTML= openBtnInside;
+    submitBtn = document.getElementById('seller-add-btn');
+    submitBtn.addEventListener('click',function(evt){
+        submit(evt);
+    })
+    emailInput = document.getElementById('email');
 }
 
-function updateElementFromAdmin(id){
-    window.open(window.location.toString()+`/updateProduct/${id}`,'_black',strWindowFeatures);
-
-}
-
-function deleteElementFromAdmin(id){
-    var callback=(request)=>{
-        switch(request.status){
-            case 200:{
-                window.location.reload();
-            }
-        }
+function submit(evt){
+    evt.stopPropagation();
+    let email = emailInput.value;
+    // console.log(email);
+    if(email == ''){
+        errorShow('Email Is Empty');
+        return ;
     }
 
-    createRequest('POST','/deleteProduct',id.toString(),callback);
-    
-}
 
-//TODO: LOWER-PRIORITY:- If Possible use import function to import request code.
-
-function createRequest(method,dest,data,callback){
     let request = new XMLHttpRequest;
-    request.open(method,dest);
-    request.setRequestHeader('Content-Type','text/plain');
-    request.send(data);
+    request.open('POST','/adminDashboard/newSeller');
+    request.setRequestHeader('Content-Type','application/JSON');
+    let data = {email};
+    request.send(JSON.stringify(data));
     request.addEventListener('load',function(){
-        callback(request);
-    })
+        switch(request.status){
+            case 409:{
+                errorShow("User Already Exists");
+                break;
+            }
+            case 200:{
+                errorShow("Mail Send");
+            }
+        }
+    });
 }
 
-const form = document.getElementById('new-product-form');
+
+function checkKey(){
+    let errDiv = document.getElementById('err-msg');
+    errDiv.style.visibility = 'hidden';
+    let key = window.event.key;
+    if(key == "Enter"){
+        let evt = new Event('click');
+        submitBtn.dispatchEvent(evt);
+    }
+}
+
+function closeDiv(){
+    newSellerBtn.innerHTML = btnInside;
+    newSellerBtn.setAttribute('id','addNewSeller');
+    newSellerBtn.removeEventListener('click',closeDiv);
+    newSellerBtn.addEventListener('click',newSellerPage);
+}
+
+function errorShow(errMsg){
+    let errDiv = document.getElementById('err-msg');
+    errDiv.innerText = errMsg;
+    errDiv.style.visibility = 'visible';
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// function newProductPage(){
+//     //TODO : Remove This Hard Codded Address
+//     window.open(window.location.toString()+"/addNewProduct/",'_black',strWindowFeatures);
+// }
+
+// function updateElementFromAdmin(id){
+//     window.open(window.location.toString()+`/updateProduct/${id}`,'_black',strWindowFeatures);
+
+// }
+
+// function deleteElementFromAdmin(id){
+//     var callback=(request)=>{
+//         switch(request.status){
+//             case 200:{
+//                 window.location.reload();
+//             }
+//         }
+//     }
+
+//     createRequest('POST','/deleteProduct',id.toString(),callback);
+    
+// }
+
+// //TODO: LOWER-PRIORITY:- If Possible use import function to import request code.
+
+// function createRequest(method,dest,data,callback){
+//     let request = new XMLHttpRequest;
+//     request.open(method,dest);
+//     request.setRequestHeader('Content-Type','text/plain');
+//     request.send(data);
+//     request.addEventListener('load',function(){
+//         callback(request);
+//     })
+// }
+
+// const form = document.getElementById('new-product-form');
 // const submitBtn = document.getElementById('submit-btn');
 
 // //form values
@@ -80,3 +172,5 @@ const form = document.getElementById('new-product-form');
 
 //     form.submit();
 // })
+
+

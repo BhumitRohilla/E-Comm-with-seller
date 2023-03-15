@@ -1,4 +1,4 @@
-const {findAll,findOne, insertOne,updateOne}  = require('./dbFunction');
+const {findAll,findOne, insertOne,updateOne, deleteOne}  = require('./dbFunction');
 const crypto  = require('crypto');
 
 const collection = 'sellers';
@@ -26,4 +26,10 @@ function updateSeller(filter,data,db){
     return updateOne(db,collection,filter,data);
 }
 
-module.exports = {getAllSellers,getOneSeller,createNewSeller,updateSeller};
+function deleteOneSeller(filter,db){
+    //db.collection().deleteOne((filter))
+    return deleteOne(db,collection,filter);
+}
+
+
+module.exports = {getAllSellers,getOneSeller,createNewSeller,updateSeller,deleteOneSeller};

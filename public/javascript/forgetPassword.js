@@ -8,7 +8,7 @@ button.addEventListener("click",function(){
     if(emailVal == ''){
         alert("Enter Email First");
     }
-    requestServerNoDelay("POST","/forgetPassword",{"email":emailVal},function(request){
+    requestServerNoDelay("POST",window.location.href,{"email":emailVal},function(request){
         if(request.status == 403){
             alert("Email does not exists");
         }else{

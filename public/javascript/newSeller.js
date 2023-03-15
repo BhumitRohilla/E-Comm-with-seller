@@ -27,6 +27,9 @@ submitBtn.addEventListener('click',function(){
         switch(request.status){
             case 200:{
                 errDisp("Account Created");
+                setTimeout(function(){
+                    window.location.href = '/';
+                },3000);
                 break;
             }
             case 303:{
@@ -34,6 +37,10 @@ submitBtn.addEventListener('click',function(){
             }
             case 409:{
                 errDisp("UserName Already Taken");
+                break;
+            }
+            case 404:{
+                errDisp("Invalid Link");
                 break;
             }
             case 500:{

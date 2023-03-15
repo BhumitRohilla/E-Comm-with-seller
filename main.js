@@ -16,9 +16,11 @@ const {MongoClient} = require('mongodb');
 const {checkUser,getUser,insertUser,updateUser} = require('./func/userFunc');
 const {getProducts,getSingleProduct,decreaseOneStock,getAllProduct,addProduct,updateProduct,deleteSingleProduct,getAllProductArrayForm} = require('./func/productFunc');
 const {getQuantity,addToCart,removeFromCart,getUserCart,getUserCartItem,deleteFromCart} = require('./func/cartFunction');
-const {getAllSellers,getOneSeller,createNewSeller,updateSeller} = require('./func/sellerFunc');
+const {getAllSellers,getOneSeller,createNewSeller,updateSeller,deleteOneSeller} = require('./func/sellerFunc');
 const sendInvitationMail = require('./func/sendInvitationMail');
-
+const changePasswordAuth = require('./middleware/changePasswordAuth');
+const forgetPasswordAuth = require('./middleware/forgetPasswordAuth');
+const sellerAuth = require('./middleware/sellerAuth');
 app.set('view engine','ejs');
 app.use(express.static('public'));
 app.use(express.urlencoded({extended: true}));
@@ -49,11 +51,7 @@ client.connect()
 
 app.get('/',(req,res)=>{
     //TODO: Home Page UI
-    if(req.session.user)
-        res.render('root',{'user': req.session.user && req.session.user.userName});
-    else{
-        res.render('root',{'user': undefined});
-    }
+    res.render('root',{'userType': req.session.userType ,"user": req.session.user});
 });
 
 
@@ -68,19 +66,57 @@ app.get('/home',homeAuth,(req,res)=>{
 
 app.route('/login')
 .get(userAuth,(req,res)=>{
-    res.render('login',{'user':req.session.is_logged_in});
+    res.render('login',{'userType': req.session.userType ,"user": req.session.user});
 })
 .post((req,res)=>{
     let userName = req.body.userValue;
     let password = req.body.pass;
+    console.log(userName,password);
     getUser({userName,password},db)
     .then(function(data){
+        console.log(data);
         if(data == null){
             res.statusCode = 401;
             res.end();
             return ;
         }
         req.session.is_logged_in=true;
+        req.session.user = data;
+        if(userName === 'admin'){
+            req.session.userType = 'admin';
+        }else{
+            req.session.userType = 'user';
+        }
+        res.statusCode = 200;
+        res.setHeader('Content-Type','text/plain')
+        res.end();
+    })
+    .catch(function(err){
+        console.log(err);
+        res.statusCode = 404;
+        res.setHeader('Content-Type','text/plain')
+        res.end();
+    })
+})
+
+
+
+app.route('/sellerLogin')
+.get((req,res)=>{
+    res.render('sellerLogin',{'userType':req.session.userType,"user":req.session.user});
+})
+.post((req,res)=>{
+    let {userName,password} = req.body;
+    getOneSeller({userName,password},db)
+    .then(function(data){
+        console.log(data);
+        if(data == null){
+            res.statusCode = 401;
+            res.end();
+            return ;
+        }
+        req.session.is_logged_in=true;
+        req.session.userType = 'seller';
         req.session.user = data;
         res.statusCode = 200;
         res.setHeader('Content-Type','text/plain')
@@ -98,7 +134,7 @@ app.route('/login')
 
 app.route('/signup')
 .get(userAuth,(req,res)=>{
-    res.render('signup',{'user':req.session.userName});
+    res.render('signup',{'userType':req.session.userType,'user':req.session.user});
 })
 .post( (req,res)=>{
     let {name,userName,password,email} = req.body;
@@ -135,9 +171,11 @@ app.get('/verify/:key',(req,res)=>{
     let filter = {'key':req.params.key};
     updateUser(filter,{"isVarified":true},db)
     .then(()=>{
+        req.session.destroy();
         res.redirect('/login');
     })
     .catch((err)=>{
+        console.log(err);
         res.send("Error Occur");
     })
 })
@@ -153,29 +191,44 @@ app.get('/logout',(req,res)=>{
 
 
 
-
+//TODO: Add seller changePassword
 app.route('/changePassword')
-.get(homeAuth,(req,res)=>{
-    res.render('changePassword',{user:req.session.user.userName});
+.get(changePasswordAuth,(req,res)=>{
+    res.render('changePassword',{"userType":req.session.userType , 'user':req.session.user });
 })
-.post((req,res)=>{
+.post(changePasswordAuth,async (req,res)=>{
     let {password} = req.body;
     let user = req.session.user;
-
+    let userType =  req.session.userType;
     // db.collection('users').updateOne({"userName":user.userName,"email":user.email},{$set:{}})
-    updateUser({"userName":user.userName,"email":user.email},{password},db)
-    .then(function(data){
-        //TODO: Lower priority move it into it's own function
-        sendMail(user,"Password Change","Info Board","<h1>Password Change</h1><p>Your password has been changed</p>",function(){
-            res.statusCode = 200;
-            req.session.destroy();
-            res.setHeader('Content-Type','text/plain');
-            res.send();
-        })
-    })
-    .catch(function(err){
+    //TODO: Lower priority move it into it's own function
+    try{
+
+        if(userType === 'user')
+        {
+            await updateUser({"userName":user.userName,"email":user.email},{password},db);
+            sendMail(user,"Password Change","Info Board","<h1>Password Change</h1><p>Your password has been changed</p>",function(){
+                res.statusCode = 200;
+                req.session.destroy();
+                res.setHeader('Content-Type','text/plain');
+                res.send();
+            })
+        }else if(userType === 'seller'){
+            //db.collection('collection').updateOne(filter,data);
+            await updateSeller({"userName":user.userName,"email":user.email},{password},db);
+            sendMail(user,"Password Change Seller","Info Board","<h1>Password Change</h1><p>Your password has been changed</p>",function(){
+                res.statusCode = 200;
+                req.session.destroy();
+                res.setHeader('Content-Type','text/plain');
+                res.send();
+            })
+        }
+        res.session.destroy();
+    }
+    catch(err){
         console.log(err);
-    })
+        res.statusCode = 500;
+    }
     // readFile('./userData.json',function(err,data){
     //     if(!err){
     //         data = JSON.parse(data);
@@ -200,8 +253,10 @@ app.route('/changePassword')
     // })
 })
 
+
+
 app.route('/forgetPassword')
-.get((req,res)=>{
+.get(forgetPasswordAuth,(req,res)=>{
     res.render('forget');
 })
 .post(async (req,res)=>{
@@ -265,12 +320,52 @@ app.route('/forgetPassword')
 })
 
 
+app.route('/forgetPasswordSeller')
+.get(forgetPasswordAuth,(req,res)=>{
+    res.render('forget');
+})
+.post(async (req,res)=>{
+    let {email} = req.body;
+    try{
+        let seller = await getOneSeller({email},db);
+        console.log(seller);
+        if(seller == null){
+            res.statusCode = 403;
+            res.end();
+            return ;
+        }else{
+            seller.passwordChange = crypto.randomBytes(6).toString('hex');
+            await updateSeller({email},{"passwordChange":seller.passwordChange},db);
+            sendMail(seller,"Password Reset Seller","Change Password",`<h1>Reset Password</h1><p>Use <a href="http://${process.env.HOSTNAME}:${process.env.PORT}/forgetPasswordSeller/change/${seller.passwordChange}">THIS</a> link to reset password </p>`,function(){    
+                res.statusCode = 200;
+                res.send();
+            });
+        }
+    }
+    catch(err){
+        console.log(err);
+        res.statusCode = 500;
+        res.end();
+        return ;
+    }
+    
+})
+
+
+
 
 app.get("/forgetPassword/change/:key",async (req,res)=>{
     let {key} = req.params;
     let user;
     try{
         user = await getUser({'passwordChange':key},db);
+        if(user != null){
+            req.session.is_logged_in = true;
+            req.session.user = user;
+            req.session.userType = 'user';
+            updateUser({"userName":user.userName},{passwordChange:null},db);
+        }
+        res.redirect("/changePassword");
     }
     catch(err){
         console.log(err);
@@ -278,12 +373,6 @@ app.get("/forgetPassword/change/:key",async (req,res)=>{
         res.send();
         return;
     }
-    if(user != null){
-        req.session.is_logged_in = true;
-        req.session.user = user;
-        updateUser({"userName":user.userName},{passwordChange:null},db);
-    }
-    res.redirect("/changePassword");
     // readFile('./userData.json',function(err,data){
     //     if(!err){
     //         data = JSON.parse(data);
@@ -305,6 +394,38 @@ app.get("/forgetPassword/change/:key",async (req,res)=>{
 
 
 
+app.route("/forgetPasswordSeller/change/:key")
+.get(async (req,res)=>{
+    let {key}  = req.params;
+    try{
+        let seller = await getOneSeller({"passwordChange":key},db);
+        if(seller == null){
+            res.statusCode = 403;
+        }else{
+            await updateSeller({"passwordChange":key},{"passwordChange":null},db);
+            req.session.userType = 'seller';
+            req.session.user = seller;
+            res.statusCode = 200;
+        }
+    }
+    catch(err){
+        console.log(err);
+        res.statusCode = 500;
+    }
+    res.setHeader('Content-Type','text/plain');
+
+    if(res.statusCode == 200){
+        res.redirect('/changePassword');
+    }
+
+
+    res.send();
+
+})
+
+
+
+
 
 app.route('/product')
 .get(homeAuth,async (req,res)=>{
@@ -315,7 +436,7 @@ app.route('/product')
     let data = await getProducts(0,5,db);
     req.session.index = data.length;
     
-    res.render('product',{'user': req.session.user && req.session.user.userName,"data":data});
+    res.render('product',{'userType':req.session.userType,'user': req.session.user ,"data":data});
     // res.render('product',{user:req.session.userName,"data":data});
 })
 
@@ -323,7 +444,9 @@ app.route('/product')
 
 
 
-app.get('/showMore',async (req,res)=>{
+
+
+app.get('/showMore',homeAuth,async (req,res)=>{
     let skip = req.session.index;
     
     let data = await getProducts( skip , 5 , db);
@@ -356,7 +479,7 @@ app.get('/showMore',async (req,res)=>{
 
 
 
-app.get('/getProductValue/:id',async (req,res)=>{
+app.get('/getProductValue/:id',homeAuth,async (req,res)=>{
     // res.send(req.params);
     let {id} = req.params;
     // getQuantity(id,req.session.user.userName,function(data){
@@ -385,7 +508,7 @@ app.get('/getProductValue/:id',async (req,res)=>{
 
 
 
-app.get('/buyProduct/:pid',async (req,res)=>{
+app.get('/buyProduct/:pid',homeAuth,async (req,res)=>{
     let {pid} = req.params;
     let stock
     try{
@@ -428,7 +551,7 @@ app.get('/buyProduct/:pid',async (req,res)=>{
 
 
 
-app.get('/removeProduct/:pid',async (req,res)=>{
+app.get('/removeProduct/:pid',homeAuth,async (req,res)=>{
     let {pid} = req.params;
     let quantity;
     try{
@@ -460,7 +583,9 @@ app.get('/removeProduct/:pid',async (req,res)=>{
 
 
 
-app.get('/deleteProduct/:pid',async (req,res)=>{
+
+
+app.get('/deleteProduct/:pid',homeAuth,async (req,res)=>{
     let {pid} = req.params;
     
     deleteFromCart(pid,req.session.user.userName,db)
@@ -493,7 +618,7 @@ app.route('/myCart')
 })
 
 
-// * Done upto Hear
+
 
 app.route('/adminDashboard')
 .get(adminAuth,async (req,res)=>{
@@ -507,7 +632,7 @@ app.route('/adminDashboard')
     //     allProduct = await getAllProduct(db);
     // }
     // catch(err){
-    //     res.statusCode = 404;
+    //     res.statusCode = 404;g
     //     res.setHeader('Content-Type','text/plain');
     //     res.send();
     //     return ;
@@ -521,7 +646,7 @@ app.route('/adminDashboard')
     let allProduct;
     try{
         sellers = await getAllSellers(db);
-        allProduct = await getAllProductArrayForm(db);
+        allProduct = await getAllProductArrayForm({},db);
     }
     catch(err){
         res.statusCode = 404;
@@ -531,142 +656,161 @@ app.route('/adminDashboard')
 
     let commpleteList = getList(sellers,allProduct);
 
-    res.render('adminDashboard',{"userName":req.session.user.userName,"err":err,"sellers":commpleteList});
+    res.render('adminDashboard',{"userType":req.session.userType,"user":req.session.user,"err":err,"sellers":commpleteList});
 })
 
 
+// * Round 1
 
-
-app.route('/adminDashboard/addNewProduct')
-.get(adminAuth,(req,res)=>{
-    res.render('newProductPage');
-})
-.post(adminAuth,upload.single("product-img")  ,async (req,res)=>{
-    // console.log(req.body);
-    let obj = {};
-    
-    if(req.file.size > 256000){
-        console.log("File is large");
-        res.statusCode = 402;
-    }
-    else{
-        let {title,tags,date,status,userReviews,stock,about} = req.body;
-        obj = {title,tags,date,status,userReviews,stock,about};
-        obj.imgSrc = req.file.filename;
-        // TODO: Implement check here checkInput(obj);
-        let isValid = checkProductValues(obj);
-        if(!isValid){
-            res.statusCode = 404;
-        }
-        // console.log(req.file);
-        else{
-            try{
-                obj.id = crypto.randomBytes(7).toString('hex');
-                await addProduct(obj,db);
-                res.statusCode = 200;
-            }
-            catch(err){
-                console.log(err);
-                res.statusCode = 404;
-            }
-        }
-    }
-    res.setHeader('Content-Type','text/plain');
-    res.send();
-
-})
-
-
-
-
-
-
-
-app.route('/adminDashboard/updateProduct/:pid')
-.get(adminAuth,async (req,res)=>{
-    let {pid} = req.params;
-    let item;
+//TODO: Remove Product When User Is Deleted;
+app.post('/adminDashboard/deleteSeller',adminAuth,async (req,res)=>{
+    let {userName} = req.body;
     try{
-        item = await getSingleProduct(pid,db);
-    }
-    catch(err){
-        res.statusCode = 404;
-        res.send("Unable to find the product");
-        return ;
-    }
-    // let item = await db.collection('product').findOne({id});
-    res.render('updateProductPage',({item}));
-})
-.post(adminAuth,upload.single('product-img'),async (req,res)=>{
-    let {title,tags,date,status,userReviews,stock,about} = req.body;
-    let {pid} = req.params;
-    let item;
-    //TODO:
-    try{
-        item = await getSingleProduct(pid,db);
-        let updated = false;
-        if(title!=""){
-            item.title = title;
-            updated = true;
-        }
-        if(tags!=""){
-            item.tag = tags.split(' ');
-            updated = true;
-        }
-        if(date !=''){
-            item.date = date;
-            updated = true;
-        }
-        if(status != ''){
-            item.status = status;
-            updated = true;
-        }
-        if(userReviews != '' && userReviews > 0){
-            item.userReviews = userReviews;
-            updated = true;
-        }
-        if(stock != '' && stock > 0){
-            item.stock = stock;
-            updated = true;
-        }
-        if(item['about-game'] != '' ){
-            item['about-game'] = about;
-            updated = true;
-        }
-        let olderFile = item.img;
-        if(req.file!=undefined){
-            item.img = req.file.filename;
-            updated = true;
-            // TODO: Low Priority Move It into function;
-            fs.unlink(path.join(__dirname,'/public/image/product',olderFile),function(){
-                
-            });
-        }
-
-        if(updated){
-            // db.collection('product').updateOne({"id":item.id},{$set:item})
-            updateProduct(pid,item,db)
-            .then(function(){
-                res.statusCode = 200;
-                res.setHeader('Content-Type','text/plain');
-                res.send();
-            })
-            .catch((err)=>{
-                console.log(err);
-                res.statusCode = 404;
-                res.setHeader('Content-Type','plain/text');
-                res.send();
-            })
-        }
+        let sellerDetails = await getOneSeller({'userName':userName},db);
+        console.log(sellerDetails);
+        await deleteOneSeller({userName},db);
+        sendMail(sellerDetails,"Account Deletion","Info Board","<h1>Account Delete</h1><p>Your seller account is delete,Please contect Steam</p>",function(){})
+        res.statusCode = 200;
+        res.send();
     }
     catch(err){
         console.log(err);
-        res.statusCode = 404;
-        res.setHeader('Content-Type','text/plain');
+        res.statusCode = 500;
         res.send();
     }
-    // let item = await db.collection('product').findOne({id});
-});
+    res.send();
+})
+
+// app.route('/adminDashboard/addNewProduct')
+// .get(adminAuth,(req,res)=>{
+//     res.render('newProductPage');
+// })
+// .post(adminAuth,upload.single("product-img")  ,async (req,res)=>{
+//     // console.log(req.body);
+//     let obj = {};
+    
+//     if(req.file.size > 256000){
+//         console.log("File is large");
+//         res.statusCode = 402;
+//     }
+//     else{
+//         let {title,tags,date,status,userReviews,stock,about} = req.body;
+//         obj = {title,tags,date,status,userReviews,stock,about};
+//         obj.imgSrc = req.file.filename;
+//         // TODO: Implement check here checkInput(obj);
+//         let isValid = checkProductValues(obj);
+//         if(!isValid){
+//             res.statusCode = 404;
+//         }
+//         // console.log(req.file);
+//         else{
+//             try{
+//                 obj.id = crypto.randomBytes(7).toString('hex');
+//                 await addProduct(obj,db);
+//                 res.statusCode = 200;
+//             }
+//             catch(err){
+//                 console.log(err);
+//                 res.statusCode = 404;
+//             }
+//         }
+//     }
+//     res.setHeader('Content-Type','text/plain');
+//     res.send();
+
+// })
+
+
+
+
+
+
+
+// app.route('/adminDashboard/updateProduct/:pid')
+// .get(adminAuth,async (req,res)=>{
+//     let {pid} = req.params;
+//     let item;
+//     try{
+//         item = await getSingleProduct(pid,db);
+//     }
+//     catch(err){
+//         res.statusCode = 404;
+//         res.send("Unable to find the product");
+//         return ;
+//     }
+//     // let item = await db.collection('product').findOne({id});
+//     res.render('updateProductPage',({item}));
+// })
+// .post(adminAuth,upload.single('product-img'),async (req,res)=>{
+//     let {title,tags,date,status,userReviews,stock,about} = req.body;
+//     let {pid} = req.params;
+//     let item;
+//     //TODO:
+//     try{
+//         item = await getSingleProduct(pid,db);
+//         let updated = false;
+//         if(title!=""){
+//             item.title = title;
+//             updated = true;
+//         }
+//         if(tags!=""){
+//             item.tag = tags.split(' ');
+//             updated = true;
+//         }
+//         if(date !=''){
+//             item.date = date;
+//             updated = true;
+//         }
+//         if(status != ''){
+//             item.status = status;
+//             updated = true;
+//         }
+//         if(userReviews != '' && userReviews > 0){
+//             item.userReviews = userReviews;
+//             updated = true;
+//         }
+//         if(stock != '' && stock > 0){
+//             item.stock = stock;
+//             updated = true;
+//         }
+//         if(item['about-game'] != '' ){
+//             item['about-game'] = about;
+//             updated = true;
+//         }
+//         let olderFile = item.img;
+//         if(req.file!=undefined){
+//             item.img = req.file.filename;
+//             updated = true;
+//             // TODO: Low Priority Move It into function;
+//             fs.unlink(path.join(__dirname,'/public/image/product',olderFile),function(){
+                
+//             });
+//         }
+
+//         if(updated){
+//             // db.collection('product').updateOne({"id":item.id},{$set:item})
+//             updateProduct(pid,item,db)
+//             .then(function(){
+//                 res.statusCode = 200;
+//                 res.setHeader('Content-Type','text/plain');
+//                 res.send();
+//             })
+//             .catch((err)=>{
+//                 console.log(err);
+//                 res.statusCode = 404;
+//                 res.setHeader('Content-Type','plain/text');
+//                 res.send();
+//             })
+//         }
+//     }
+//     catch(err){
+//         console.log(err);
+//         res.statusCode = 404;
+//         res.setHeader('Content-Type','text/plain');
+//         res.send();
+//     }
+//     // let item = await db.collection('product').findOne({id});
+// });
 
 
 app.route('/newSeller/:key')
@@ -675,7 +819,7 @@ app.route('/newSeller/:key')
     let sellerDetails;
     try{
         sellerDetails = await getOneSeller({'userCreateKey':key},db);
-        console.log(sellerDetails);
+        // console.log(sellerDetails);
     }
     catch(err){
         res.statusCode = 404;
@@ -683,7 +827,7 @@ app.route('/newSeller/:key')
         return ;
     }
     if(sellerDetails == null){
-        res.send(404);
+        res.send('Invalid Link');
         return ;
     }
     res.render('newSeller',({'email':sellerDetails.email}));
@@ -697,6 +841,7 @@ app.route('/newSeller/:key')
             res.statusCode = 303;
         }else{
             let data = {userName,name,password};
+            data.userCreateKey = null ;
             sellerDetails = await getOneSeller({'userCreateKey':key},db);
             if(sellerDetails == null){
                 res.statusCode = 404;
@@ -719,7 +864,13 @@ app.route('/newSeller/:key')
 
 
 
-
+app.route('/sellerPage')
+.get(sellerAuth,async (req,res)=>{
+    console.log(req.session.user);
+    let product = await getAllProductArrayForm({'sellerId':req.session.user.id},db);
+    console.log(product);
+    res.render('sellerPage',{"userType":req.session.userType,"user":req.session.user});
+})
 
 
 app.route('/adminDashboard/newSeller')

@@ -16,6 +16,10 @@
     color: #9a9999;
 }
 
+body{
+    background-color: #171a21;
+}
+
 .nav{
     height: 58px;
     width: 100%;

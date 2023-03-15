@@ -1,7 +1,13 @@
-
-<h1 class="seller-heading"><%= seller.userName %></h1>
-<div class="product-container">
-        <% seller.product.forEach( (item) =>{ %>
-            <%- include('./adminItem',({item}));%>
-        <% }) %>
-</div> 
+<% if(seller.userName !== undefined){%>
+<div id="<%=seller.userName%>">
+    <div class="flex-row seller-title">
+        <h1 class="seller-heading"><%= seller.userName %></h1>
+        <button class="seller-title-btn" onclick="deleteSellerBtn( '<%=seller.userName%>')">Delete Seller</button>
+    </div>
+    <div class="product-container">
+            <% seller.product.forEach( (item) =>{ %>
+                <%- include('./adminItem',({item}));%>
+            <% }) %>
+    </div> 
+</div>
+<%}%>

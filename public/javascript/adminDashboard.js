@@ -2,13 +2,14 @@
 let newSellerBtn = document.getElementById('addNewSeller');
 let btnInside = '<div id="vertical" class="buttonline"></div><div id="horizontal" class="buttonline"></div>';
 newSellerBtn.addEventListener('click',newSellerPage);
-
+let creationMode = false;
 let emailInput ;
 let submitBtn;
 let openBtnInside='<h2 class="seller-heading">Enter Seller Email</h2><input onclick="window.event.stopPropagation()" class="input-form" onkeydown="checkKey()" id="email" pattern=".+@+." type="email" placeholder="Enter Seller Email" title="Seller Email"><p id="err-msg">This Is Dummy Error</p><button class="submit-btn submit" id="seller-add-btn">Send Invite</button>'
 let timeId = null;
 
 function newSellerPage(){
+    creationMode = true;
     // window.open(window.location.href+'/newSeller/','_blank',strWindowFeatures);
     newSellerBtn.setAttribute('id','newSellerDiv');
     newSellerBtn.removeEventListener('click',newSellerPage);
@@ -49,6 +50,31 @@ function submit(evt){
     });
 }
 
+function deleteSellerBtn(userName){
+    let data = JSON.stringify({userName});
+    console.log(data);
+    let request = new XMLHttpRequest;
+    request.open('POST','/adminDashboard/deleteSeller');
+    request.setRequestHeader('Content-Type','application/JSON');
+    request.send(data);
+    request.addEventListener('load',function(){
+        switch(request.status){
+            case 200:{
+                let element = document.getElementById(userName);
+                element.remove();
+                break;
+            }
+            case 303:{
+                window.location.href = '/';
+            }
+            case 500:{
+                alert("Server Time Out");
+                break;
+            }
+
+        }
+    })
+}
 
 function checkKey(){
     let errDiv = document.getElementById('err-msg');
@@ -61,6 +87,7 @@ function checkKey(){
 }
 
 function closeDiv(){
+    creationMode = false;
     newSellerBtn.innerHTML = btnInside;
     newSellerBtn.setAttribute('id','addNewSeller');
     newSellerBtn.removeEventListener('click',closeDiv);
@@ -74,9 +101,11 @@ function errorShow(errMsg){
 }
 
 
-
-
-
+setInterval(function(){
+    if(!creationMode){
+        window.location.reload();
+    }
+},15000);
 
 
 

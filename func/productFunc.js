@@ -75,8 +75,9 @@ async function getAllProduct(db){
     return obj;
 }
 
-function getAllProductArrayForm(db){
-    return findAll(db,collection,{});
+
+function getAllProductArrayForm(filter,db){
+    return findAll(db,collection,filter);
 }
 
 async function addProduct(obj,db){

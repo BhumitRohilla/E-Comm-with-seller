@@ -11,7 +11,7 @@ export function requestServer(method,dest,data,callback){
         request.addEventListener('load',function(){
             callback(request);
         });
-    },1000);
+    },0);
 }
 
 export function requestServerNoDelay(method,dest,data,callback){

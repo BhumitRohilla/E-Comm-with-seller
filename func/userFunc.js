@@ -10,7 +10,7 @@ async function checkUser(user,db){
 
 
 async function getUser(user,db){
-    return dbFunc.findOne(db,collection,user)
+    return dbFunc.findOne(db,collection,user);
 }
 
 

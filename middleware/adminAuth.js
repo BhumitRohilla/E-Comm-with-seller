@@ -5,7 +5,7 @@ function homeAuth(req,res,next){
         res.statusCode = 401;
         res.send("Not Authorised To Access this page");
     }else{
-
+        res.statusCode = 303;
         res.redirect('/login');
     }
 }

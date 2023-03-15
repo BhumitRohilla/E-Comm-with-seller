@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="/styles/admin.css">
 </head>
 <body>
-    <%- include('partials/header',({"user":userName})); %>
+    <%- include('partials/header',({"userType": userType,"user":user})); %>
     <div class="main-container">
         <% if(err == undefined){ %>
             <h5 style="color:red; background-color: black;text-align: center;" id="err"><%= err %></h5>

@@ -83,7 +83,8 @@ function getAllProductArrayForm(filter,db){
 async function addProduct(obj,db){
     //TODO: Remove This Dependency;
     let finalObj = {}
-    finalObj.id = obj.id
+    finalObj.id = obj.id;
+    finalObj.sellerId = obj.sellerId;
     finalObj.title = obj.title;
     let tagArray = obj.tags.split(' ');
     finalObj.date = obj.date;

@@ -608,7 +608,7 @@ app.route('/myCart')
     try{
         let cart = await getUserCart(req.session.user.userName,db);
         let cartItem = await getUserCartItem(cart,db); 
-        res.render('cart',({"userName":req.session.user.userName,"items":cartItem}));
+        res.render('cart',({"userType":req.session.userType,"user":req.session.user,"items":cartItem}));
     }
     catch(err){
         console.log(err);
@@ -681,44 +681,48 @@ app.post('/adminDashboard/deleteSeller',adminAuth,async (req,res)=>{
     res.send();
 })
 
-// app.route('/adminDashboard/addNewProduct')
-// .get(adminAuth,(req,res)=>{
-//     res.render('newProductPage');
-// })
-// .post(adminAuth,upload.single("product-img")  ,async (req,res)=>{
-//     // console.log(req.body);
-//     let obj = {};
-    
-//     if(req.file.size > 256000){
-//         console.log("File is large");
-//         res.statusCode = 402;
-//     }
-//     else{
-//         let {title,tags,date,status,userReviews,stock,about} = req.body;
-//         obj = {title,tags,date,status,userReviews,stock,about};
-//         obj.imgSrc = req.file.filename;
-//         // TODO: Implement check here checkInput(obj);
-//         let isValid = checkProductValues(obj);
-//         if(!isValid){
-//             res.statusCode = 404;
-//         }
-//         // console.log(req.file);
-//         else{
-//             try{
-//                 obj.id = crypto.randomBytes(7).toString('hex');
-//                 await addProduct(obj,db);
-//                 res.statusCode = 200;
-//             }
-//             catch(err){
-//                 console.log(err);
-//                 res.statusCode = 404;
-//             }
-//         }
-//     }
-//     res.setHeader('Content-Type','text/plain');
-//     res.send();
+// sellerPage/addNewProduct/1
 
-// })
+app.route('/sellerPage/addNewProduct/:key')
+.get(sellerAuth,(req,res)=>{
+    let {key} = req.params;
+    res.render('newProductPage',({"action":`/sellerPage/addNewProduct/${key}`}));
+})
+.post(sellerAuth,upload.single("product-img")  ,async (req,res)=>{
+    // console.log(req.body);
+    let {key} = req.params;
+    let obj = {};
+    
+    if(req.file.size > 256000){
+        console.log("File is large");
+        res.statusCode = 402;
+    }
+    else{
+        let {title,tags,date,status,userReviews,stock,about} = req.body;
+        obj = {title,tags,date,status,userReviews,stock,about};
+        obj.imgSrc = req.file.filename;
+        let isValid = checkProductValues(obj);
+        if(!isValid){
+            res.statusCode = 404;
+        }
+        // console.log(req.file);
+        else{
+            try{
+                obj.id = crypto.randomBytes(7).toString('hex');
+                obj.sellerId = key;
+                await addProduct(obj,db);
+                res.statusCode = 200;
+            }
+            catch(err){
+                console.log(err);
+                res.statusCode = 404;
+            }
+        }
+    }
+    res.setHeader('Content-Type','text/plain');
+    res.send();
+
+})
 
 
 
@@ -866,10 +870,22 @@ app.route('/newSeller/:key')
 
 app.route('/sellerPage')
 .get(sellerAuth,async (req,res)=>{
+    let err = req.session.err;
+    if(err!=undefined){
+        delete req.session.err;
+    }
     console.log(req.session.user);
-    let product = await getAllProductArrayForm({'sellerId':req.session.user.id},db);
-    console.log(product);
-    res.render('sellerPage',{"userType":req.session.userType,"user":req.session.user});
+    let allProduct;
+    try{
+        allProduct = await getAllProductArrayForm({'sellerId':req.session.user.id},db);
+    }
+    catch(err){
+        console.log(err);
+        res.statusCode = 500;
+        res.send();
+    }
+    console.log(allProduct);
+    res.render('sellerPage',{"userType":req.session.userType,"user":req.session.user,"err":err,"product":allProduct});
 })
 
 

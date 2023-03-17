@@ -7,7 +7,7 @@ console.log(showMore);
 showMore.addEventListener('click',function(){
     console.log(itemList);
     
-    requestServerNoDelay('GET','/showMore',null,function(request){
+    requestServerNoDelay('GET','/product/showMore',null,function(request){
         console.log(request.response);
         if(request.status == 403){
             showMore.style.visibility = "hidden";

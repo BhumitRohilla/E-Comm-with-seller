@@ -149,7 +149,7 @@ function showDetails(element){
     quantitySpan.classList.add('quantitySpan');
     quantitySpan.innerText = 0;
     
-    request.open("GET",`/getProductValue/${element}`);
+    request.open("GET",`/product/getProductValue/${element}`);
     request.send();
     request.addEventListener('load',function(){
         quantitySpan.innerText = request.response;
@@ -188,7 +188,7 @@ function showDetails(element){
 function buy(element,quantitySpan){
     console.log(element.id);
     let request = new XMLHttpRequest;
-    request.open("GET",`/buyProduct/${element.id}`);
+    request.open("GET",`/product/buyProduct/${element.id}`);
     request.send();
     request.addEventListener('load',function(){
         if(request.status == 201 ){

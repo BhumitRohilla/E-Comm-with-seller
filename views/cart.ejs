@@ -11,7 +11,10 @@
 <body>
     <%- include('partials/header',({"userType":userType,"user":user})); %>
     <div class="main-container">
-        <h1 class="title">Cart</h1>
+        <div class="title-div">
+            <h1 class="title">Cart</h1>
+            <button id="buy-btn">Buy</button>
+        </div>
         <br>
         <div class="item-container">
             <% for(key in items){%>

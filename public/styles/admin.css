@@ -1,6 +1,7 @@
 body{
     background-color: #1b2839;
     background: linear-gradient(to bottom right, #1b2839, #070a0e);
+    min-height: 100vh;
 }
 
 .main-container{

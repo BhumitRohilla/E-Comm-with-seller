@@ -54,7 +54,7 @@ function deleteSellerBtn(userName){
     let data = JSON.stringify({userName});
     console.log(data);
     let request = new XMLHttpRequest;
-    request.open('POST','/adminDashboard/deleteSeller');
+    request.open('POST','/sellerPage/deleteSeller');
     request.setRequestHeader('Content-Type','application/JSON');
     request.send(data);
     request.addEventListener('load',function(){
@@ -92,6 +92,22 @@ function closeDiv(){
     newSellerBtn.setAttribute('id','addNewSeller');
     newSellerBtn.removeEventListener('click',closeDiv);
     newSellerBtn.addEventListener('click',newSellerPage);
+}
+
+
+function deleteElementFromAdmin(id){
+    let request = new XMLHttpRequest;
+    request.open('POST','adminDashboard/deleteProduct');
+    request.setRequestHeader('Content-Type','application/JSON');
+    let data = JSON.stringify({id});
+    request.send(data);
+    request.addEventListener('load',function(){
+        if(request.status == 200){
+            window.location.reload();
+        }else if(request.status == 404){
+            alert('Error Occure');
+        }
+    })
 }
 
 function errorShow(errMsg){

@@ -1,15 +1,15 @@
 let {findOne, insertOne, updateOne, removePropertyFromAll, removeProperty} = require('./dbFunction');
 
-let {increaseOneStock,getAllProduct} = require('./productFunc');
+let {increaseOneStock,getAllProduct,increaseStocks} = require('./productFunc');
 
 let collection = 'cart';
 
 
-async function getQuantity(pid,userName,db){
+async function getQuantity(pid,userName){
     let data ;
     try{
         // data = await findOne(db,collection,{userName});
-        data = await getUserCart(userName,db);
+        data = await getUserCart(userName);
         // console.log(data);
     }
     catch(err){
@@ -32,10 +32,10 @@ async function getQuantity(pid,userName,db){
 }
 
 
-async function addToCart(pid, userName,db){
+async function addToCart(pid, userName){
     let userCart;
     try{
-        userCart = await getUserCart(userName,db);
+        userCart = await getUserCart(userName);
     }
     catch(err){
         throw err;
@@ -55,29 +55,39 @@ async function addToCart(pid, userName,db){
         userCart.product[pid] = {};
         userCart.product[pid].quantity = 1;
         if(!userExist){
-            insertOne(db,collection,userCart);
-            return ;
+            try{
+                await  insertOne(collection,userCart);
+                return ;
+            }
+            catch(err){
+                throw err;
+            }
         }
     }
-    updateOne(db,collection,{userName},{"product":userCart.product})
+    try{
+        await updateOne(collection,{userName},{"product":userCart.product});
+    }
+    catch(err){
+        throw err;
+    }
 }
 
 
-function getUserCart( userName, db ){
-    return findOne(db,collection,{userName});
+function getUserCart( userName){
+    return findOne(collection,{userName});
 }
 
 
-async function removeFromCart(pid, userName,db){
+async function removeFromCart(pid, userName){
     let quantity ;
     try{
-        quantity = await getQuantity(pid,userName,db);
+        quantity = await getQuantity(pid,userName);
         if(quantity > 0){
             quantity--;
             let productToUpdate = "product." + pid;
-            updateOne(db,collection,{userName},{ [productToUpdate] : {"quantity":quantity}});
+            await updateOne(collection,{userName},{ [productToUpdate] : {"quantity":quantity}});
         }
-        await increaseOneStock(pid,db);
+        await increaseOneStock(pid);
     }
     catch(err){
         console.log(err);
@@ -92,16 +102,16 @@ async function removeFromCart(pid, userName,db){
         // // db.collection('product').updateOne({'id':pid},{$set:{"stock":data.stock}});
 }
 
-async function getUserCart(userName,db){
-    return findOne(db,collection,{userName});
+async function getUserCart(userName){
+    return findOne(collection,{userName});
     // * return db.collection('cart').findOne({"userName":userName});
 }
 
-async function getUserCartItem(cart,db){
+async function getUserCartItem(cart){
     //TODO: ERROR HANDLING
     let allItems
     try{
-        allItems = await getAllProduct(db);
+        allItems = await getAllProduct();
     }
     catch(err){
         throw err;
@@ -113,7 +123,7 @@ async function getUserCartItem(cart,db){
             if(obj[key]==undefined){
                 //TODO: Remove Dependency from this code
                 try{
-                    await deleteProductFromCartWhichAreDeletedByAdmin(db,key);
+                    await deleteProductFromCartWhichAreDeletedByAdmin(key);
                     // db.collection('cart').updateMany({},{ $unset: {[propertyToDelete]:1}});
                 }
                 catch(err){
@@ -128,16 +138,23 @@ async function getUserCartItem(cart,db){
     return obj;
 }
 
-function deleteProductFromCartWhichAreDeletedByAdmin(db,key){
+function deleteProductFromCartWhichAreDeletedByAdmin(key){
     let propertyToDelete = "product."+key;
-    removePropertyFromAll(db,collection,{},{[propertyToDelete]:1});
+    removePropertyFromAll(collection,{},{[propertyToDelete]:1});
 }
 
 
-function deleteFromCart(pid,userName,db){
+async function deleteFromCart(pid,userName){
+    try{
+        let quantity = await getQuantity(pid,userName);
+        await increaseStocks(pid,quantity);
+    }
+    catch(err){
+        console.log(err);
+    }
     let propetyToDelete = "product."+pid;
     // db.collection().updateOne({"id":pid},{$unset:{propetyToDelete}});
-    return removeProperty(db,collection,{userName},{[propetyToDelete]:1});
+    return removeProperty(collection,{userName},{[propetyToDelete]:1});
 }
 
 module.exports = {getQuantity,addToCart,removeFromCart,getUserCart,getUserCartItem,deleteFromCart};

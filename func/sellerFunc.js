@@ -3,32 +3,32 @@ const crypto  = require('crypto');
 
 const collection = 'sellers';
 
-function getAllSellers(db){
+function getAllSellers(){
     //return db.collection('sellers').find({}).toArray(); 
-    return findAll(db,collection,{});
+    return findAll(collection,{});
 }
 
-function getOneSeller(filter,db){
+function getOneSeller(filter){
     // db.collection(collection).fidOne(filter);
-    return findOne(db,collection,filter);
+    return findOne(collection,filter);
 }
 
-function createNewSeller(email,userCreateKey,db){
+function createNewSeller(email,userCreateKey){
     let data ={email};
     data.id = crypto.randomBytes(4).toString('hex');
     data.userCreateKey = userCreateKey;
-    return insertOne(db,collection,data);
+    return insertOne(collection,data);
 }
 
 
-function updateSeller(filter,data,db){
+function updateSeller(filter,data){
     // return db.collection('sellers').updateOne(filter,{$set:data});
-    return updateOne(db,collection,filter,data);
+    return updateOne(collection,filter,data);
 }
 
 function deleteOneSeller(filter,db){
     //db.collection().deleteOne((filter))
-    return deleteOne(db,collection,filter);
+    return deleteOne(collection,filter);
 }
 
 

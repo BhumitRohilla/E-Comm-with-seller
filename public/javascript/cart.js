@@ -1,7 +1,7 @@
 function increaseQuantity(id){
     let element = document.getElementById(id);
     let request = new XMLHttpRequest;
-    request.open("GET",`/buyProduct/${element.id}`);
+    request.open("GET",`/product/buyProduct/${element.id}`);
     request.send();
     request.addEventListener('load',function(){
         if(request.status == 201 ){
@@ -18,7 +18,7 @@ function increaseQuantity(id){
 function decreaseQuantity(id){
     let element = document.getElementById(id);
     let request = new XMLHttpRequest;
-    request.open("GET",`/removeProduct/${element.id}`);
+    request.open("GET",`/myCart/removeProduct/${element.id}`);
     request.send();
     request.addEventListener('load',function(){
         if(request.status == 201 ){
@@ -34,7 +34,7 @@ function decreaseQuantity(id){
 function deleteFromCart(id){
     let element = document.getElementById(id);
     let request = new XMLHttpRequest;
-    request.open("GET",`/deleteProduct/${element.id}`);
+    request.open("GET",`/myCart/deleteProduct/${element.id}`);
     request.send();
     request.addEventListener('load',function(){
         if(request.status == 201 ){

@@ -1,41 +1,41 @@
 const dbFunc = require('./dbFunction');
 
 
+
 const collection = 'users';
 
 // ! Depricated:-
-async function checkUser(user,db){
-    return dbFunc.findAll(db,collection,user)
+function checkUser(user){
+    return dbFunc.findAll(collection,user)
 }
 
 
-async function getUser(user,db){
-    return dbFunc.findOne(db,collection,user);
+function getUser(user){
+    return dbFunc.findOne(collection,user);
 }
 
 
-async function insertUser(user,db){
+async function insertUser(user){
     let userName = user.userName;
     let email = user.email;
     let oldUser = {userName,email}
     
-    oldUser = await getUser(oldUser,db);
+    try{
+        oldUser = await getUser(oldUser);
+    }
+    catch(err){
+        throw err;
+    }
+
     if(oldUser != null){
         throw 401;
     }
-
-    return dbFunc.insertOne(db,collection,user)
-    .then(function(){
-        return 200;
-    })
-    .catch(function(){
-        return 404;
-    })
+    return dbFunc.insertOne(collection,user);
 }
 
 
-function updateUser(filter,output,db){
-    return dbFunc.updateOne(db,collection,filter,output)
+async function updateUser(filter,output){
+    return  dbFunc.updateOne(collection,filter,output)
 }
 
 

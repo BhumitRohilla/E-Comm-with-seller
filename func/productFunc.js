@@ -1,68 +1,69 @@
-let {findAllWithSkip,findOne,updateOne,findAll, insertOne,deleteOne} = require('./dbFunction');
+let {findAllWithSkip,findOne,updateOne,findAll, insertOne,deleteOne, deleteMany} = require('./dbFunction');
 
 let collection = 'product';
 
 
-function getProducts(starting,number,db){
-    return findAllWithSkip(db,collection,starting,number,{});
+function getProducts(starting,number){
+    return findAllWithSkip(collection,starting,number,{});
 }
 
 
-function getSingleProduct(pid,db){
-    return findOne(db,collection,{"id":pid});
-    // let element = await db.collection('product').findOne({"id":pid});
-    // let stock = element.stock;
-    // if(stock == 0){
-    //     return 0;
-    // }else{
-    //     try{
-    //         await db.collection('product').updateOne({"id":pid},{$set:{"stock":(stock-1)}});
-    //     }
-    //     catch(err){
-    //         console.log(err);
-    //     }
-    //     return stock;
-    // }
+function getSingleProduct(pid){
+    return findOne(collection,{"id":pid});
 }
 
 
-async function increaseOneStock(pid,db){
+async function increaseOneStock(pid){
     let product;
     let stock;
     try{
         // * db.collection('product').findOne({"id":pid});
-        product = await findOne(db,collection,{"id":pid});
+        product = await findOne(collection,{"id":pid});
         stock = product.stock;
         stock++;
-        await updateOne(db,collection,{"id":pid},{"stock":stock});
+        await updateOne(collection,{"id":pid},{"stock":stock});
     }
     catch(err){
         throw err;
     }
 }
 
-async function decreaseOneStock(pid,db){
+async function increaseStocks(pid,stocks){
     let product;
     let stock;
     try{
-        product = await getSingleProduct(pid,db);
-        stock = product.stock;
-    }
-    catch(err){
-        throw err;
-    }
-    try{
-        await updateOne(db,collection,{"id":pid},{"stock": stock -1 });
+        product = await findOne(collection,{'id':pid});
+        stock = product.stock + stocks;
+        await updateOne(collection,{'id':pid},{"stock":stock});
     }
     catch(err){
         throw err;
     }
 }
 
-async function getAllProduct(db){
+async function decreaseOneStock(pid){
+
+    let product;
+    let stock;
+    try{
+        product = await getSingleProduct(pid);
+        stock = product.stock;
+    }
+    catch(err){
+        throw err;
+    }
+    try{
+        await updateOne(collection,{"id":pid},{"stock": stock -1 });
+    }
+    catch(err){
+        throw err;
+    }
+}
+
+async function getAllProduct(){
     let data;
     try{
-        data = await findAll(db,collection,{});
+        data = await findAll(collection,{});
     }
     catch(err){
         throw err;
@@ -76,11 +77,11 @@ async function getAllProduct(db){
 }
 
 
-function getAllProductArrayForm(filter,db){
-    return findAll(db,collection,filter);
+function getAllProductArrayForm(filter){
+    return findAll(collection,filter);
 }
 
-async function addProduct(obj,db){
+async function addProduct(obj){
     //TODO: Remove This Dependency;
     let finalObj = {}
     finalObj.id = obj.id;
@@ -94,17 +95,21 @@ async function addProduct(obj,db){
     finalObj.img = obj.imgSrc;
     finalObj.stock = obj.stock;
     finalObj['about-game'] = obj.about;
-    return insertOne(db,collection,finalObj);
+    return insertOne(collection,finalObj);
     // * return await db.collection('product').insertOne(finalObj);
 }
 
-function updateProduct(pid,data,db){
+function updateProduct(pid,data){
     // db.collection().
-    return updateOne(db,collection,{"id":pid},data);
+    return updateOne(collection,{"id":pid},data);
 }
 
-function deleteSingleProduct(pid,db){
-    return deleteOne(db,collection,{"id":pid});
+function deleteSingleProduct(pid){
+    return deleteOne(collection,{"id":pid});
 }
 
-module.exports = {getProducts,getSingleProduct,decreaseOneStock,increaseOneStock,getAllProduct,addProduct,updateProduct,deleteSingleProduct,getAllProductArrayForm};
+function deleteMultipleProduct(filter){
+    return deleteMany(collection,filter);
+}
+
+module.exports = {getProducts,getSingleProduct,decreaseOneStock,increaseOneStock,getAllProduct,addProduct,updateProduct,deleteSingleProduct,getAllProductArrayForm,deleteMultipleProduct,increaseStocks};

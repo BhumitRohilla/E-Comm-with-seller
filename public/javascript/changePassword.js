@@ -10,9 +10,14 @@ submitBtn.addEventListener('click',function(){
     }else if(p1 != p2){
         alert("Password are not matching");
     }else{
-        requestServerNoDelay('POST','/changePassword',{"password":p1},function(){
-            alert("Password Changed check your mail");
-            window.location.href='/login';
+        requestServerNoDelay('POST','/changePassword',{"password":p1},function(request){
+            console.log(request);
+            if(request.status == 200){
+                alert("Password Changed check your mail");
+                window.location.href='/login';
+            }else{
+                alert("Server Time Out");
+            }
         })
     }
 })

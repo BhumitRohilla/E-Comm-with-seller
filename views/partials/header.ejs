@@ -18,7 +18,8 @@
         <%}else if(userType === 'seller'){ %>
             <div class="flex-row nav-btn-cluster">
                 <p style="margin-right: 20px;" class="dark-text"><%=user.userName%></p>
-                <button onclick="window.location.href = 'sellerPage'" class="btn">SellerDashboard</button>
+                <button onclick="window.location.href = '/sellerPage'" class="btn">SellerDashboard</button>
+                <button onclick="window.location.href = '/order'" class="btn">Order</button>
                 <button id="logout-btn" class="btn">Logout</button>
                 <button onclick="window.location.href = '/changePassword'" class="btn">ChangePassword</button>
             </div>
@@ -28,6 +29,7 @@
                 <button onclick="window.location.href = '/changePassword'" class="btn">ChangePassword</button>
                 <button onclick="window.location.href='product'" class="btn">Product</button>
                 <button onclick="window.location.href='myCart'" class="btn">Cart</button>
+                <button onclick="window.location.href = '/myOrder'" class="btn">Order</button>
                 <button id="logout-btn" class="btn">Logout</button>
             </div>
         <%}%>

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userAuth = require('../middleware/userAuth');
-const {insertUser} = require('../func/userFunc');
+const {insertUser} = require('../func/dbFunction/userFunc');
 const crypto = require('crypto');
 const sendVerificationMail = require('../func/sendVerificationMail');
 

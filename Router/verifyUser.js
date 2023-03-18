@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {updateUser} = require('../func/userFunc')
+const {updateUser} = require('../func/dbFunction/userFunc')
 
 router.get('/:key',(req,res)=>{
     let filter = {'key':req.params.key};

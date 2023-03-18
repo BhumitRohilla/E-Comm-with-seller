@@ -1,15 +1,15 @@
-let {findAllWithSkip,findOne,updateOne,findAll, insertOne,deleteOne, deleteMany} = require('./dbFunction');
+let {findAllWithSkip,findOne,updateOne,findAll, insertOne,deleteOne, deleteMany, updateMany} = require('../db/dbFunction');
 
 let collection = 'product';
 
 
 function getProducts(starting,number){
-    return findAllWithSkip(collection,starting,number,{});
+    return findAllWithSkip(collection,starting,number,{"active":true});
 }
 
 
 function getSingleProduct(pid){
-    return findOne(collection,{"id":pid});
+    return findOne(collection,{"id":pid,'active':true});
 }
 
 
@@ -18,7 +18,7 @@ async function increaseOneStock(pid){
     let stock;
     try{
         // * db.collection('product').findOne({"id":pid});
-        product = await findOne(collection,{"id":pid});
+        product = await getSingleProduct(pid);
         stock = product.stock;
         stock++;
         await updateOne(collection,{"id":pid},{"stock":stock});
@@ -32,7 +32,7 @@ async function increaseStocks(pid,stocks){
     let product;
     let stock;
     try{
-        product = await findOne(collection,{'id':pid});
+        product = await getSingleProduct(pid);
         stock = product.stock + stocks;
         await updateOne(collection,{'id':pid},{"stock":stock});
     }
@@ -63,7 +63,7 @@ async function decreaseOneStock(pid){
 async function getAllProduct(){
     let data;
     try{
-        data = await findAll(collection,{});
+        data = await findAll(collection,{'active':true});
     }
     catch(err){
         throw err;
@@ -78,6 +78,7 @@ async function getAllProduct(){
 
 
 function getAllProductArrayForm(filter){
+    filter.active = true;
     return findAll(collection,filter);
 }
 
@@ -86,6 +87,7 @@ async function addProduct(obj){
     let finalObj = {}
     finalObj.id = obj.id;
     finalObj.sellerId = obj.sellerId;
+    finalObj.active = true;
     finalObj.title = obj.title;
     let tagArray = obj.tags.split(' ');
     finalObj.date = obj.date;
@@ -100,16 +102,15 @@ async function addProduct(obj){
 }
 
 function updateProduct(pid,data){
-    // db.collection().
-    return updateOne(collection,{"id":pid},data);
+    return updateOne(collection,{"id":pid,'active':true},data);
 }
 
 function deleteSingleProduct(pid){
-    return deleteOne(collection,{"id":pid});
+    return updateOne(collection,{"id":pid},{'active':false});
 }
 
 function deleteMultipleProduct(filter){
-    return deleteMany(collection,filter);
+    return updateMany(collection,filter,{'active':false});
 }
 
 module.exports = {getProducts,getSingleProduct,decreaseOneStock,increaseOneStock,getAllProduct,addProduct,updateProduct,deleteSingleProduct,getAllProductArrayForm,deleteMultipleProduct,increaseStocks};

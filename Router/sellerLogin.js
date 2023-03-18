@@ -1,7 +1,7 @@
 const express = require('express');
 const userAuth = require('../middleware/userAuth');
 const router = express.Router();
-const {getOneSeller} = require('../func/sellerFunc');
+const {getOneSeller} = require('../func/dbFunction/sellerFunc');
 
 router.route('/')
 .get(userAuth,(req,res)=>{

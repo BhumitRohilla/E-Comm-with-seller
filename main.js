@@ -23,6 +23,7 @@ const cart = require('./Router/cart');
 const adminDashboard = require('./Router/adminDashboard');
 const sellerPage = require('./Router/sellerPage');
 const newSeller = require('./Router/newSeller');
+const order = require('./Router/order');
 
 app.set('view engine','ejs');
 app.use(express.static('public'));
@@ -85,6 +86,7 @@ app.use('/myCart',homeAuth,cart);
 
 // * Done Upto Hear
 //TODO: Test Delete Seller
+//TODO: Cannot delete seller;
 app.use('/adminDashboard',adminAuth,adminDashboard);
 
 
@@ -92,6 +94,9 @@ app.use('/sellerPage',sellerAuth,sellerPage);
 
 
 app.use('/newSeller',newSeller);
+
+
+app.use('/myOrder',homeAuth,order);
 
 
 app.get('*',(req,res)=>{

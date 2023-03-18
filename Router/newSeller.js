@@ -1,5 +1,5 @@
 const express = require('express');
-const { getOneSeller, updateSeller } = require('../func/sellerFunc');
+const { getOneSeller, updateSeller } = require('../func/dbFunction/sellerFunc');
 const router  = express.Router();
 
 router.route('/:key')

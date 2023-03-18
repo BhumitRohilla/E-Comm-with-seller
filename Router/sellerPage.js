@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllProductArrayForm, addProduct, getSingleProduct, updateProduct, deleteSingleProduct } = require('../func/productFunc');
+const { getAllProductArrayForm, addProduct, getSingleProduct, updateProduct, deleteSingleProduct } = require('../func/dbFunction/productFunc');
 const router = express.Router();
 const crypto = require('crypto');
 const multer = require('multer');

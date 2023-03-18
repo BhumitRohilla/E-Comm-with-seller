@@ -1,7 +1,7 @@
 const express = require('express');
-const { getUserCartItem, getUserCart, getQuantity, removeFromCart ,deleteFromCart} = require('../func/cartFunction');
+const { getUserCartItem, getUserCart, getQuantity, removeFromCart ,deleteFromCart} = require('../func/dbFunction/cartFunction');
+const {placeOrder} = require('../func/dbFunction/placeOrder');
 const router = express.Router();
-
 
 router.route('/')
 .get(async (req,res)=>{
@@ -48,11 +48,27 @@ router.get('/removeProduct/:pid',async (req,res)=>{
 })
 
 
-router.post('/order',async (req,res)=>{
+router.post('/orderPlacement',async (req,res)=>{
     let userName = req.session.user.userName;
-    let cart = await getUserCart(userName);
-    console.log(cart);
+    try{
+        let cart = await getUserCart(userName);
+        let productQuantity = cart.product;
+        if(Object.keys(productQuantity).length == 0)
+        {
+            res.statusCode = 202;
+        }else{
+            await placeOrder(productQuantity,userName);
+            res.statusCode = 200;
+        }
+    }
+    catch(err){
+        console.log(err);
+        res.statusCode = 500;
+    }
+    res.setHeader('Content-Type','text/plain');
+    res.send();
 });
+
 
 router.get('/deleteProduct/:pid',async (req,res)=>{
     let {pid} = req.params;

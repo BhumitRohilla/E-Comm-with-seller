@@ -3,7 +3,7 @@ const router = express.Router();
 
 
 //db function
-const {getUser} = require('../func/userFunc');
+const {getUser} = require('../func/dbFunction/userFunc');
 
 router.route('/')
 .get((req,res)=>{

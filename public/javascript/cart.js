@@ -1,3 +1,8 @@
+let order = document.getElementById('buy-btn');
+
+order.addEventListener('click',orderBtn);
+
+
 function increaseQuantity(id){
     let element = document.getElementById(id);
     let request = new XMLHttpRequest;
@@ -27,6 +32,20 @@ function decreaseQuantity(id){
         }
         if(request.status == 204){
             
+        }
+    })
+}
+
+function orderBtn(){
+    let request = new XMLHttpRequest;
+    request.open('POST','/myCart/orderPlacement');
+    request.send();
+    request.addEventListener('load',function(){
+        if(request.status == 200){
+            window.location.href="/thanks";
+        }
+        if(request.status == 202){
+            alert("No Product In The Cart");
         }
     })
 }

@@ -1,4 +1,4 @@
-const dbFunc = require('./dbFunction');
+const dbFunc = require('../db/dbFunction');
 
 
 

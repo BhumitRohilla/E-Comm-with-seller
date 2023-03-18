@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const {updateUser} = require('../func/userFunc')
-const {updateSeller} = require('../func/sellerFunc');
+const {updateUser} = require('../func/dbFunction/userFunc')
+const {updateSeller} = require('../func/dbFunction/sellerFunc');
 const sendMail = require('../func/sendMail');
 
 router.route('/')

@@ -4,6 +4,7 @@
   },
   "id": "1",
   "sellerId":"1",
+  "active":true,
   "title": "LIGHT OF ALARIYA",
   "tag": [
     "Exploration",
@@ -24,6 +25,7 @@
   },
   "id": "2",
   "sellerId":"1",
+  "active":true,
   "title": "Ogre Chambers DX",
   "tag": [
     "Action Roguelike",
@@ -44,6 +46,7 @@
   },
   "id": "3",
   "sellerId":"1",
+  "active":true,
   "title": "Elog Plug",
   "tag": [
     "Adventure",
@@ -64,6 +67,7 @@
   },
   "id": "4",
   "sellerId":"1",
+  "active":true,
   "title": "Counter Strike",
   "tag": [
     "FPS",
@@ -85,6 +89,7 @@
   },
   "id": "6",
   "sellerId":"2",
+  "active":true,
   "title": "Red Dead Redemption 2",
   "tag": [
     "Open World",
@@ -107,6 +112,7 @@
   },
   "id": "7",
   "sellerId":"2",
+  "active":true,
   "title": "Call of Duty",
   "tag": [
     "FPS",
@@ -127,6 +133,7 @@
   },
   "id": "8",
   "sellerId":"2",
+  "active":true,
   "title": "Call of Duty WORLD AT WAR",
   "tag": [
     "Zombies",
@@ -147,6 +154,7 @@
   },
   "id": "9",
   "sellerId":"2",
+  "active":true,
   "title": "CupHead",
   "tag": [
     "Difficult",
@@ -169,6 +177,7 @@
   },
   "id": "10",
   "sellerId":"1",
+  "active":true,
   "title": "GOD OF WAR",
   "tag": [
     "Exploration",
@@ -189,6 +198,7 @@
   },
   "id": "11",
   "sellerId":"2",
+  "active":true,
   "title": "ELDEAN RING",
   "tag": [
     "Souls-like",
@@ -209,6 +219,7 @@
   },
   "id": "5",
   "sellerId":"1",
+  "active":false,
   "title": "Halo: THe Master Chief Collection",
   "tag": [
     "Greate Soundtrack",

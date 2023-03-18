@@ -54,7 +54,7 @@ function deleteSellerBtn(userName){
     let data = JSON.stringify({userName});
     console.log(data);
     let request = new XMLHttpRequest;
-    request.open('POST','/sellerPage/deleteSeller');
+    request.open('POST','/adminDashboard/deleteSeller');
     request.setRequestHeader('Content-Type','application/JSON');
     request.send(data);
     request.addEventListener('load',function(){

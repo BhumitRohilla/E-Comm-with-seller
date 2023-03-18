@@ -1,14 +1,11 @@
-[
-    {
-     "sellerID":
-        [
-            {
-                "orderId":"status"
-            },
-            {
-                "orderId":"status"
-            }
-        ]
-    }
-
-]
+{
+    "sellerID":
+    [
+        {
+            "orderId":"status"
+        },
+        {
+            "orderId":"status"
+        }
+    ]
+}

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
-const { getUser, updateUser } = require('../func/userFunc');
+const { getUser, updateUser } = require('../func/dbFunction/userFunc');
 const sendMail = require('../func/sendMail');
 
 router.route('/')

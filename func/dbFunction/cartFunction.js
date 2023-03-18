@@ -1,4 +1,4 @@
-let {findOne, insertOne, updateOne, removePropertyFromAll, removeProperty} = require('./dbFunction');
+let {findOne, insertOne, updateOne, removePropertyFromAll, removeProperty} = require('../db/dbFunction');
 
 let {increaseOneStock,getAllProduct,increaseStocks} = require('./productFunc');
 
@@ -77,6 +77,11 @@ function getUserCart( userName){
     return findOne(collection,{userName});
 }
 
+function deleteFromCart(pid,userName){
+    let productToRemove = 'product.'+pid;
+    // * Check for alternative
+    return removeProperty(collection,{userName},{productToRemove});
+}
 
 async function removeFromCart(pid, userName){
     let quantity ;

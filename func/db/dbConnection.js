@@ -7,7 +7,7 @@ async function newConnection(){
     const databaseName = 'e-comm';
     try{
         await client.connect(databaseName);
-        console.log('connected');
+        // console.log('connected');
         return client.db(databaseName);
     }
     catch(err){
@@ -17,7 +17,7 @@ async function newConnection(){
 }
 
 async function close(){
-    console.log('disconnected');
+    // console.log('disconnected');
     try{
         await client.close();
     }

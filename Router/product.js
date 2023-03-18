@@ -1,6 +1,6 @@
 const express = require('express');
-const { getQuantity, addToCart, removeFromCart } = require('../func/cartFunction');
-const { getProducts, getSingleProduct, decreaseOneStock } = require('../func/productFunc');
+const { getQuantity, addToCart, removeFromCart } = require('../func/dbFunction/cartFunction');
+const { getProducts, getSingleProduct, decreaseOneStock } = require('../func/dbFunction/productFunc');
 const router = express.Router();
 
 router.route('/')

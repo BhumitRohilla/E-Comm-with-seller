@@ -6,6 +6,8 @@ const multer = require('multer');
 const upload = multer({'dest':'public/image/product/'});
 const fs = require('fs');
 const path = require('path');
+const { getSellerOrder } = require('../func/dbFunction/sellerOrderList');
+const {rejectOrder} = require('../func/dbFunction/orderFunction');
 
 router.route('/')
 .get(async (req,res)=>{
@@ -33,7 +35,6 @@ router.route('/addNewProduct/:key')
 .post(upload.single("product-img")  ,async (req,res)=>{
     let {key} = req.params;
     let obj = {};
-    
     if(req.file.size > 256000){
         console.log("File is large");
         res.statusCode = 402;
@@ -192,7 +193,35 @@ router.post('/deleteProduct',(req,res)=>{
     })
 })
 
+router.route('/order')
+.get(async (req,res)=>{
+    let order
+    try{
+        order = await getSellerOrder(req.session.user.id);
+    }
+    catch(err){
+        console.log(err);
+        res.statusCode = 500;
+        res.send("Server Error Occure");
+    }
+    console.log(order);
+    res.render('sellerOrder.ejs',{userType:req.session.userType,user:req.session.user,order});
+})
 
+router.post('/order/reject/:key',async (req,res)=>{
+    let {key} = req.params;
+    console.log(key);
+    try{
+        await rejectOrder(key);
+        res.statusCode = 200;
+        res.send();
+    }
+    catch(err){
+        console.log(err);
+        res.statusCode = 500;
+        res.send();
+    }
+})
 
 
 function checkProductValues(obj){

@@ -10,6 +10,9 @@ let timeId = null;
 
 function newSellerPage(){
     creationMode = true;
+    let blurDiv = document.createElement('div');
+    blurDiv.classList.add('blur-back');
+    document.body.appendChild(blurDiv);
     // window.open(window.location.href+'/newSeller/','_blank',strWindowFeatures);
     newSellerBtn.setAttribute('id','newSellerDiv');
     newSellerBtn.removeEventListener('click',newSellerPage);
@@ -23,9 +26,9 @@ function newSellerPage(){
 }
 
 function submit(evt){
+    submitBtn.setAttribute('disabled','true');
     evt.stopPropagation();
     let email = emailInput.value;
-    // console.log(email);
     if(email == ''){
         errorShow('Email Is Empty');
         return ;
@@ -38,6 +41,7 @@ function submit(evt){
     let data = {email};
     request.send(JSON.stringify(data));
     request.addEventListener('load',function(){
+        submitBtn.removeAttribute('disabled');
         switch(request.status){
             case 409:{
                 errorShow("User Already Exists");
@@ -68,7 +72,6 @@ function deleteSellerBtn(userName){
                 window.location.href = '/';
             }
             case 500:{
-                alert("Server Time Out");
                 break;
             }
 
@@ -87,6 +90,7 @@ function checkKey(){
 }
 
 function closeDiv(){
+    document.getElementsByClassName('blur-back')[0].remove();
     creationMode = false;
     newSellerBtn.innerHTML = btnInside;
     newSellerBtn.setAttribute('id','addNewSeller');

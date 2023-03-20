@@ -25,11 +25,15 @@
         <div class="td">Quantity</div>
         <div class="td"><%=item.quantity%></div>
       </div>
-    <% if(item.resolve!=null){%>
-      <div class="tr">
-        <div class="td">Delivery</div>
-        <div class="td"><%=item.resolve%>></div>
-      </div>
+    <% if(item.resolve == true){%>
+      <% if(item.fullfilled == true){ %>
+        <div class="tr">
+          <div class="td">Delivery</div>
+          <div class="td"><%=item.resolve%>></div>
+        </div>
+      <%}else{%>
+        <div class="tr"></div>
+      <%}%>
     <%}%>
     </div>
   </div>

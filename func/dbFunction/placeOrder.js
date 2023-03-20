@@ -25,7 +25,7 @@ async function placeOrder(product,userName){
 
 async function getOrderId(key,quantity){
     let orderId = crypt.randomBytes(10).toString('hex');
-    let obj ={orderId,"product":{"productID":key,quantity,status:false,resolve:null}};
+    let obj ={orderId,"product":{"productID":key,quantity},resolve:false,status:null,'ExpectedDate':null,msg:null};
     try{
         
         await insertOne(collection,obj);

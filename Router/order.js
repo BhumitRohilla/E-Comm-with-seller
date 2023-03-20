@@ -4,12 +4,17 @@ const router = express.Router();
 
 router.route('/')
 .get(async (req,res)=>{
-    let order = await getUserOrder(req.session.user.userName);
-    console.dir(order, { depth: null })
+    let order ;
+    try{
+        order = await getUserOrder(req.session.user.userName);
+    }
+    catch(err){
+        console.log(err);
+        res.statusCode = 500;
+        res.send("Server Error");
+        return ;
+    }
     res.render('order',{userType:req.session.userType,user:req.session.user,order});
-})
-.post((req,res)=>{
-
 })
 
 module.exports = router;

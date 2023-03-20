@@ -28,19 +28,26 @@ async function addOrderUserList(userName,orderId){
 }
 
 async function getUserOrder(userName){
-    let data = await findOne(collection,{userName});
-    console.log(data);
-    let order = data.order;
-    for(key in order){
-        order[key] = await getOrderFromOrderId(key);
-        console.log(order[key]);
-        if(order[key] == null){
-           delete order[key];
-        }else{
-            Object.assign(order[key].product,await getSingleProduct(order[key].product.productID));
+    let data ;
+    try{
+        data = await findOne(collection,{userName});
+        if(data == null){
+            return null;
         }
+        let order = data.order;
+        for(key in order){
+            order[key] = await getOrderFromOrderId(key);
+            if(order[key] == null){
+               delete order[key];
+            }else{
+                Object.assign(order[key].product,await getSingleProduct(order[key].product.productID));
+            }
+        }
+        return order;
     }
-    return order;
+    catch(err){
+        throw err;
+    }
 }
 
 module.exports = {addOrderUserList,getUserOrder};

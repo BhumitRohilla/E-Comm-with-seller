@@ -1,4 +1,4 @@
-const {findOne} = require('../db/dbFunction');
+const {findOne, updateOne} = require('../db/dbFunction');
 
 let collection = 'order';
 
@@ -6,4 +6,9 @@ function getOrderFromOrderId(orderId){
     return findOne(collection,{orderId});
 }
 
-module.exports ={getOrderFromOrderId};
+function rejectOrder(orderId){
+    console.log(orderId);
+    return updateOne(collection,{orderId},{resolve:true,status:false});
+}
+
+module.exports ={getOrderFromOrderId,rejectOrder};

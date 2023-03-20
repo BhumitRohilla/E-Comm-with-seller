@@ -181,7 +181,7 @@ body{
     border-radius: 5px;
 }
 
-img{
+.item-img{
     width: 460px;
     height: 219px;
 }
@@ -194,7 +194,7 @@ img{
         box-sizing: border-box;
         width: 100%;
     }
-    img{
+    .item-img{
         width: 100%;
         height: auto;
     }

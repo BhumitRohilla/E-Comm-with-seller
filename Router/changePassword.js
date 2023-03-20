@@ -22,7 +22,6 @@ router.route('/')
     // db.collection('users').updateOne({"userName":user.userName,"email":user.email},{$set:{}})
     //TODO: Lower priority move it into it's own function
     try{
-
         if(userType === 'user')
         {
             await updateUser({"userName":user.userName,"email":user.email},{password});

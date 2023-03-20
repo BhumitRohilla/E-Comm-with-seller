@@ -64,11 +64,9 @@ app.get('/logout',(req,res)=>{
 })
 
 
-//TODO: Error handing in js file of changePassword
 app.use('/changePassword',changePasswordAuth,changePassword);
 
 
-//TODO: Disable button when pressed and alert only when email send
 app.use('/forgetPassword',forgetPasswordAuth,forgetPassword);
 
 
@@ -86,10 +84,9 @@ app.use('/myCart',homeAuth,cart);
 
 // * Done Upto Hear
 //TODO: Test Delete Seller
-//TODO: Cannot delete seller;
 app.use('/adminDashboard',adminAuth,adminDashboard);
 
-
+//TODO: Order Page in seller
 app.use('/sellerPage',sellerAuth,sellerPage);
 
 
@@ -97,6 +94,7 @@ app.use('/newSeller',newSeller);
 
 
 app.use('/myOrder',homeAuth,order);
+
 
 
 app.get('*',(req,res)=>{

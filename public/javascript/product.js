@@ -1,7 +1,11 @@
 import {requestServerNoDelay} from '/javascript/general.js'
 const showMore = document.getElementById('show-more');
 const itemList = document.getElementById('item-container');
+let errMsg;
 console.log(showMore);
+
+
+
 
 
 showMore.addEventListener('click',function(){

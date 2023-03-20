@@ -181,6 +181,12 @@ function showDetails(element){
         evt.stopPropagation();
         buy(element,quantitySpan);
     });
+    
+    // Error msg 
+    let errMsg = document.createElement('p');
+    errMsg.id = 'err-msg'
+    errMsg.innerText = "This Is Dummy Text";
+    element.appendChild(errMsg);
     element.appendChild(button);
     console.log(button);
 }
@@ -195,7 +201,8 @@ function buy(element,quantitySpan){
             quantitySpan.innerText = parseInt(quantitySpan.innerText) + 1;
         }
         if(request.status == 204){
-            alert('Out of stocks');
+            showErr('Out of stocks');
+            // alert('Out of stocks');
         }
     })
 }
@@ -210,8 +217,11 @@ function removeDetails(element){
     blur.remove();
     document.body.style.overflow = "initial";
     element.innerHTML = previousData;
-    
 }
 
-
+function showErr(err){
+    let errMsg = document.getElementById('err-msg');
+    errMsg.style.visibility = 'visible';
+    errMsg.innerText = err;
+}
 </script>

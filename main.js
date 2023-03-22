@@ -24,6 +24,8 @@ const adminDashboard = require('./Router/adminDashboard');
 const sellerPage = require('./Router/sellerPage');
 const newSeller = require('./Router/newSeller');
 const order = require('./Router/order');
+const { newConnectionSQL } = require('./func/db/dbConnectionSQL');
+const dbFunction = require('./func/db/dbFunctionSQL');
 
 app.set('view engine','ejs');
 app.use(express.static('public'));
@@ -34,6 +36,7 @@ app.use(session({
     saveUninitialized: true,
     resave: false 
 }))
+
 
 
 app.get('/',(req,res)=>{
@@ -48,7 +51,7 @@ app.get('/home',homeAuth,(req,res)=>{
 
 app.use('/login',userAuth,login);
 
-
+// * DONE UPTO HERE:
 app.use('/sellerLogin',sellerLogin);
 
 
@@ -79,12 +82,10 @@ app.use('/product',homeAuth,product);
 app.use('/myCart',homeAuth,cart);
 
 
-
-
-
 // * Done Upto Hear
 //TODO: Test Delete Seller
 app.use('/adminDashboard',adminAuth,adminDashboard);
+
 
 //TODO: Order Page in seller
 app.use('/sellerPage',sellerAuth,sellerPage);

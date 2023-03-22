@@ -1,9 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const userAuth = require('../middleware/userAuth');
-const {insertUser} = require('../func/dbFunction/userFunc');
+// const {insertUser} = require('../func/dbFunction/userFunc');
+const {insertUser} = require('../func/dbFunction-sql/userFunc');
 const crypto = require('crypto');
 const sendVerificationMail = require('../func/sendVerificationMail');
+
+
+//* select * from user where userName = '' and password = '';
+/**
+ **  insert into user(userName,password,email,is_varified,passwordChange,active,role)
+ **  values(userName,password,email,is_varified,passwordChnage,active,role);
+ */
 
 router.route('/')
 .get(userAuth,(req,res)=>{
@@ -12,9 +20,9 @@ router.route('/')
 .post(async (req,res)=>{
     let {name,userName,password,email} = req.body;
     let user={
-        name,userName,password,email,isVarified: false,key: crypto.randomBytes(5).toString('hex'),passwordChange: null
+        name,userName,password,email,isVarified: false,key: crypto.randomBytes(6).toString('hex'),passwordChange: null
     }
-    try{
+    try{        
         await insertUser(user);
         sendVerificationMail(user,function(err){
             if(!err){
@@ -29,7 +37,6 @@ router.route('/')
         });
     }
     catch(err){
-        console.log(err);
         switch(err){
             case 401:
                 res.statusCode = 401;

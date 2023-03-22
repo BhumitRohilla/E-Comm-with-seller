@@ -9,6 +9,9 @@ const path = require('path');
 const { getSellerOrder } = require('../func/dbFunction/sellerOrderList');
 const {rejectOrder} = require('../func/dbFunction/orderFunction');
 
+//* getProduct :-> select * from product where sellerUser = '';
+//* addProduct :-> insert into product(productId,sellerUser,title,DateOfRelease,status,userReview,img,active) values();
+
 router.route('/')
 .get(async (req,res)=>{
     let err = req.session.err;

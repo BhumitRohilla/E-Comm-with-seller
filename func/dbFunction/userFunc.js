@@ -1,5 +1,5 @@
 const dbFunc = require('../db/dbFunction');
-
+const crypto = require('crypto');
 
 
 const collection = 'users';
@@ -38,6 +38,18 @@ async function updateUser(filter,output){
     return  dbFunc.updateOne(collection,filter,output)
 }
 
+function verifyUser(filter){
+    return updateUser(filter,{'isVarified':true});
+}
 
+async function updatePasswordChangeToken(email){
+    let passwordChange = crypto.randomBytes(6).toString('hex');
+    await  updateUser({email},{passwordChange});
+    return passwordChange;
+}
 
-module.exports = {checkUser,getUser,insertUser,updateUser};
+async function removePasswordChangeToken(email){
+    await updateUser({email},{passwordChange:NULL});
+}
+
+module.exports = {checkUser,getUser,insertUser,updateUser,verifyUser,updatePasswordChangeToken};

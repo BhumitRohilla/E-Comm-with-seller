@@ -2,13 +2,17 @@ const express = require('express');
 const { getOneSeller, updateSeller } = require('../func/dbFunction/sellerFunc');
 const router  = express.Router();
 
+
+//* select * from user where key = '';
+//* insert into user(userName,password,email,is_varified,passwordChange,active,role,key) values(userName,password,email,1,NULL,1,'seller',NULL);
+
+
 router.route('/:key')
 .get(async (req,res)=>{
     let {key} = req.params;
     let sellerDetails;
     try{
         sellerDetails = await getOneSeller({'userCreateKey':key});
-        // console.log(sellerDetails);
     }
     catch(err){
         res.statusCode = 404;

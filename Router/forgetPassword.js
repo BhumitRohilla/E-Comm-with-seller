@@ -1,8 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
-const { getUser, updateUser } = require('../func/dbFunction/userFunc');
+// const { getUser, updatePasswordChangeToken } = require('../func/dbFunction/userFunc');
+const { getUser, updatePasswordChangeToken, removePasswordChangeToken } = require('../func/dbFunction-sql/userFunc');
 const sendMail = require('../func/sendMail');
+
+
+//* select * from user where email = ''        getUser;
+//* update user set passwordChange = '' and email = '';
+
 
 router.route('/')
 .get((req,res)=>{
@@ -17,20 +23,19 @@ router.route('/')
             res.end();
             return ;
         }
-        let changePasswordToken = crypto.randomBytes(6).toString('hex');
-        data.passwordChange = changePasswordToken;
         try{
-            await updateUser({email},{"passwordChange":changePasswordToken})
-            data.passwordChange = changePasswordToken;
-            sendMail(data,"Password Reset","Change Password",`<h1>Reset Password</h1><p>Use <a href="http://${process.env.HOSTNAME}:${process.env.PORT}/forgetPassword/change/${data.passwordChange}">THIS</a> link to reset password </p>`,function(){    
+            let key = await updatePasswordChangeToken(email);
+            sendMail(data,"Password Reset","Change Password",`<h1>Reset Password</h1><p>Use <a href="http://${process.env.HOSTNAME}:${process.env.PORT}/forgetPassword/change/${key}">THIS</a> link to reset password </p>`,function(){    
                 res.statusCode = 200;
                 res.send();
+                return ;
             });
         }
         catch(err){
             console.log(err);
             res.statusCode = 404;
             res.send();
+            return ;
         }
     }
     catch(err){
@@ -43,6 +48,7 @@ router.route('/')
 
 router.get("/change/:key",async (req,res)=>{
     let {key} = req.params;
+    console.log(key);
     let user;
     try{
         user = await getUser({'passwordChange':key});
@@ -50,7 +56,7 @@ router.get("/change/:key",async (req,res)=>{
             req.session.is_logged_in = true;
             req.session.user = user;
             req.session.userType = 'user';
-            updateUser({"userName":user.userName},{passwordChange:null});
+            await removePasswordChangeToken(user.email);
         }
         res.redirect("/changePassword");
     }

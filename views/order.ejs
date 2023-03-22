@@ -7,15 +7,14 @@
     <title>Document</title>
     <link rel="stylesheet" href="/styles/general.css">
     <link rel="stylesheet" href="/styles/admin.css">
-    <link rel="stylesheet" href="/styles/sellerPage.css">
+    <link rel="stylesheet" href="/styles/userOrder.css"?
 </head>
 <body>
     <%- include('partials/header',{userType,user}) %>
     <div>
-        
         <div class="product-container">
             <% for(key in order){ %>
-                        <%- include('partials/orderItem',({"item":order[key].product})); %>
+                        <%- include('partials/orderItem',({"item":order[key].product,"resolve":order[key].resolve,"status":order[key].status})); %>
             <%}%>
         </div>
     </div>

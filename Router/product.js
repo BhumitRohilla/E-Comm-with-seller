@@ -3,6 +3,15 @@ const { getQuantity, addToCart, removeFromCart } = require('../func/dbFunction/c
 const { getProducts, getSingleProduct, decreaseOneStock } = require('../func/dbFunction/productFunc');
 const router = express.Router();
 
+//* getProducts         :-> select * from product offset skip fetch next 5 rows only;
+//* getQuantity         :-> select quantity from cart_item where cartid = (select cartId from cart where userName = '') and productId = '';
+//* getSingleProduct    :-> select * from product where productId =  '';
+//! checkIfPresent      :-> select 'exists' from cart_item where cartId = (select cartId from cart where userName = '' ) and productId = '';
+//! addToCart (present) :-> update outer set quantity =((select quanity from cart_item as inner where inner.cartId = outer.cartId and productId = '' )+1) from cart_item as outer into cart_item  values();
+//! ifCartDoesNotExists :-> insert into cart values();
+//! addToCart (not present) :-> insert into cart_item values();
+
+
 router.route('/')
 .get(async (req,res)=>{
     // readFileStream('./product.json',function(data){

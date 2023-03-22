@@ -5,6 +5,10 @@ function rejectOrder(id){
    request.open('POST',`/sellerPage/order/reject/${id}`);
    request.send();
    request.addEventListener('load',function(){
-    console.log(request.status);
+      switch(request.status){
+         case 200:{
+            window.location.reload();
+         }
+      }
    })
 }

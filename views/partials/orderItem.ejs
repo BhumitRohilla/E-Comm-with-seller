@@ -1,5 +1,5 @@
 <div class="admin-item-container">
-    <img src=<%=`/image/product/${item.img}`%> alt="">
+    <img class="item-img" src=<%=`/image/product/${item.img}`%> alt="">
     <div class="table">
       <div class="tr">
         <div class="td">Title</div>
@@ -25,16 +25,22 @@
         <div class="td">Quantity</div>
         <div class="td"><%=item.quantity%></div>
       </div>
-    <% if(item.resolve == true){%>
-      <% if(item.fullfilled == true){ %>
+    </div>
+    <% if(resolve == true){%>
+      <% if(status == true){ %>
         <div class="tr">
           <div class="td">Delivery</div>
-          <div class="td"><%=item.resolve%>></div>
+          <div class="td"><%=ExpectedDate%>></div>
         </div>
       <%}else{%>
-        <div class="tr"></div>
+        <div class="seller-msg seller-msg-rejected">
+          <p>Sorry, Order Rejected By Seller</p>
+        </div>
       <%}%>
+    <%}else{%>
+      <div class="seller-msg seller-msg-pending">
+        <p>Status Pending</p>
+      </div>
     <%}%>
-    </div>
   </div>
   

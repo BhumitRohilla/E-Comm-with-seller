@@ -1,10 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const {updateUser} = require('../func/dbFunction/userFunc')
+// const {verifyUser} = require('../func/dbFunction/userFunc')
+
+/**
+ ** update user set is_varified = 1 where [key] = "";
+ */
+
+
+const {verifyUser} = require('../func/dbFunction-sql/userFunc');
 
 router.get('/:key',(req,res)=>{
     let filter = {'key':req.params.key};
-    updateUser(filter,{"isVarified":true})
+    verifyUser(filter)
     .then(()=>{
         req.session.destroy();
         res.redirect('/login');

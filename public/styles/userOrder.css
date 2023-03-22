@@ -1,0 +1,22 @@
+.seller-msg{
+    width: 100%;
+    overflow: hidden;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.product-container{
+    align-items: start;
+}
+
+.seller-msg-rejected{
+    color: #dc3545;
+}
+
+.seller-msg-pending{
+    color:#ffc107;
+}
+
+.seller-msg-shipped{
+    color: #00ff00;
+}

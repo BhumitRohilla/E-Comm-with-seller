@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 
 
-//db function
-const {getUser} = require('../func/dbFunction/userFunc');
+//* select * from user where userName = '' and password = '' and role = "user";
+
+
+const {getUser} = require('../func/dbFunction-sql/userFunc');
 
 router.route('/')
 .get((req,res)=>{
@@ -21,10 +23,11 @@ router.route('/')
         }
         req.session.is_logged_in=true;
         req.session.user = data;
-        if(userName === 'admin'){
+        if(userName === 'admin' && password === process.env.ADMIN_PASS){
             req.session.userType = 'admin';
         }else{
             req.session.userType = 'user';
+            console.log(req.session.user.isVarified);
         }
         res.statusCode = 200;
         res.setHeader('Content-Type','text/plain')

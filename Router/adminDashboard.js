@@ -6,6 +6,11 @@ const router = express.Router();
 const crypto = require('crypto');
 const sendInvitationMail = require('../func/sendInvitationMail');
 
+//* getAllSellers   :-> select * from user where role = 'seller';
+//* getAllProduct   :-> select * from product;
+//* deleteSeller    :-> update user set active = 0 where userName = '' and role = 'seller';
+//* deleteAllProduct:-> update product set active = 0 where sellerUser = 'sellerUserName';
+//* deleteSingleProduct :-> update product set active = 0 where productId = '';
 
 router.route('/')
 .get(async (req,res)=>{

@@ -4,6 +4,10 @@ const {updateUser} = require('../func/dbFunction/userFunc')
 const {updateSeller} = require('../func/dbFunction/sellerFunc');
 const sendMail = require('../func/sendMail');
 
+
+//* update user set password = '' where userName = '' 
+
+
 router.route('/')
 .get((req,res)=>{
     res.render('changePassword',{"userType":req.session.userType , 'user':req.session.user });

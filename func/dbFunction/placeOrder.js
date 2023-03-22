@@ -5,6 +5,10 @@ const { deleteFromCart } = require('./cartFunction');
 const {addOrderUserList} = require('./userOrderList');
 
 
+//* addOrderUserList    :-> insert into order values();
+//* insert int order_item values(),();
+//* delete cart_item where cartId = (select cartId from cart where userName = '' and role = 'user');
+
 let collection = 'order';
 
 async function placeOrder(product,userName){

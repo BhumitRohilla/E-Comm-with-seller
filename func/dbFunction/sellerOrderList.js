@@ -38,7 +38,7 @@ async function getSellerOrder(id){
         for(key in order){
             order[key] = await getOrderFromOrderId(key);
             console.log(order[key]);
-            if(order[key] == null || order[key].resolved == true){
+            if(order[key] == null || order[key].resolve == true){
                 delete order[key];
             }else{
                 Object.assign(order[key].product,await getSingleProduct(order[key].product.productID));

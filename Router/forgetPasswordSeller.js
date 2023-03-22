@@ -4,6 +4,12 @@ const router = express.Router();
 const crypto = require('crypto');
 const sendMail = require('../func/sendMail');
 
+
+//* select * from user where email = ''        getUser;
+//* update user set passwordChange = '' and email = '';
+
+
+
 router.route('/')
 .get((req,res)=>{
     res.render('forget');

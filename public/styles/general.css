@@ -37,6 +37,8 @@ body{
     position: absolute;
     top: 10px;
     right: 20px;
+    display: flex;
+    align-content: center;
 }
 
 .nav button{
@@ -54,11 +56,116 @@ body{
     height: 44px;
 }
 
+#user-nav{
+    padding: 2px 5px;
+    height: 20px;
+    align-self: center;
+}
+
 header{
     position: sticky;
     top: 0px;
     z-index: 2;
 }
+
+#hamburger-btn{
+    width: 40px;
+    height: 30px;
+    padding: 5px;
+    display: none;
+}
+
+#hamburger-btn:hover{
+    background-color: rgb(77, 85, 91);
+}
+
+
+#hamburger-inside{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    
+}
+
+.div-line{
+    width: 100%;
+    height: 3px;
+    background-color: white;
+}
+
+
+#nav-expand-div{
+    height: 100%;;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 0%;
+    transition: width 0.61s;
+    background-color: #171a21;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#div-inside-nav-expand{
+    width: 70%;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#div-inside-nav-expand button{
+    height: 40px;
+    background-color: transparent;
+    border: transparent;
+    outline: transparent;
+    border-radius: 5px;
+    color: #c6c6c6;
+    font-size: 1.2rem;
+}
+
+#div-inside-nav-expand button:hover{
+    color: #e3e1e1;
+}
+
+#hamburger-close-btn{
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    width: 40px;
+    height: 30px;
+    padding: 5px;
+    border: transparent;
+    outline: transparent;
+    background-color: transparent;
+}
+#hamburger-close-btn:hover{
+    background-color: rgb(77, 85, 91);
+}
+
+.right-cross{
+    position: absolute;
+    top:50%;
+    left: 50%;
+    transform: rotate( -45deg) translate(-50%,-50%);
+    transform-origin: 0% 0%;
+    /* transform: translate(-50%,-50%); */
+    width: 20px;
+}
+.left-cross{
+    position: absolute;
+    top:50%;
+    left: 50%;
+    transform: rotate(45deg) translate(-50%,-50%);
+    transform-origin: 0% 0%;
+    width: 20px;
+}
+
+
 
 .flex-row{
     display: flex;
@@ -199,12 +306,12 @@ header{
     width: 100vw;
     height: 100vh;
     filter: blur(200px);
-    z-index: 3;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
     box-sizing: border-box;
     background: radial-gradient(ellipse at top, #32353b, transparent), radial-gradient(ellipse at bottom, #32353b, transparent);
+    z-index: 3;
 }
 
 
@@ -232,3 +339,16 @@ header{
 
 }
 
+
+
+@media only screen and (max-width: 620px){
+    #hamburger-btn{
+        display:initial;
+    }
+    .nav-collapse-btn{
+        display: none;
+    }
+    #user-nav{
+        display: none;
+    }
+}

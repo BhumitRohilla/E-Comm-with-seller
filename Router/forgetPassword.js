@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
 // const { getUser, updatePasswordChangeToken } = require('../func/dbFunction/userFunc');
-const { getUser, updatePasswordChangeToken, removePasswordChangeToken } = require('../func/dbFunction-sql/userFunc');
+// const { getUser, updatePasswordChangeToken, removePasswordChangeToken } = require('../func/dbFunction-sql/userFunc');
 const sendMail = require('../func/sendMail');
 
+const {getUser} = require('../func/common/userFunction');
 
 //* select * from user where email = ''        getUser;
 //* update user set passwordChange = '' and email = '';

@@ -1,7 +1,12 @@
 const express = require('express');
-const { getQuantity, addToCart, removeFromCart } = require('../func/dbFunction/cartFunction');
-const { getProducts, getSingleProduct, decreaseOneStock } = require('../func/dbFunction/productFunc');
+// const { getQuantity, addToCart, removeFromCart } = require('../func/dbFunction/cartFunction');
+// const {getQuantity,addToCart,removeFromCart} = require('../func/dbFunction-sql/cartFunction');
+// const { getProducts, getSingleProduct, decreaseOneStock } = require('../func/dbFunction/productFunc');
 const router = express.Router();
+
+// const {getProducts,getSingleProduct,decreaseOneStock} = require('../func/dbFunction-sql/productFunc');
+const {getProducts,getSingleProduct,decreaseOneStock} = require('../func/common/productFunc');
+const {addToCart,getQuantity} = require('../func/common/cartFunc');
 
 //* getProducts         :-> select * from product offset skip fetch next 5 rows only;
 //* getQuantity         :-> select quantity from cart_item where cartid = (select cartId from cart where userName = '') and productId = '';
@@ -18,7 +23,16 @@ router.route('/')
     //     res.render('product',({user:req.session.userName,"data":data}));
     // },req);
     req.session.index = 0;
-    let data = await getProducts(0,5);
+    let data ;
+    try{
+        data = await getProducts(0,5);
+    }
+    catch(err){
+        console.log(err);
+        res.render('errPage',{'userType':req.session.userType,'user': req.session.user ,"error":"Server Error Occure"});
+        return ;
+    }
+    console.log(data);
     req.session.index = data.length;
     
     res.render('product',{'userType':req.session.userType,'user': req.session.user ,"data":data});
@@ -76,6 +90,7 @@ router.get('/getProductValue/:id',async (req,res)=>{
     res.send(quantity.toString());
 })
 
+// * Done UptoHear;
 
 router.get('/buyProduct/:pid',async (req,res)=>{
     let {pid} = req.params;

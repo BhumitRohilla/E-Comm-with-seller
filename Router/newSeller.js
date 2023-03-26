@@ -1,7 +1,9 @@
 const express = require('express');
-const { getOneSeller, updateSeller } = require('../func/dbFunction/sellerFunc');
+// const { getOneSeller, updateSeller } = require('../func/dbFunction/sellerFunc');
 const router  = express.Router();
 
+// const { getOneSeller,createNewSellerFinal } = require('../func/dbFunction-sql/sellerFunc');
+const {getOneSeller,createNewSellerFinal} = require('../func/common/sellerFunc')
 
 //* select * from user where key = '';
 //* insert into user(userName,password,email,is_varified,passwordChange,active,role,key) values(userName,password,email,1,NULL,1,'seller',NULL);
@@ -39,14 +41,19 @@ router.route('/:key')
             if(sellerDetails == null){
                 res.statusCode = 404;
             }else{
-                await updateSeller({'userCreateKey':key},data);
+                await createNewSellerFinal({'userCreateKey':key},data,sellerDetails.email)
+                // await updateSeller({'userCreateKey':key},data);
                 res.statusCode = 200;
             }
         }
     }
     catch(err){
+        if(err.message == 'User Already Exists'){
+            res.statusCode = 409;
+        }else{
+            res.statusCode = 500;
+        }
         console.log(err);
-        res.statusCode = 500;
     }
     res.setHeader('Content-Type','text/plain');
     res.send();

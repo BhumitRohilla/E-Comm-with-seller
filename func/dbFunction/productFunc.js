@@ -9,7 +9,7 @@ function getProducts(starting,number){
 
 
 function getSingleProduct(pid){
-    return findOne(collection,{"id":pid,'active':true});
+    return findOne(collection,{"ProductId":pid,'active':true});
 }
 
 
@@ -71,7 +71,7 @@ async function getAllProduct(){
     // * let data = await db.collection('product').find().toArray();
     let obj ={};
     data =  data.forEach((element)=>{
-        obj[element.id] = element;
+        obj[element.ProductId] = element;
     })
     return obj;
 }
@@ -102,6 +102,7 @@ async function addProduct(obj){
 }
 
 function updateProduct(pid,data){
+    data.tag = data.tag.split(' ');
     return updateOne(collection,{"id":pid,'active':true},data);
 }
 
@@ -113,4 +114,8 @@ function deleteMultipleProduct(filter){
     return updateMany(collection,filter,{'active':false});
 }
 
-module.exports = {getProducts,getSingleProduct,decreaseOneStock,increaseOneStock,getAllProduct,addProduct,updateProduct,deleteSingleProduct,getAllProductArrayForm,deleteMultipleProduct,increaseStocks};
+function getAllProductOfSeller(sellerName){
+    return getAllProductArrayForm({sellerName});
+}
+
+module.exports = {getProducts,getSingleProduct,decreaseOneStock,increaseOneStock,getAllProduct,addProduct,updateProduct,deleteSingleProduct,getAllProductArrayForm,deleteMultipleProduct,increaseStocks,getAllProductOfSeller};

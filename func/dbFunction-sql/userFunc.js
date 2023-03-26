@@ -7,7 +7,7 @@ async function getUser(user){
         query = `select * from users where userName = '${user.userName}' and password = '${user.password}'`;
     }
     if(user.email){
-        query = `select * from users where email = '${user.email}'`;
+        query = `select * from users where email = '${user.email}' `;
     }
     if(user.passwordChange){
         query = `select * from users where passwordChange = '${user.passwordChange}'`;
@@ -20,7 +20,7 @@ async function getUser(user){
 
 async function insertUser(user){
     console.log(user);
-    let query = `insert into users([name],userName,password,email,isVarified,[key]) values('${user.name}','${user.userName}','${user.password}','${user.email}',${(user.isVarified)===true?1:0},'${user.key}')`;
+    let query = `insert into users([name],userName,password,email,isVarified,[key],role,active) values('${user.name}','${user.userName}','${user.password}','${user.email}',0,'${user.key}','user',1)`;
     try{
         await newConnectionSQL(query);
     }
@@ -51,4 +51,11 @@ async function removePasswordChangeToken(email){
     return newConnectionSQL(query);
 }
 
-module.exports = {getUser,insertUser,verifyUser,updatePasswordChangeToken,removePasswordChangeToken};
+
+async function changePassword(userName,password){
+    console.log(userName,password);
+    let query = `update users set password = '${password}' where userName = '${userName}'`;
+    return newConnectionSQL(query);
+}
+
+module.exports = {getUser,insertUser,verifyUser,updatePasswordChangeToken,removePasswordChangeToken,changePassword};

@@ -18,10 +18,12 @@ function getUser(user){
 async function insertUser(user){
     let userName = user.userName;
     let email = user.email;
-    let oldUser = {userName,email}
+    let oldUser = {userName};
+    let oldEmail = {email};
     
     try{
-        oldUser = await getUser(oldUser);
+        oldUser  = await getUser({oldUser});
+        oldEmail = await getUser({email});
     }
     catch(err){
         throw err;
@@ -29,6 +31,9 @@ async function insertUser(user){
 
     if(oldUser != null){
         throw 401;
+    }
+    if(oldEmail != null){
+        throw 402;
     }
     return dbFunc.insertOne(collection,user);
 }
@@ -52,4 +57,9 @@ async function removePasswordChangeToken(email){
     await updateUser({email},{passwordChange:NULL});
 }
 
-module.exports = {checkUser,getUser,insertUser,updateUser,verifyUser,updatePasswordChangeToken};
+function changePassword(userName,password){
+    return updateUser({userName},{password});
+}
+
+
+module.exports = {checkUser,getUser,insertUser,updateUser,verifyUser,updatePasswordChangeToken,changePassword,removePasswordChangeToken};

@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const {updateUser} = require('../func/dbFunction/userFunc')
-const {updateSeller} = require('../func/dbFunction/sellerFunc');
+// const {updateUser} = require('../func/dbFunction/userFunc')
+// const {updateSeller} = require('../func/dbFunction/sellerFunc');
 const sendMail = require('../func/sendMail');
 
+// const {changePassword} = require('../func/dbFunction-sql/userFunc'); 
 
-//* update user set password = '' where userName = '' 
-
+const {changePassword} = require('../func/common/changePassword');
 
 router.route('/')
 .get((req,res)=>{
@@ -22,27 +22,14 @@ router.route('/')
     }
     let user = req.session.user;
     let userType =  req.session.userType;
-    // console.log(user);
-    // db.collection('users').updateOne({"userName":user.userName,"email":user.email},{$set:{}})
     //TODO: Lower priority move it into it's own function
     try{
-        if(userType === 'user')
-        {
-            await updateUser({"userName":user.userName,"email":user.email},{password});
-            sendMail(user,"Password Change","Info Board","<h1>Password Change</h1><p>Your password has been changed</p>",function(){
-                res.statusCode = 200;
-                res.setHeader('Content-Type','text/plain');
-                res.send();
-            })
-        }else if(userType === 'seller'){
-            //db.collection('collection').updateOne(filter,data);
-            await updateSeller({"userName":user.userName,"email":user.email},{password});
-            sendMail(user,"Password Change Seller","Info Board","<h1>Password Change</h1><p>Your password has been changed</p>",function(){
-                res.statusCode = 200;
-                res.setHeader('Content-Type','text/plain');
-                res.send();
-            })
-        }
+        await changePassword(user.userName,password,userType);
+        sendMail(user,"Password Change Seller","Info Board","<h1>Password Change</h1><p>Your password has been changed</p>",function(){
+            res.statusCode = 200;
+            res.setHeader('Content-Type','text/plain');
+            res.send();
+        })
         req.session.destroy();
     }
     catch(err){

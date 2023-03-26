@@ -55,6 +55,10 @@ submitBtn.addEventListener('click',function(){
                     errThrough("UserName already Taken",4);
                     break;
                 }
+                case 402:{
+                    errThrough("Email already In Use",4);
+                    break;
+                }
                 case 303:{
                     errThrough("Email cant be sent",5);
                 }

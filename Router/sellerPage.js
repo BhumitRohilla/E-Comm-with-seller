@@ -1,14 +1,15 @@
 const express = require('express');
-const { getAllProductArrayForm, addProduct, getSingleProduct, updateProduct, deleteSingleProduct } = require('../func/dbFunction/productFunc');
+// const { getAllProductArrayForm, addProduct, getSingleProduct, updateProduct, deleteSingleProduct } = require('../func/dbFunction/productFunc');
 const router = express.Router();
-const crypto = require('crypto');
 const multer = require('multer');
 const upload = multer({'dest':'public/image/product/'});
 const fs = require('fs');
 const path = require('path');
+
 const { getSellerOrder } = require('../func/dbFunction/sellerOrderList');
 const {rejectOrder} = require('../func/dbFunction/orderFunction');
 
+// const {getAllProductOfSeller,addProduct,getSingleProduct,deleteSingleProduct,updateProduct} = require('../func/dbFunction-sql/productFunc');
 //* getProduct :-> select * from product where sellerUser = '';
 //* addProduct :-> insert into product(productId,sellerUser,title,DateOfRelease,status,userReview,img,active) values();
 
@@ -20,12 +21,12 @@ router.route('/')
     }
     let allProduct;
     try{
-        allProduct = await getAllProductArrayForm({'sellerId':req.session.user.id});
+        allProduct = await getAllProductOfSeller(req.session.user.userName);
     }
     catch(err){
         console.log(err);
         res.statusCode = 500;
-        res.send();
+        res.render('errPage')
     }
     res.render('sellerPage',{"userType":req.session.userType,"user":req.session.user,"err":err,"product":allProduct});
 })
@@ -52,8 +53,9 @@ router.route('/addNewProduct/:key')
         }
         else{
             try{
-                obj.id = crypto.randomBytes(7).toString('hex');
-                obj.sellerId = key;
+                // obj.id = crypto.randomBytes(7).toString('hex');
+                // obj.sellerId = key;
+                obj.sellerName = key;
                 await addProduct(obj);
                 res.statusCode = 200;
             }
@@ -75,10 +77,9 @@ router.route('/updateProduct/:pid')
     let item;
     try{
         item = await getSingleProduct(pid);
-        if(item.sellerId !== req.session.user.id){
+        if(item.sellerName !== req.session.user.userName){
             throw err;
         }
-
     }
     catch(err){
         res.statusCode = 404;
@@ -96,35 +97,35 @@ router.route('/updateProduct/:pid')
     //TODO:
     try{
         item = await getSingleProduct(pid);
-        if(item.sellerId !== req.session.user.id){
+        if(item.sellerName !== req.session.user.userName){
             throw "unAutharised";
         }
         let updated = false;
-        if(title!=""){
+        if(title.trim()!=""){
             item.title = title;
             updated = true;
         }
-        if(tags!=""){
-            item.tag = tags.split(' ');
+        if(tags.trim()!=""){
+            item.tag = tags;
             updated = true;
         }
-        if(date !=''){
+        if(date.trim() !=''){
             item.date = date;
             updated = true;
         }
-        if(status != ''){
+        if(status.trim() != ''){
             item.status = status;
             updated = true;
         }
-        if(userReviews != '' && userReviews > 0){
+        if(userReviews.trim() != '' && userReviews > 0){
             item.userReviews = userReviews;
             updated = true;
         }
-        if(stock != '' && stock > 0){
+        if(stock.trim() != '' && stock > 0){
             item.stock = stock;
             updated = true;
         }
-        if(item['about-game'] != '' ){
+        if(item['about-game'].trim() != '' ){
             item['about-game'] = about;
             updated = true;
         }
@@ -174,8 +175,17 @@ router.post('/deleteProduct',(req,res)=>{
     })
     req.on('end',async function(){
         //TODO: Low Priority Create Function of this code
-        let product = await getSingleProduct(req.data);
-        if(product.sellerId === req.session.user.id){
+        let product;
+        try{
+            product = await getSingleProduct(req.data);
+        }
+        catch(err){
+            console.log(err);
+            res.statusCode = 403;
+            res.setHeader('Content-Type','text/plain');
+            res.send();
+        }
+        if(product.sellerName === req.session.user.userName){
             deleteSingleProduct(req.data)
             .then(function(){
                 res.setHeader('Content-Type','text/plain');

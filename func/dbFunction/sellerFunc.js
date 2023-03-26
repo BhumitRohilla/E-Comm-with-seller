@@ -1,6 +1,7 @@
 const {findAll,findOne, insertOne,updateOne, deleteOne}  = require('../db/dbFunction');
 const crypto  = require('crypto');
-const { updateProduct, deleteMultipleProduct } = require('./productFunc');
+
+const { updateProduct, deleteMultipleProduct, getAllProduct } = require('./productFunc');
 
 const collection = 'sellers';
 
@@ -21,7 +22,7 @@ async function createNewSeller(email){
             throw new Error("User Already Exists");
         }
         let data ={email};
-        data.id = crypto.randomBytes(4).toString('hex');
+        data.userId = crypto.randomBytes(4).toString('hex');
         data.userCreateKey = crypto.randomBytes(6).toString('hex');
         data.active = true;
         await insertOne(collection,data);
@@ -44,5 +45,23 @@ async function deleteOneSeller(filter){
     return updateOne(collection,filter,{'active':false});
 }
 
+function createNewSellerFinal(key,data){
+        return updateSeller(key,data);
+}
 
-module.exports = {getAllSellers,getOneSeller,createNewSeller,updateSeller,deleteOneSeller};
+async function updatePasswordChangeToken(email){
+    let passwordChange = crypto.randomBytes(6).toString('hex');
+    await  updateSeller({email},{passwordChange});
+    return passwordChange;
+}
+
+async function removePasswordChangeToken(email){
+    await updateSeller({email},{passwordChange:NULL});
+}
+
+function changePassword(userName,password){
+    return updateSeller({userName},{password});
+}
+
+
+module.exports = {getAllSellers,getOneSeller,createNewSeller,updateSeller,deleteOneSeller,createNewSellerFinal,updatePasswordChangeToken,removePasswordChangeToken,changePassword};

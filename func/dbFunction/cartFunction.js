@@ -1,9 +1,6 @@
 let {findOne, insertOne, updateOne, removePropertyFromAll, removeProperty} = require('../db/dbFunction');
-
 let {increaseOneStock,getAllProduct,increaseStocks} = require('./productFunc');
-
 let collection = 'cart';
-
 
 async function getQuantity(pid,userName){
     let data ;
@@ -72,10 +69,6 @@ async function addToCart(pid, userName){
     }
 }
 
-
-function getUserCart( userName){
-    return findOne(collection,{userName});
-}
 
 function deleteFromCart(pid,userName){
     let productToRemove = 'product.'+pid;

@@ -7,7 +7,9 @@ const router = express.Router();
  */
 
 
-const {verifyUser} = require('../func/dbFunction-sql/userFunc');
+// const {verifyUser} = require('../func/dbFunction-sql/userFunc');
+
+const {verifyUser} = require('../func/common/userFunction');
 
 router.get('/:key',(req,res)=>{
     let filter = {'key':req.params.key};

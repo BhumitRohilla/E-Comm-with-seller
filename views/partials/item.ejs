@@ -110,7 +110,7 @@
     }
 </style>
 
-<div class="container container-hover" id="<%= item.id %>" onclick="showDetails( '<%= item.id %>' )">
+<div class="container container-hover" id="<%= item.ProductId %>" onclick="showDetails( '<%= item.ProductId %>' )">
     <div style="display: flex;height: fit-content;">
         <div class="img-container">
             <img class="img" src="/image/product/<%=item.img%>" alt="">
@@ -131,7 +131,7 @@
             <div><span class='<%= item.status%>'> <%= item.status %> </span><span>| <%= item.userReviews %> User Reviews</span></div>
         </div>
     </div>
-    <div class="about-game" style="visibility: collapse;overflow: hidden;">
+    <div class="about-game" style="display: none;overflow: hidden;">
         <p  ><%=item["about-game"]%></p>
     </div>
 </div>
@@ -171,7 +171,7 @@ function showDetails(element){
     let data = element.getElementsByClassName('text-container')[0];
     img.style.width = '50%';
     let aboutGame = element.getElementsByClassName('about-game')[0];
-    aboutGame.style.visibility='visible';
+    aboutGame.style.display = 'initial'
     let button = document.createElement('buttton');
     button.innerText = "BUY";
     button.classList.add('submit-btn')

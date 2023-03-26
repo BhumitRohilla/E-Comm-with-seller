@@ -24,8 +24,7 @@ const adminDashboard = require('./Router/adminDashboard');
 const sellerPage = require('./Router/sellerPage');
 const newSeller = require('./Router/newSeller');
 const order = require('./Router/order');
-const { newConnectionSQL } = require('./func/db/dbConnectionSQL');
-const dbFunction = require('./func/db/dbFunctionSQL');
+
 
 app.set('view engine','ejs');
 app.use(express.static('public'));
@@ -51,7 +50,7 @@ app.get('/home',homeAuth,(req,res)=>{
 
 app.use('/login',userAuth,login);
 
-// * DONE UPTO HERE:
+
 app.use('/sellerLogin',sellerLogin);
 
 
@@ -67,6 +66,7 @@ app.get('/logout',(req,res)=>{
 })
 
 
+//TODO: In generlizing need to pay attention as seller and user table is seperate in mongo
 app.use('/changePassword',changePasswordAuth,changePassword);
 
 
@@ -75,14 +75,13 @@ app.use('/forgetPassword',forgetPasswordAuth,forgetPassword);
 
 app.use('/forgetPasswordSeller',forgetPasswordAuth,forgetPasswordSeller);
 
-
+//TODO: Mongo Code is broken fix it
 app.use('/product',homeAuth,product);
 
-
+//TODO: Implement order button code in sql
 app.use('/myCart',homeAuth,cart);
 
 
-// * Done Upto Hear
 //TODO: Test Delete Seller
 app.use('/adminDashboard',adminAuth,adminDashboard);
 
@@ -94,12 +93,13 @@ app.use('/sellerPage',sellerAuth,sellerPage);
 app.use('/newSeller',newSeller);
 
 
+// * DONE UPTO HERE:
 app.use('/myOrder',homeAuth,order);
 
 
 
 app.get('*',(req,res)=>{
-    res.sendStatus(404);
+    res.render('errPage',{userType:req.session.userType,user:req.session.user,error:"PAGE NOT FOUND!"});
 })
 
 

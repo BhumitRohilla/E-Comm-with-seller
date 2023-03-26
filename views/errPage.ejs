@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/styles/general.css">
+    <link rel="stylesheet" href="/styles/errPage.css">
+</head>
+<body>
+    <%- include('partials/header',({"userType": userType,"user":user})); %>
+    <div class='all-container'>
+        <div class="error-container">
+            <div class="title">
+                <h1>Error</h1>
+            </div>
+            <div class="second-container">
+                <div class="text-container">
+                    <h3>Sorry!</h3>
+                    <h4>An error was encountered while procssing your request:</h4>
+                    <h2 class="text-blue"><%=error%></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

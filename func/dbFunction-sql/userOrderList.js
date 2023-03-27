@@ -14,7 +14,6 @@ async function getUserOrder(userName){
         Object.assign(order[result[i].OrderId].product,await getSingleProduct(result[i].ProductId));
         delete order.ProductId;
     }
-    console.log(result);
     return order;
 }
 

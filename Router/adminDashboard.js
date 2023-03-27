@@ -46,13 +46,11 @@ router.post('/deleteSeller',async (req,res)=>{
     let {userName} = req.body;
     try{
         let seller = await getOneSellerUserNameOnly(userName);
-        console.log(seller);
         await deleteOneSeller(seller.userName);
         sendMail(seller,"Account Deletion","Info Board","<h1>Account Delete</h1><p>Your seller account is deleteed,Please contect Steam</p>",function(){})
         res.statusCode = 200;
     }
     catch(err){
-        console.log(err);
         res.statusCode =500;
     }
     res.setHeader('Content-Type','text/plain');
@@ -92,7 +90,6 @@ router.route('/newSeller')
     res.render('newSeller');
 })
 .post(async (req,res)=>{
-    console.log(req.body);
     let {email} = req.body;
     let  userCreateKey
     try{

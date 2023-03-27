@@ -15,9 +15,7 @@ router.route('/')
 .get(async (req,res)=>{
     try{
         let cart = await getUserCart(req.session.user.userName);
-        console.log(cart);
         let cartItem = await getUserCartItem(cart); 
-        console.log(cartItem);
         res.render('cart',({"userType":req.session.userType,"user":req.session.user,"items":cartItem}));
     }
     catch(err){

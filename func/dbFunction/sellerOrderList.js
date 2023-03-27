@@ -28,16 +28,15 @@ async function addOrderSellerList(pid,orderId){
     }
 }
 
-async function getSellerOrder(id){
+async function getSellerOrder(sellerName){
     try{
-        let data = await findOne(collection,{sellerId:id});
+        let data = await findOne(collection,{sellerName});
         if(data == null){
             return null;
         }
         let order = data.order;
         for(key in order){
             order[key] = await getOrderFromOrderId(key);
-            console.log(order[key]);
             if(order[key] == null || order[key].resolve == true){
                 delete order[key];
             }else{

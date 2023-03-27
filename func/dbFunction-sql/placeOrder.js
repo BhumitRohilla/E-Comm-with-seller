@@ -12,7 +12,7 @@ async function placeOrder(product,userName){
 
 async function getOrderId(userName){
     try{
-        let query = `insert into Orders(userName) values(${userName})`;
+        let query = `insert into Orders(userName) values('${userName}')`;
         return newConnectionSQL(query);   
     }
     catch(err){

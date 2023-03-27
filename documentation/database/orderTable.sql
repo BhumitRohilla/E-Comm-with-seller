@@ -13,7 +13,10 @@ create table Order_Item( sellerName varchar(50) not null,OrderId int not null,Pr
 
 create clustered index PK_INDEX_ORDERS on Orders(userName,OrderId);
 
+
 create clustered index Order_Item_Index on Order_Item(sellerName,TimeOfPurchase);
+create index NON_CLUSTERED_SELLER_INDEX on Order_Item(sellerName);
+
 
 -------------------------------------------
 

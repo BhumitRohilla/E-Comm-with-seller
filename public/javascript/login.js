@@ -16,7 +16,6 @@ loginBtn.addEventListener('click',function(){
         loginBtn.classList.add('submit');
         loginBtn.innerHTML = `Sign in`;
         loginBtn.removeAttribute("disabled");
-        console.log(request.status);
         switch(request.status){
             case 200:{
                 window.location.href = '/home';

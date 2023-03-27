@@ -7,7 +7,6 @@ function getOrderFromOrderId(orderId){
 }
 
 function rejectOrder(orderId){
-    console.log(orderId);
     return updateOne(collection,{orderId},{resolve:true,status:false});
 }
 

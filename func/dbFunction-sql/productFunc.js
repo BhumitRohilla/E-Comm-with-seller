@@ -4,7 +4,6 @@ const { newConnectionSQL } = require("../db/dbConnectionSQL");
 async function getProducts(start,length){
     let query = `select * from dbo.getProduct(${start},${length});`;
     let result = await newConnectionSQL(query);
-    console.log(result);
     result.forEach((element)=>{
         element.tag = element.tag.split(' ');
     })
@@ -27,7 +26,6 @@ async function getSingleProduct(pid){
 async function decreaseOneStock(pid){
     let query = `exec decraseStock ${pid}`;
     let result = await newConnectionSQL(query);
-    console.log(result);
 }
 
 async function getAllProductArrayForm(){
@@ -36,7 +34,6 @@ async function getAllProductArrayForm(){
     result.forEach((element)=>{
         element.tag = element.tag.split(' ');
     })
-    console.log(result);
     return result;
 }
 
@@ -71,6 +68,11 @@ async function getAllProductOfSeller(sellerName){
 
 async function updateProduct(pid,item){
     console.dir('item',item);
+    let date = new Date(item.date);
+    let finalDate = date.getFullYear().toString();
+    finalDate += '-'+date.getMonth();
+    finalDate += '-'+date.getDate();
+    item.date = finalDate;
     let query = `exec updateProduct  ${pid},'${item.title}','${item.date}','${item.status}',${item.userReviews},'${item.img}',${item.stock},'${item.tag}','${item['about-game']}'`;
     return newConnectionSQL(query);
 }

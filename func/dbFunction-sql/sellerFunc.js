@@ -19,14 +19,11 @@ async function getOneSeller(user){
     if(user.userCreateKey){
         query = `select * from SellerToCreate where userCreation = '${user.userCreateKey}'`;
     }
-    console.log(query);
     let result = await newConnectionSQL(query);
-    console.log(result);
     return result[0];
 }
 
 async function createNewSellerFinal(key,data,email){
-    console.log(data);
     let query = `exec createNewSellerFinal '${data.userName}','${data.password}','${email}','${data.name}'`
     return newConnectionSQL(query);
 }
@@ -59,7 +56,6 @@ async function createNewSeller(email){
     catch(err){
         throw err;
     }
-    console.log(result);
     return key;
 }
 

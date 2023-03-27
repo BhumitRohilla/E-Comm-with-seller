@@ -20,7 +20,6 @@ router.route('/')
         res.send("Server Error");
         return ;
     }
-    console.log(order);
     res.render('order',{userType:req.session.userType,user:req.session.user,order});
 })
 

@@ -6,11 +6,12 @@ const upload = multer({'dest':'public/image/product/'});
 const fs = require('fs');
 const path = require('path');
 
-const { getSellerOrder } = require('../func/dbFunction/sellerOrderList');
-const {rejectOrder} = require('../func/dbFunction/orderFunction');
+// const { getSellerOrder } = require('../func/dbFunction/sellerOrderList');
+// const {rejectOrder} = require('../func/dbFunction/orderFunction');
 
 const {getAllProductOfSeller,addProduct,getSingleProduct,updateProduct,deleteSingleProduct} = require('../func/common/productFunc');
-
+const { getSellerOrder } = require('../func/common/sellerOrderList');
+const {rejectOrder} = require('../func/dbFunction-sql/orderFunction');
 // const {getAllProductOfSeller,addProduct,getSingleProduct,deleteSingleProduct,updateProduct} = require('../func/dbFunction-sql/productFunc');
 //* getProduct :-> select * from product where sellerUser = '';
 //* addProduct :-> insert into product(productId,sellerUser,title,DateOfRelease,status,userReview,img,active) values();
@@ -42,7 +43,6 @@ router.route('/addNewProduct/:key')
     let {key} = req.params;
     let obj = {};
     if(req.file.size > 256000){
-        console.log("File is large");
         res.statusCode = 402;
     }
     else{
@@ -71,7 +71,6 @@ router.route('/addNewProduct/:key')
     res.send();
 
 })
-
 
 router.route('/updateProduct/:pid')
 .get(async (req,res)=>{
@@ -169,7 +168,6 @@ router.route('/updateProduct/:pid')
     }
 });
 
-
 router.post('/deleteProduct',(req,res)=>{
     req.data = '';
     req.on('data',function(chunk){
@@ -212,20 +210,18 @@ router.route('/order')
 .get(async (req,res)=>{
     let order
     try{
-        order = await getSellerOrder(req.session.user.id);
+        order = await getSellerOrder(req.session.user.userName);
     }
     catch(err){
         console.log(err);
         res.statusCode = 500;
         res.send("Server Error Occure");
     }
-    console.log(order);
     res.render('sellerOrder.ejs',{userType:req.session.userType,user:req.session.user,order});
 })
 
 router.post('/order/reject/:key',async (req,res)=>{
     let {key} = req.params;
-    console.log(key);
     try{
         await rejectOrder(key);
         res.statusCode = 200;
@@ -238,7 +234,6 @@ router.post('/order/reject/:key',async (req,res)=>{
     }
 })
 
-
 function checkProductValues(obj){
     if(obj.title == "" || obj.tag == "" || obj.date == "" || obj.statusProduct == "" || obj.userReviews == "" /*|| price == ""*/ || obj.stock == ""  || obj.about == "" || obj.img == ""){
         return false;
@@ -249,8 +244,5 @@ function checkProductValues(obj){
         return true;
     }
 }
-
-
-
 
 module.exports = router;

@@ -41,7 +41,6 @@ router.route('/')
         req.session.is_logged_in=true;
         req.session.user = data;
         req.session.userType = 'user';
-        console.log(req.session.user.isVarified);
         res.statusCode = 200;
         res.setHeader('Content-Type','text/plain')
         res.end();

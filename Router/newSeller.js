@@ -34,6 +34,9 @@ router.route('/:key')
     try{
         if(userName == "" || name == "" || password == "" ){
             res.statusCode = 303;
+        }
+        else if(userName == 'admin'){
+            throw 409;
         }else{
             let data = {userName,name,password};
             data.userCreateKey = null ;

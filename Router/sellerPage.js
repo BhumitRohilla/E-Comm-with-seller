@@ -9,6 +9,8 @@ const path = require('path');
 const { getSellerOrder } = require('../func/dbFunction/sellerOrderList');
 const {rejectOrder} = require('../func/dbFunction/orderFunction');
 
+const {getAllProductOfSeller,addProduct,getSingleProduct,updateProduct,deleteSingleProduct} = require('../func/common/productFunc');
+
 // const {getAllProductOfSeller,addProduct,getSingleProduct,deleteSingleProduct,updateProduct} = require('../func/dbFunction-sql/productFunc');
 //* getProduct :-> select * from product where sellerUser = '';
 //* addProduct :-> insert into product(productId,sellerUser,title,DateOfRelease,status,userReview,img,active) values();
@@ -22,13 +24,13 @@ router.route('/')
     let allProduct;
     try{
         allProduct = await getAllProductOfSeller(req.session.user.userName);
+        res.render('sellerPage',{"userType":req.session.userType,"user":req.session.user,"err":err,"product":allProduct});
     }
     catch(err){
         console.log(err);
         res.statusCode = 500;
-        res.render('errPage')
+        res.render('errPage',{userType:req.session.userType,userName:req.session.user.userName,error:err})
     }
-    res.render('sellerPage',{"userType":req.session.userType,"user":req.session.user,"err":err,"product":allProduct});
 })
 
 router.route('/addNewProduct/:key')

@@ -1,5 +1,7 @@
 const express = require('express');
-const { getUserOrder } = require('../func/dbFunction/userOrderList');
+// const { getUserOrder } = require('../func/dbFunction/userOrderList');
+
+const {getUserOrder} = require('../func/common/userOrderList');
 const router = express.Router();
 
 

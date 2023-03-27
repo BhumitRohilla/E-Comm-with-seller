@@ -1,6 +1,6 @@
 function homeAuth(req,res,next){
     if(req.session.is_logged_in && req.session.userType === 'admin'){
-        next();
+        res.redirect('/adminDashboard');
     }else if(req.session.is_logged_in && req.session.userType === 'seller'){
         res.redirect('/sellerPage');
     }else if(req.session.is_logged_in && req.session.userType === 'user' && req.session.user.isVarified){

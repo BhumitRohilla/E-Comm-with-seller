@@ -51,4 +51,34 @@ function getAllProductOfSeller(sellerName){
     return result;
 }
 
-module.exports = {getProducts,getSingleProduct,decreaseOneStock,getAllProductArrayForm,getAllProductOfSeller};
+function addProduct(obj){
+    let result;
+    if(process.env.USESQL == 'true'){
+        result = sqlProduct.addProduct(obj);
+    }else{
+        result = mongoProduct.addProduct(obj);
+    }
+    return result;
+}
+
+function updateProduct(pid,item){
+    let result;
+    if(process.env.USESQL == 'true'){
+        result = sqlProduct.updateProduct(pid,item);
+    }else{
+        result = mongoProduct.updateProduct(pid,item);
+    }
+    return result;
+}
+
+function deleteSingleProduct(pid){
+    let result;
+    if(process.env.USESQL == 'true'){
+        result = sqlProduct.deleteSingleProduct(pid);
+    }else{
+        result = mongoProduct.deleteSingleProduct(pid);
+    }
+    return result;
+}
+
+module.exports = {getProducts,getSingleProduct,decreaseOneStock,getAllProductArrayForm,getAllProductOfSeller,addProduct,updateProduct,deleteSingleProduct};

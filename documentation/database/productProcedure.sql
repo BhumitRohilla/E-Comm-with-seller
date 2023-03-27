@@ -9,6 +9,13 @@
 --create table Product (productId int default 1 primary key, sellerName varchar(50), title varchar(100),DateOfRelease date,status varchar(10),userReview int, Img varchar(50),active bit, Foreign key (sellerName) references users(userName));
 
 
+----------------------------
+
+--*initial load
+
+
+
+
 -----------------------------
 
 --?? Triggers

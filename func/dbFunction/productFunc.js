@@ -1,5 +1,7 @@
 let {findAllWithSkip,findOne,updateOne,findAll, insertOne,deleteOne, deleteMany, updateMany} = require('../db/dbFunction');
 
+let crypto = require('crypto');
+
 let collection = 'product';
 
 
@@ -21,7 +23,7 @@ async function increaseOneStock(pid){
         product = await getSingleProduct(pid);
         stock = product.stock;
         stock++;
-        await updateOne(collection,{"id":pid},{"stock":stock});
+        await updateOne(collection,{"ProductId":pid},{"stock":stock});
     }
     catch(err){
         throw err;
@@ -34,7 +36,7 @@ async function increaseStocks(pid,stocks){
     try{
         product = await getSingleProduct(pid);
         stock = product.stock + stocks;
-        await updateOne(collection,{'id':pid},{"stock":stock});
+        await updateOne(collection,{'ProductId':pid},{"stock":stock});
     }
     catch(err){
         throw err;
@@ -53,7 +55,7 @@ async function decreaseOneStock(pid){
         throw err;
     }
     try{
-        await updateOne(collection,{"id":pid},{"stock": stock -1 });
+        await updateOne(collection,{"ProductId":pid},{"stock": stock -1 });
     }
     catch(err){
         throw err;
@@ -85,12 +87,12 @@ function getAllProductArrayForm(filter){
 async function addProduct(obj){
     //TODO: Remove This Dependency;
     let finalObj = {}
-    finalObj.id = obj.id;
-    finalObj.sellerId = obj.sellerId;
+    finalObj.ProductId = crypto.randomBytes(6).toString('hex');
+    finalObj.sellerName = obj.sellerName;
     finalObj.active = true;
     finalObj.title = obj.title;
     let tagArray = obj.tags.split(' ');
-    finalObj.date = obj.date;
+    finalObj.date = new Date(obj.date);
     finalObj.tag = tagArray;
     finalObj.status = obj.status;
     finalObj.userReviews = obj.userReviews;
@@ -103,11 +105,11 @@ async function addProduct(obj){
 
 function updateProduct(pid,data){
     data.tag = data.tag.split(' ');
-    return updateOne(collection,{"id":pid,'active':true},data);
+    return updateOne(collection,{"ProductId":pid,'active':true},data);
 }
 
 function deleteSingleProduct(pid){
-    return updateOne(collection,{"id":pid},{'active':false});
+    return updateOne(collection,{"ProductId":pid},{'active':false});
 }
 
 function deleteMultipleProduct(filter){

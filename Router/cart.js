@@ -1,11 +1,11 @@
 const express = require('express');
 // const { getUserCartItem, getUserCart, getQuantity, removeFromCart ,deleteFromCart} = require('../func/dbFunction/cartFunction');
-const {placeOrder} = require('../func/dbFunction/placeOrder');
 const router = express.Router();
 
 
 // const {getUserCart,getUserCartItem,getQuantity,removeFromCart,deleteFromCart} = require('../func/dbFunction-sql/cartFunction');
 const {getUserCart,getUserCartItem,getQuantity,removeFromCart,deleteFromCart} = require('../func/common/cartFunc');
+const {placeOrder} = require('../func/common/placeOrder');
 
 //* getUserCartProduct :-> select (select * from product where productId = cart_item.productId),quantity from cart_item where cartId = (select cartId from cart where userName = '');
 //! removeFromCart     :-> update c2 set quantity = (select quantity from cartItem as  c1 where c1.cartId = c2.cartId and productId = '' ) - 1 from cart_item as c2 where cartId = (select cartId from cart where userName = '') where productId = '';

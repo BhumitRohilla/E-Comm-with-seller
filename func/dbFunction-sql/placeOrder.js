@@ -20,6 +20,7 @@ async function getOrderId(userName){
     catch(err){
         console.log(err);
         throw err;
+        
     }
 }
 

@@ -7,6 +7,8 @@ async function placeOrder(product,userName){
         let query = `insert into Order_Item(sellerName,OrderId,ProductId,quantity,resolve,status,price) values((select sellerName from Product where ProductId = ${key}),${orderId},${key},${product[key].quantity},0,0,0)`; 
         await newConnectionSQL(query);
     }
+    let query = `DeleteCartForSpecificUser ${userName}`;
+    return newConnectionSQL(query);
 }
 
 

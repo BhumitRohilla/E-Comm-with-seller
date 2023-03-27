@@ -22,7 +22,7 @@ router.route('/:key')
         return ;
     }
     if(sellerDetails == null){
-        res.send('Invalid Link');
+        res.render('errPage',({userType:req.session.userType,user:req.session.user,error:"Invalid Link!"}))
         return ;
     }
     res.render('newSeller',({'email':sellerDetails.email}));

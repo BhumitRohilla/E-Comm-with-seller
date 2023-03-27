@@ -75,3 +75,14 @@ end
 
 
 -------------------------
+
+
+create procedure DeleteCartForSpecificUser @userName varchar(50)
+as
+begin
+	delete cart_Item where cartId = (select cartId from cart where userName = @userName)
+	delete cart where userName = @userName;
+end
+
+
+-------------------------

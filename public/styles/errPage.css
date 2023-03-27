@@ -9,14 +9,17 @@ body{
     width: 100%;
     height: calc( 100vh - 58px);
     display: flex;
-    align-items: center;
+    align-items: start;
     justify-content: center;
+    box-sizing: border-box;
+    padding-top: 12vh;
 }
 
 .error-container{
     width: 70%;
     height: 50%;
     min-height: fit-content;
+    min-width: 350px;
 }
 
 .title{

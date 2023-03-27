@@ -133,7 +133,6 @@
 
 @media only screen and (max-width:719px) {
     body{
-        background-color: #000000;
         overflow-x: hidden;
         width: 100vw;
     }

@@ -64,4 +64,9 @@ function changePassword(userName,password){
 }
 
 
-module.exports = {getAllSellers,getOneSeller,createNewSeller,updateSeller,deleteOneSeller,createNewSellerFinal,updatePasswordChangeToken,removePasswordChangeToken,changePassword};
+function getOneSellerUserNameOnly(userName){
+    return findOne(collection,{userName});
+}
+
+
+module.exports = {getAllSellers,getOneSeller,createNewSeller,updateSeller,deleteOneSeller,createNewSellerFinal,updatePasswordChangeToken,removePasswordChangeToken,changePassword,getOneSellerUserNameOnly};

@@ -11,6 +11,9 @@
 <body>
     <%- include('partials/header',({"userType":userType,"user":user})); %>
     <div class="main-container">
+        <div id="price">
+            <h2>Amount: ₹ <%=price%></h2>
+        </div>
         <div class="title-div">
             <h1 class="title">Cart</h1>
             <button id="buy-btn">Buy</button>

@@ -6,6 +6,15 @@
         <div class="td"><%=item.title%></div>
       </div>
       <div class="tr">
+        <div class="td">Price</div>
+        <div class="td">
+          <% if (item.price == 0){ %>
+            <%='FREE'%>
+          <%}else{%>
+            <%='₹ '+item.price%>
+          <%}%></div>
+      </div>
+      <div class="tr">
         <div class="td">Tag</div>
         <div class="td"><%=item.tag.join(' ')%></div>
       </div>

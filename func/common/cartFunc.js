@@ -62,4 +62,14 @@ function deleteFromCart(pid,userName){
     return result;
 }
 
-module.exports = {getQuantity,addToCart,getUserCart,getUserCartItem,removeFromCart,deleteFromCart};
+function getTotalPriceOfCartUserName(userName){
+    let result;
+    if(process.env.USESQL == 'true'){
+        result = sqlCart.getTotalPriceOfCartUserName(userName);
+    }else{
+        result = mongoCart.getTotalPriceOfCartUserName(userName);
+    }
+    return result;
+}
+
+module.exports = {getQuantity,addToCart,getUserCart,getUserCartItem,removeFromCart,deleteFromCart,getTotalPriceOfCartUserName};

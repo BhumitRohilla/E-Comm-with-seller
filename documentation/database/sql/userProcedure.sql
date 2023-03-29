@@ -9,8 +9,16 @@
 alter procedure deactivateSeller @userName varchar(50)
 as
 begin
-	update Product set active = 0 where sellerName = @userName;
-	update users set active = 0 where userName = @userName and role = 'seller';
+	begin transaction
+	begin try
+		delete cart_item where ProductId in (select ProductId from Product where sellerName = @userName);
+		update Product set active = 0 where sellerName = @userName;
+		update users set active = 0 where userName = @userName and role = 'seller';
+		commit ;
+	end try
+	begin catch
+		rollback transaction;
+	end catch
 end
 
 ---------------------
@@ -56,3 +64,20 @@ end
 
 
 -------------------
+
+
+--! SHOULD BE USED FOR TESTING PURPOSE ONLY
+
+
+create procedure completeDeleteSeller @sellerName varchar(50)
+as
+begin
+	delete cart_item where ProductId in (select ProductId from Product where sellerName = @sellerName);
+	delete Product_Tag where ProductId in (select ProductId from Product where sellerName = @sellerName);
+	delete About_Product where ProductId in (select ProductId from Product where sellerName = @sellerName);
+	delete Product where ProductId in (select ProductId from Product where sellerName = @sellerName);
+	delete users where userName = @sellerName;
+end
+
+
+------------------

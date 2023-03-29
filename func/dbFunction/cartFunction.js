@@ -155,4 +155,8 @@ async function deleteFromCart(pid,userName){
     return removeProperty(collection,{userName},{[propetyToDelete]:1});
 }
 
-module.exports = {getQuantity,addToCart,removeFromCart,getUserCart,getUserCartItem,deleteFromCart};
+function getTotalPriceOfCartUserName(userName){
+    return 0;
+}
+
+module.exports = {getQuantity,addToCart,removeFromCart,getUserCart,getUserCartItem,deleteFromCart,getTotalPriceOfCartUserName};

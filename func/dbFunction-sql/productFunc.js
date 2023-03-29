@@ -16,7 +16,7 @@ async function getProducts(start,length){
 }
 
 async function getSingleProduct(pid){
-    let query = `select Product.*,tag , [about-game] from Product join ( select Product_Tag.*,[about-game] from Product_Tag inner join About_Product on Product_Tag.ProductId = About_Product.ProductId) as c1 on Product.ProductId = c1.productId where Product.ProductId = ${pid} and active = 1;`;
+    let query = `select Product.*,tag,[about-game],price from Product inner join (select c1.*,price from (select Product_Tag.*,[about-game] from Product_Tag inner join About_Product on Product_Tag.productId = About_Product.ProductId) as c1 inner join Product_Price on Product_Price.ProductId = c1.productId) as c2 on  c2.ProductId = Product.ProductId where Product.ProductId = ${pid} and active = 1;`;
     let result = await newConnectionSQL(query);
     result = result[0];
     result.tag = result.tag.split(' ');
@@ -38,7 +38,7 @@ async function getAllProductArrayForm(){
 }
 
 async function deleteSingleProduct(pid){
-    let query = `update Product set active = 0 where ProductId = '${pid}'`;
+    let query = `exec deleteProduct ${pid}`;
     return newConnectionSQL(query);
 }
 
@@ -52,13 +52,13 @@ async function addProduct(obj){
         return true;
     })
     obj.tags = obj.tags.join(' ');
-    let query = `exec insertIntoProduct '${obj.sellerName}','${obj.title}','${obj.date}','${obj.stock}',${obj.userReviews},'${obj.status}','${obj.imgSrc}','${1}','${obj.tags}','${obj.about}'`;
+    let query = `exec insertIntoProduct '${obj.sellerName}','${obj.title}','${obj.date}','${obj.stock}',${obj.userReviews},'${obj.status}','${obj.imgSrc}','${1}','${obj.tags}','${obj.about}',${obj.price}`;
     return newConnectionSQL(query);
     // * return await db.collection('product').insertOne(finalObj);
 }
 
 async function getAllProductOfSeller(sellerName){
-    let query = `select Product.*,tag , [about-game] from Product join ( select Product_Tag.*,[about-game] from Product_Tag inner join About_Product on Product_Tag.ProductId = About_Product.ProductId) as c1 on Product.ProductId = c1.productId where sellerName = '${sellerName}' and active = 1;`;
+    let query = `select Product.*,tag,[about-game],price from Product inner join (select c1.*,price from (select Product_Tag.*,[about-game] from Product_Tag inner join About_Product on Product_Tag.productId = About_Product.ProductId) as c1 inner join Product_Price on Product_Price.ProductId = c1.productId) as c2 on  c2.ProductId = Product.ProductId where sellerName = '${sellerName}' and active = 1;`;
     let result =await newConnectionSQL(query);
     result.forEach((element)=>{
         element.tag = element.tag.split(' ');
@@ -73,7 +73,7 @@ async function updateProduct(pid,item){
     finalDate += '-'+date.getMonth();
     finalDate += '-'+date.getDate();
     item.date = finalDate;
-    let query = `exec updateProduct  ${pid},'${item.title}','${item.date}','${item.status}',${item.userReviews},'${item.img}',${item.stock},'${item.tag}','${item['about-game']}'`;
+    let query = `exec updateProduct  ${pid},'${item.title}','${item.date}','${item.status}',${item.userReviews},'${item.img}',${item.stock},'${item.tag}','${item['about-game']}',${item.price}`;
     return newConnectionSQL(query);
 }
 

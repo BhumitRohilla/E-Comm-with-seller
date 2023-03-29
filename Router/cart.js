@@ -4,7 +4,7 @@ const router = express.Router();
 
 
 // const {getUserCart,getUserCartItem,getQuantity,removeFromCart,deleteFromCart} = require('../func/dbFunction-sql/cartFunction');
-const {getUserCart,getUserCartItem,getQuantity,removeFromCart,deleteFromCart} = require('../func/common/cartFunc');
+const {getUserCart,getUserCartItem,getQuantity,removeFromCart,deleteFromCart,getTotalPriceOfCartUserName} = require('../func/common/cartFunc');
 const {placeOrder} = require('../func/common/placeOrder');
 
 //* getUserCartProduct :-> select (select * from product where productId = cart_item.productId),quantity from cart_item where cartId = (select cartId from cart where userName = '');
@@ -16,7 +16,7 @@ router.route('/')
     try{
         let cart = await getUserCart(req.session.user.userName);
         let cartItem = await getUserCartItem(cart); 
-        res.render('cart',({"userType":req.session.userType,"user":req.session.user,"items":cartItem}));
+        res.render('cart',({"userType":req.session.userType,"user":req.session.user,"items":cartItem,"price":cart.price}));
     }
     catch(err){
         console.log(err);
@@ -41,7 +41,7 @@ router.get('/removeProduct/:pid',async (req,res)=>{
     };
     if(quantity > 1){
         try{
-            removeFromCart(pid,req.session.user.userName);
+            await removeFromCart(pid,req.session.user.userName);
             res.statusCode = 201;
             res.setHeader('Content-Type','text/plain');
             res.send();
@@ -98,5 +98,19 @@ router.get('/deleteProduct/:pid',async (req,res)=>{
     }
 });
 
+
+router.get('/getPrice',async (req,res)=>{
+    let userName =  req.session.user.userName;
+    try{
+        let totalPrice = await getTotalPriceOfCartUserName(userName);
+        res.setHeader('Content-Type','text/plain');
+        res.send(`${totalPrice}`);
+        res.statusCode = 202;
+    }
+    catch(err){
+        console.log(err);
+        res.statusCode = 500;
+    }
+})
 
 module.exports = router;

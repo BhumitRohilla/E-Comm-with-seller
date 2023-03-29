@@ -110,7 +110,7 @@
     }
 </style>
 
-<div class="container container-hover" id="<%= item.ProductId %>" onclick="showDetails( '<%= item.ProductId %>' )">
+<div class="container  container-hover" id="<%= item.ProductId %>" onclick="showDetails( '<%= item.ProductId %>' )">
     <div style="display: flex;height: fit-content;">
         <div class="img-container">
             <img class="img" src="/image/product/<%=item.img%>" alt="">
@@ -129,6 +129,15 @@
                 </div>
             </div>
             <div><span class='<%= item.status%>'> <%= item.status %> </span><span>| <%= item.userReviews %> User Reviews</span></div>
+        </div>
+        <div class="price">
+            <p>
+                <% if(item.price == 0){%>
+                    <%='FREE'%>
+                <%}else{%>
+                    <%='₹ '+item.price%>
+                <%}%>
+            </p>
         </div>
     </div>
     <div class="about-game" style="display: none;overflow: hidden;">
@@ -162,9 +171,13 @@ function showDetails(element){
     element = document.getElementById(element);
     previousData = element.innerHTML;
     console.log(element);
+    
     element.classList.add('onPressed');
     element.classList.remove('container-hover');
-    element.setAttribute('onclick',`removeDetails('${element.id}')`);
+
+    element.removeAttribute('onclick');
+
+    blur.setAttribute('onclick',`removeDetails('${element.id}')`);
     document.body.style.overflow= "hidden";
     let img = element.getElementsByClassName('img-container')[0];
     console.log(img);

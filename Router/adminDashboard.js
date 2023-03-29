@@ -8,8 +8,8 @@ const sendInvitationMail = require('../func/sendInvitationMail');
 // const {getAllProductArrayForm,deleteSingleProduct,getSingleProduct} = require('../func/dbFunction-sql/productFunc');
 // const {getAllSellers,getOneSellerUserNameOnly,deleteOneSeller,createNewSeller} = require('../func/dbFunction-sql/sellerFunc');
 
-const {getAllProductArrayForm} = require('../func/common/productFunc');
-const {getAllSellers,createNewSeller} = require('../func/common/sellerFunc');
+const {getAllProductArrayForm,getSingleProduct, deleteSingleProduct,} = require('../func/common/productFunc');
+const {getAllSellers,createNewSeller,getOneSellerUserNameOnly,deleteOneSeller} = require('../func/common/sellerFunc');
 
 //* getAllSellers   :-> select * from user where role = 'seller';
 //* getAllProduct   :-> select * from product;
@@ -37,8 +37,6 @@ router.route('/')
         res.send();
         return ;
     }
-
-
 })
 
 
@@ -65,7 +63,7 @@ router.route('/deleteProduct')
     let product;
     try{
         product = await getSingleProduct(id);
-        seller = await getOneSellerUserNameOnly({"userName":product.sellerName})
+        seller = await getOneSellerUserNameOnly(product.sellerName);
     }
     catch(err){
         console.log(err);

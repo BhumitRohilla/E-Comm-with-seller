@@ -8,6 +8,12 @@ async function getQuantity(pid,userName){
     return result[0][''];
 }
 
+async function addToCartAndRemoveStock(pid,userName){
+    let query = `exec addToCartAndRemoveStock ${userName},${pid}`;
+    let result = await newConnectionSQL(query);
+    console.log(result);
+}
+
 async function addToCart(pid,userName){
     //console.log(pid,userName);
     let query = `exec increaseQuantityByOne ${userName}, ${pid}`;
@@ -29,6 +35,7 @@ async function getUserCart(userName){
     let objToReturn = {};
     objToReturn.userName = userName;
     objToReturn.product = {};
+    objToReturn.price = await getTotalPriceOfCartUserName(userName);
     result.forEach((element)=>{
         let obj ={};
         obj.quantity = element.quantity;
@@ -67,9 +74,15 @@ async function deleteProductFromCartWhichAreDeletedByAdmin(key){
 
 
 async function deleteFromCart(pid,userName){
-    let query = `delete cart_item where ProductId = '${pid}' and cartId = (select cartid from cart where userName = '${userName}')`;
+    let query = `exec deleteFromCart ${userName},${pid}`;
     await newConnectionSQL(query);
     return ;
 }
 
-module.exports = {getQuantity,addToCart,removeFromCart,getUserCart,getUserCartItem,deleteFromCart};
+async function getTotalPriceOfCartUserName(userName){
+    let query = `exec getTotalPrice '${userName}'`;
+    let result = await newConnectionSQL(query);
+    return result[0][''];
+}
+
+module.exports = {getQuantity,addToCart,removeFromCart,getUserCart,getUserCartItem,deleteFromCart,addToCartAndRemoveStock,getTotalPriceOfCartUserName};

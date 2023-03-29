@@ -61,6 +61,24 @@ function createNewSellerFinal(key,data,email){
     return result;
 }
 
+function getOneSellerUserNameOnly(userName){
+    let result;
+    if(process.env.USESQL == 'true'){
+        result = sql.getOneSellerUserNameOnly(userName);
+    }else{
+        result = mongo.getOneSellerUserNameOnly(userName);
+    }
+    return result;
+}
 
+function deleteOneSeller(userName){
+    let result;
+    if(process.env.USESQL == 'true'){
+        result = sql.deleteOneSeller(userName);
+    }else{
+        result = mongo.deleteOneSeller(userName);
+    }
+    return result;
+}
 
-module.exports = {getOneSeller,updatePasswordChangeToken,removePasswordChangeToken,getAllSellers,createNewSeller,createNewSellerFinal};
+module.exports = {getOneSeller,updatePasswordChangeToken,removePasswordChangeToken,getAllSellers,createNewSeller,createNewSellerFinal,getOneSellerUserNameOnly,deleteOneSeller};

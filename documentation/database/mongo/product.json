@@ -1,0 +1,298 @@
+[{
+  "_id": {
+    "$oid": "64097fd1dae30c9bc676da1d"
+  },
+  "active": true,
+  "title": "LIGHT OF ALARIYA",
+  "price": 0,
+  "tag": [
+    "Exploration",
+    "Puzzle Platformer",
+    "PRG",
+    "Puzzle",
+    "Sailing"
+  ],
+  "date": {
+    "$date": "2023-02-28T18:30:00.000Z"
+  },
+  "status": "Positive",
+  "userReviews": "10",
+  "img": "light-of-alariya.jpg",
+  "stock": 96,
+  "about-game": "Light of Alariya is an open-world, third-person, exploration puzzle game made by students at SMU Guildhall. In Light of Alariya, you traverse the ancient alien temples and ruins to restore the power of the stars and awaken your sleeping civilization.",
+  "ProductId": "1",
+  "sellerName": "bhumit"
+},{
+  "_id": {
+    "$oid": "64097fd1dae30c9bc676da1e"
+  },
+  "active": true,
+  "title": "Ogre Chambers DX",
+  "price": 0,
+  "tag": [
+    "Action Roguelike",
+    "Bullet Hell",
+    "Roguelike",
+    "Sci-fi",
+    "Shoot 'Em Up"
+  ],
+  "date": {
+    "$date": "2023-03-02T18:30:00.000Z"
+  },
+  "status": "Positive",
+  "userReviews": "10",
+  "img": "ogre-chambers-dx.jpg",
+  "stock": 75,
+  "about-game": "Roguelike bullet hell shooter, where you fend off waves of attacking monsters in a constantly transforming arena. You are rewarded with upgrades to your vulnerable spaceship if you survive long enough",
+  "ProductId": "2",
+  "sellerName": "bhumit"
+},{
+  "_id": {
+    "$oid": "64097fd1dae30c9bc676da1f"
+  },
+  "active": true,
+  "title": "Elog Plug",
+  "price": 0,
+  "tag": [
+    "Adventure",
+    "Comedy",
+    "3D Platformer ",
+    "Cute",
+    "Exploration"
+  ],
+  "date": {
+    "$date": "2023-02-24T18:30:00.000Z"
+  },
+  "status": "Very Positive",
+  "userReviews": "153",
+  "img": "elong-plug.jpg",
+  "stock": 21,
+  "about-game": "Play as an elastic plug trying to become as long as LORD ELON. Use your climbing, dangling, and stretching skills to collect coins and buy length upgrades. Will LORD ELON accept you? ",
+  "sellerName": "bhumitP",
+  "ProductId": "3"
+},{
+  "_id": {
+    "$oid": "64097fd1dae30c9bc676da20"
+  },
+  "active": true,
+  "title": "Counter Strike",
+  "price": 1140,
+  "tag": [
+    "FPS",
+    "Shooter",
+    "Multiplayer",
+    "Competitive",
+    "Action",
+    "Team-Based"
+  ],
+  "date": {
+    "$date": "2012-08-20T18:30:00.000Z"
+  },
+  "status": "Very Positive",
+  "userReviews": "699070",
+  "img": "counter-strike.jpg",
+  "stock": 53,
+  "about-game": "Counter-Strike: Global Offensive (CS: GO) expands upon the team-based action gameplay that it pioneered when it was launched 19 years ago. CS: GO features new maps, characters, weapons, and game modes, and delivers updated versions of the classic CS content (de_dust2, etc.). ",
+  "ProductId": "4",
+  "sellerName": "bhumitP"
+},{
+  "_id": {
+    "$oid": "64097fd1dae30c9bc676da22"
+  },
+  "active": true,
+  "title": "Red Dead Redemption 2",
+  "price": 3199,
+  "tag": [
+    "Open World",
+    "Story Rich",
+    "Adventure",
+    "Western",
+    "Action",
+    "Mltiplayer",
+    "Realistic"
+  ],
+  "date": {
+    "$date": "2019-12-04T18:30:00.000Z"
+  },
+  "status": "Positive",
+  "userReviews": "345091",
+  "img": "red-dead-redemption-2.jpg",
+  "stock": 102,
+  "about-game": "Winner of over 175 Game of the Year Awards and recipient of over 250 perfect scores, RDR2 is the epic tale of outlaw Arthur Morgan and the infamous Van der Linde gang, on the run across America at the dawn of the modern age. Also includes access to the shared living world of Red Dead Online. ",
+  "ProductId": "6",
+  "sellerName": "bhumit"
+},{
+  "_id": {
+    "$oid": "64097fd1dae30c9bc676da23"
+  },
+  "active": true,
+  "title": "Call of Duty",
+  "price": 650,
+  "tag": [
+    "FPS",
+    "World War 2",
+    "Action",
+    "Classic",
+    "Shooter"
+  ],
+  "date": {
+    "$date": "2003-10-28T18:30:00.000Z"
+  },
+  "status": "Positive",
+  "userReviews": "4328",
+  "img": "cod-1.jpg",
+  "stock": 95,
+  "about-game": "Call of Duty® delivers the gritty realism and cinematic intensity of World War II's epic battlefield moments like never before - through the eyes of citizen soldiers and unsung heroes from an alliance of countries who together helped shape the course of modern history.n-world, third-person, exploration puzzle game made by students at SMU Guildhall. In Light of Alariya, you traverse the ancient alien temples and ruins to restore the power of the stars and awaken your sleeping civilization.",
+  "ProductId": "7",
+  "sellerName": "bhumit"
+},{
+  "_id": {
+    "$oid": "64097fd1dae30c9bc676da24"
+  },
+  "active": true,
+  "title": "Call of Duty WORLD AT WAR",
+  "price": 975,
+  "tag": [
+    "Zombies",
+    "World War 2",
+    "FPS",
+    "Multiplayer",
+    "Action"
+  ],
+  "date": {
+    "$date": "2008-11-17T18:30:00.000Z"
+  },
+  "status": "Positive",
+  "userReviews": "37193",
+  "img": "call-of-duty-world-at-war.jpg",
+  "stock": 94,
+  "about-game": "Call of Duty is back, redefining war like you've never experienced before. Building on the Call of Duty 4®: Modern Warfare engine, Call of Duty: World at War immerses players into the most gritty and chaotic WWII combat ever experienced. ",
+  "ProductId": "8",
+  "sellerName": "bhumitP"
+},{
+  "_id": {
+    "$oid": "64097fd1dae30c9bc676da25"
+  },
+  "active": true,
+  "title": "CupHead",
+  "price": 565,
+  "tag": [
+    "Difficult",
+    "Cartoon",
+    "Co-op",
+    "Platformer",
+    "Great Soundtrack",
+    "Hand-drawn",
+    "Multiplayer"
+  ],
+  "date": {
+    "$date": "2017-09-28T18:30:00.000Z"
+  },
+  "status": "Positive",
+  "userReviews": "117089",
+  "img": "cuphead.jpg",
+  "stock": 94,
+  "about-game": "Cuphead is a classic run and gun action game heavily focused on boss battles. Inspired by cartoons of the 1930s, the visuals and audio are painstakingly created with the same techniques of the era, i.e. traditional hand drawn cel animation, watercolor backgrounds, and original jazz recordings.",
+  "ProductId": "9",
+  "sellerName": "bhumitP"
+},{
+  "_id": {
+    "$oid": "64097fd1dae30c9bc676da26"
+  },
+  "active": true,
+  "title": "GOD OF WAR",
+  "price": 1979,
+  "tag": [
+    "Exploration",
+    "Puzzle Platformer",
+    "PRG",
+    "Puzzle",
+    "Sailing"
+  ],
+  "date": {
+    "$date": "2023-02-28T18:30:00.000Z"
+  },
+  "status": "Positive",
+  "userReviews": "67214",
+  "img": "god-of-war.png",
+  "stock": 75,
+  "about-game": "His vengeance against the Gods of Olympus years behind him, Kratos now lives as a man in the realm of Norse Gods and monsters. It is in this harsh, unforgiving world that he must fight to survive… and teach his son to do the same. ",
+  "ProductId": "10",
+  "sellerName": "bhumit"
+},{
+  "_id": {
+    "$oid": "64097fd1dae30c9bc676da27"
+  },
+  "active": true,
+  "title": "ELDEAN RING",
+  "price": 2400,
+  "tag": [
+    "Souls-like",
+    "Dark Fantasy",
+    "RPG",
+    "Open World",
+    "Difficult",
+    "Fantasy"
+  ],
+  "date": {
+    "$date": "2022-02-24T18:30:00.000Z"
+  },
+  "status": "PVery ositive",
+  "userReviews": "469056",
+  "img": "elden-ring.png",
+  "stock": 99,
+  "ProductId": "11",
+  "sellerName": "bhumitP"
+},{
+  "_id": {
+    "$oid": "64097fd1dae30c9bc676da21"
+  },
+  "active": true,
+  "title": "Halo: THe Master Chief Collection",
+  "price": 899,
+  "tag": [
+    "Greate",
+    "Soundtrack",
+    "FPS",
+    "Classic",
+    "Multiplayer",
+    "Story",
+    "Rich",
+    "Sci-fi",
+    "First-Person"
+  ],
+  "date": {
+    "$date": "2019-12-02T18:30:00.000Z"
+  },
+  "status": "Very Positive",
+  "userReviews": "183433",
+  "img": "halo.jpg",
+  "stock": 22,
+  "about-game": "The Master Chief’s iconic journey includes six games, built for PC and collected in a single integrated experience. Whether you’re a long-time fan or meeting Spartan 117 for the first time, The Master Chief Collection is the definitive Halo gaming experience.",
+  "ProductId": "5",
+  "sellerName": "bhumit"
+},{
+  "_id": {
+    "$oid": "641ff14cb935749cbc70ae40"
+  },
+  "ProductId": "d083f564bf29",
+  "sellerName": "test",
+  "active": true,
+  "title": "test Uplaod Mongo",
+  "price": 3000.40,
+  "date": {
+    "$date": "2023-03-08T00:00:00.000Z"
+  },
+  "tag": [
+    "tag1",
+    "tag2",
+    "tag3",
+    "tag4",
+    "tag5"
+  ],
+  "status": "Positive",
+  "userReviews": "5",
+  "img": "112afa76d34ec2409863eba10368175c",
+  "stock": "16",
+  "about-game": "This Is Test test"
+}]

@@ -339,6 +339,9 @@ header{
 
 }
 
+*::-webkit-scrollbar{
+    display: none;
+}
 
 
 @media only screen and (max-width: 620px){

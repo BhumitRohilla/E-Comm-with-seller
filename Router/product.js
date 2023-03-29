@@ -7,6 +7,7 @@ const router = express.Router();
 // const {getProducts,getSingleProduct,decreaseOneStock} = require('../func/dbFunction-sql/productFunc');
 const {getProducts,getSingleProduct,decreaseOneStock} = require('../func/common/productFunc');
 const {addToCart,getQuantity} = require('../func/common/cartFunc');
+const { addToCartAndRemoveStock } = require('../func/common/transactions');
 
 //* getProducts         :-> select * from product offset skip fetch next 5 rows only;
 //* getQuantity         :-> select quantity from cart_item where cartid = (select cartId from cart where userName = '') and productId = '';
@@ -94,39 +95,13 @@ router.get('/getProductValue/:id',async (req,res)=>{
 
 router.get('/buyProduct/:pid',async (req,res)=>{
     let {pid} = req.params;
-    let stock
     try{
-        let product = await getSingleProduct(pid);
-        stock = product.stock;
+        await addToCartAndRemoveStock(req.session.user.userName,pid);
+        res.statusCode = 201;
     }
     catch(err){
-        res.statusCode = 404;
-        res.setHeader('Content-Type','text/plain');
-        res.send();
-        return ;
-    }
-    if(stock > 0){
-        res.statusCode = 201;
-        try{
-            await addToCart(pid,req.session.user.userName);
-        }
-        catch(err){
-            console.log(err);
-            res.statusCode = 404;
-            res.send();
-            return ;
-        }
-        try{
-            await decreaseOneStock(pid);
-        }
-        catch(err){
-            removeFromCart(pid,req.session.user.userName);
-            console.log(err);
-            res.statusCode = 404;
-            res.send();
-        }
-    }else{
-        res.statusCode = 204;
+        console.log('Transaction Failed');
+        res.statusCode = err;
     }
     res.send();
 })

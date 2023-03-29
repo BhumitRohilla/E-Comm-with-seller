@@ -98,6 +98,7 @@ async function addProduct(obj){
     finalObj.userReviews = obj.userReviews;
     finalObj.img = obj.imgSrc;
     finalObj.stock = obj.stock;
+    finalObj.price = obj.price;
     finalObj['about-game'] = obj.about;
     return insertOne(collection,finalObj);
     // * return await db.collection('product').insertOne(finalObj);

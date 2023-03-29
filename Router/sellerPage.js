@@ -46,8 +46,8 @@ router.route('/addNewProduct/:key')
         res.statusCode = 402;
     }
     else{
-        let {title,tags,date,status,userReviews,stock,about} = req.body;
-        obj = {title,tags,date,status,userReviews,stock,about};
+        let {title,tags,date,status,userReviews,stock,about,price} = req.body;
+        obj = {title,tags,date,status,userReviews,stock,about,price};
         obj.imgSrc = req.file.filename;
         let isValid = checkProductValues(obj);
         if(!isValid){
@@ -92,7 +92,7 @@ router.route('/updateProduct/:pid')
     res.render('updateProductPage',({item,action}));
 })
 .post(upload.single('product-img'),async (req,res)=>{
-    let {title,tags,date,status,userReviews,stock,about} = req.body;
+    let {title,tags,date,status,userReviews,stock,about,price} = req.body;
     let {pid} = req.params;
     let item;
     //TODO:
@@ -128,6 +128,10 @@ router.route('/updateProduct/:pid')
         }
         if(item['about-game'].trim() != '' ){
             item['about-game'] = about;
+            updated = true;
+        }
+        if(price.trim() != '' && price >0){
+            item.price = price;
             updated = true;
         }
         let olderFile = item.img;
@@ -237,7 +241,7 @@ router.post('/order/reject/:key',async (req,res)=>{
 function checkProductValues(obj){
     if(obj.title == "" || obj.tag == "" || obj.date == "" || obj.statusProduct == "" || obj.userReviews == "" /*|| price == ""*/ || obj.stock == ""  || obj.about == "" || obj.img == ""){
         return false;
-    }else if(obj.userReviews < 0 || obj.stock  < 0){
+    }else if(obj.userReviews < 0 || obj.stock  < 0 || obj.price < 0){
         alert("Please Enter none negative values");
         return false;
     }else{

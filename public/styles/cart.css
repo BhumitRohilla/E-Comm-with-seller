@@ -4,6 +4,7 @@ body{
 }
 
 .main-container{
+    position: relative;
     width: 100%;
     height: fit-content;
     margin: auto;
@@ -105,5 +106,38 @@ h1{
     img{
         width: 100%;
         height: auto;
+    }
+}
+.item-img{
+    width: 460px;
+    height: 219px;
+}
+
+#price{
+    display: flex;
+    position: absolute;
+    top: -40px;
+    left: 70px;
+}
+#price h2{
+    font-family: malvo-font-thin;
+    font-weight: 200;
+    
+}
+
+@media screen  and (max-width: 530px){
+    .product-container{
+        grid-template-columns: auto;
+    }
+    .admin-item-container{
+        box-sizing: border-box;
+        width: 100%;
+    }
+    .item-img{
+        width: 100%;
+        height: auto;
+    }
+    .footer-cluster{
+        gap:0px;
     }
 }

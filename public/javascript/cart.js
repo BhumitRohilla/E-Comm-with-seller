@@ -13,11 +13,13 @@ function increaseQuantity(id){
             let quantitySpan = element.getElementsByClassName('item-quantity')[0];
             // console.log(quantitySpan);
             quantitySpan.innerText = parseInt(quantitySpan.innerText) + 1;
+            updatePrice();
         }
         if(request.status == 204){
             alert('Out of stocks');
         }
     })
+    updatePrice();
 }
 
 function decreaseQuantity(id){
@@ -29,6 +31,7 @@ function decreaseQuantity(id){
         if(request.status == 201 ){
             let quantitySpan = element.getElementsByClassName('item-quantity')[0];
             quantitySpan.innerText = parseInt(quantitySpan.innerText) - 1;
+            updatePrice();
         }
         if(request.status == 204){
             
@@ -58,9 +61,22 @@ function deleteFromCart(id){
     request.addEventListener('load',function(){
         if(request.status == 201 ){
             element.remove();
+            updatePrice();
         }
         if(request.status == 404){
             alert('Server Time Out');
         }
+    })
+    
+}
+
+
+function updatePrice(){
+    let Price = document.getElementById('price');
+    let request = new XMLHttpRequest;
+    request.open('GET','/myCart/getPrice');
+    request.send();
+    request.addEventListener('load',function(){
+        Price.innerHTML = `<h2>Amount: ₹ ${request.response}</h2>`
     })
 }

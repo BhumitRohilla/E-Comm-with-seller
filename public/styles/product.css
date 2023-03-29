@@ -93,6 +93,10 @@ body{
     outline: 2px solid #808388;
 }
 
+.container{
+    position: relative;
+}
+
 .about-game{
     box-sizing: border-box;
     padding: 20px 10px;
@@ -103,9 +107,18 @@ footer{
     height: 40px;
 }
 
+.price{
+    position: absolute;
+    top: 7px;
+    right: 10px;
+    background-color: rgb(42, 46, 51);
+    padding: 5px 10px;
+}
+
+
 @media only screen and (max-width:500px) {
     #item-container{
-        padding-left: 0;
+        padding-left: 10px;
         padding-right: 0;
     }
 }

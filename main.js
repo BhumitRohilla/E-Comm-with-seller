@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const session = require('express-session');
+
+//middleware
 const userAuth = require('./middleware/userAuth')
 const homeAuth = require('./middleware/homeAuth');
 const adminAuth = require('./middleware/adminAuth');
@@ -35,8 +37,6 @@ app.use(session({
     saveUninitialized: true,
     resave: false 
 }))
-
-
 
 app.get('/',(req,res)=>{
     res.render('root',{'userType': req.session.userType ,"user": req.session.user});
@@ -75,25 +75,25 @@ app.use('/forgetPassword',forgetPasswordAuth,forgetPassword);
 
 app.use('/forgetPasswordSeller',forgetPasswordAuth,forgetPasswordSeller);
 
-//TODO: Mongo Code is broken fix it
+//--TODO: Mongo Code is broken fix it
 app.use('/product',homeAuth,product);
 
-//TODO: Implement order button code in sql
+// // TODO: Implement order button code in sql
+// // TODO: update Price as well when changing the quantity
+//* mongo check
 app.use('/myCart',homeAuth,cart);
 
 
-//TODO: Test Delete Seller
-app.use('/adminDashboard',adminAuth,adminDashboard);
-
-
-//TODO: Order Page in seller
 app.use('/sellerPage',sellerAuth,sellerPage);
+
+// *DONE upto hear;
+//TODO: Check delete product and seller
+app.use('/adminDashboard',adminAuth,adminDashboard);
 
 
 app.use('/newSeller',newSeller);
 
 
-// * DONE UPTO HERE:
 app.use('/myOrder',homeAuth,order);
 
 

@@ -69,28 +69,36 @@ router.post('/orderPlacement',async (req,res)=>{
         {
             res.statusCode = 202;
         }else{
-            await placeOrder(productQuantity,userName);
+            let {orderId,price} = await placeOrder(productQuantity,userName);
             const session = await stripe.checkout.sessions.create({
-                mode : 'payment',
-                customer_email: req.session.user.email, 
-                line_items:{
-                    name: 'Games',
-                    description: 'Games',
-                    amount : 100*100,
-                    currency: 'inr'
-                },
-                success_url:`http://${process.env.HOSTNAME}/thanks`,
-                cancel_url: `http://${process.env.HOSTNAME}/cancel`,
+                payment_method_types: ['card'],
+                mode:'payment',
+                line_items:[
+                    {
+                        price_data:{
+                            currency:'inr',
+                            product_data:{
+                                name:"Total"
+                            },
+                            unit_amount : price
+                        },
+                        quantity:1
+                    }
+                ],
+                success_url:`http://${process.env.HOSTNAME}:${process.env.PORT}/thanks/${orderId}`,
+                cancel_url: `http://${process.env.HOSTNAME}:${process.env.PORT}/orderCancel/${orderId}`,
             })
             res.statusCode = 200;
+            console.log(session.url);
+            res.setHeader('Content-Type','text/plain');
+            res.send(session.url);
         }
     }
     catch(err){
         console.log(err);
         res.statusCode = 500;
+        res.send();
     }
-    res.setHeader('Content-Type','text/plain');
-    res.send();
 });
 
 

@@ -2,6 +2,8 @@ let order = document.getElementById('buy-btn');
 
 order.addEventListener('click',orderBtn);
 
+let blurDiv;
+let loadingDiv;
 
 function increaseQuantity(id){
     let element = document.getElementById(id);
@@ -44,13 +46,22 @@ function orderBtn(){
     request.open('POST','/myCart/orderPlacement');
     request.send();
     request.addEventListener('load',function(){
+        console.log(request.response);
         if(request.status == 200){
-            window.location.href="/thanks";
+            window.location.href=request.response;
         }
         if(request.status == 202){
             alert("No Product In The Cart");
         }
+        blurDiv.remove();
+        loadingDiv.remove();
     })
+    blurDiv = document.createElement('div');
+    loadingDiv = document.createElement('div');
+    blurDiv.setAttribute('class','blur-back');
+    loadingDiv.setAttribute('class','blur-loading-div');
+    document.body.appendChild(blurDiv);
+    document.body.appendChild(loadingDiv);
 }
 
 function deleteFromCart(id){
@@ -72,11 +83,11 @@ function deleteFromCart(id){
 
 
 function updatePrice(){
-    let Price = document.getElementById('price');
+    let Price = document.getElementById('price-p');
     let request = new XMLHttpRequest;
     request.open('GET','/myCart/getPrice');
     request.send();
     request.addEventListener('load',function(){
-        Price.innerHTML = `<h2>Amount: ₹ ${request.response}</h2>`
+        Price.innerHTML = `₹ ${request.response}`
     })
 }

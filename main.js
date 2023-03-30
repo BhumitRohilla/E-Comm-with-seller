@@ -26,7 +26,7 @@ const adminDashboard = require('./Router/adminDashboard');
 const sellerPage = require('./Router/sellerPage');
 const newSeller = require('./Router/newSeller');
 const order = require('./Router/order');
-
+const orderSuccess = require('./Router/orderSuccess');
 
 app.set('view engine','ejs');
 app.use(express.static('public'));
@@ -78,10 +78,9 @@ app.use('/forgetPasswordSeller',forgetPasswordAuth,forgetPasswordSeller);
 //--TODO: Mongo Code is broken fix it
 app.use('/product',homeAuth,product);
 
-// // TODO: Implement order button code in sql
-// // TODO: update Price as well when changing the quantity
-//* mongo 
 
+//* mongo 
+app.get('/thanks',orderSuccess);
 
 app.use('/sellerPage',sellerAuth,sellerPage);
 

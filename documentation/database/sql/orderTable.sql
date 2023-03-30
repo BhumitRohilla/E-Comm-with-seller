@@ -4,6 +4,7 @@
 --* Table Creation
 
 create table Orders (userName varchar(50), OrderId int identity(1,1) not null,TimeOfPurchase datetime not null, unique(OrderId),foreign key (userName) references users(userName));
+alter table Orders add paymentKey varchar(50);
 
 create table Order_Item( sellerName varchar(50) not null,OrderId int not null,ProductId int not null,quantity int not null,resolve bit,[status] bit,price decimal(5,2), foreign key(sellerName) references users(userName),foreign key (OrderId) references Orders(OrderId),foreign key(ProductId) references Product(ProductId));
 
@@ -14,7 +15,7 @@ create table Order_Holder (OrderId int foreign key references Orders(OrderId) no
 --* Indexing
 
 create clustered index PK_INDEX_ORDERS on Orders(userName,OrderId);
-
+create index NON_C_Payment_Key_Order on Orders(paymentKey);
 
 create clustered index Order_Item_Index on Order_Item(sellerName,TimeOfPurchase);
 create index NON_CLUSTERED_SELLER_INDEX on Order_Item(sellerName);

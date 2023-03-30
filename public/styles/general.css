@@ -336,13 +336,51 @@ header{
 .footer-cluster{
     display: flex;
     align-items: center;
-
 }
 
 *::-webkit-scrollbar{
     display: none;
 }
 
+.svg-window{
+    width: 1.3vw;
+}
+
+.svg-window{
+    width: 15px;
+}
+
+.blue-btn{
+    background-color: #264963;
+    color: #6abcf0;
+    border-radius: 0px;
+    width: fit-content;
+    padding: 0px 15px;
+    margin: 0px;
+    margin-right: auto;
+    font-weight: 200;
+    outline: none;
+    border: none;
+    padding: 10px 20px;
+}
+
+.blue-btn:hover{
+    color: white;
+    
+}
+
+.blur-loading-div{
+    width: 50px;
+    height: 50px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    border: 2px solid #888787;
+    border-bottom: 2px solid white;
+    border-radius: 50%;
+    animation: loading 1s linear infinite;
+    z-index: 4;
+}
 
 @media only screen and (max-width: 620px){
     #hamburger-btn{

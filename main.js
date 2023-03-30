@@ -80,19 +80,20 @@ app.use('/product',homeAuth,product);
 
 // // TODO: Implement order button code in sql
 // // TODO: update Price as well when changing the quantity
-//* mongo check
-app.use('/myCart',homeAuth,cart);
+//* mongo 
 
 
 app.use('/sellerPage',sellerAuth,sellerPage);
 
-// *DONE upto hear;
 //TODO: Check delete product and seller
 app.use('/adminDashboard',adminAuth,adminDashboard);
 
 
 app.use('/newSeller',newSeller);
 
+//* sql ;
+
+app.use('/myCart',homeAuth,cart);
 
 app.use('/myOrder',homeAuth,order);
 

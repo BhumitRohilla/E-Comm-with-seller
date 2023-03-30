@@ -1,3 +1,4 @@
+const stripe = require('stripe')('sk_test_51MrAkJSIXFeKBASGhgSyuVln4JM9o4XNGs8JhIdFzA3SgnXrWoRQLu0sJWVrc1KduZx2uYaaDYXZ6tiQAiDVI0PM00OdN7Ea2G');
 const express = require('express');
 // const { getUserCartItem, getUserCart, getQuantity, removeFromCart ,deleteFromCart} = require('../func/dbFunction/cartFunction');
 const router = express.Router();
@@ -69,6 +70,18 @@ router.post('/orderPlacement',async (req,res)=>{
             res.statusCode = 202;
         }else{
             await placeOrder(productQuantity,userName);
+            const session = await stripe.checkout.sessions.create({
+                mode : 'payment',
+                customer_email: req.session.user.email, 
+                line_items:{
+                    name: 'Games',
+                    description: 'Games',
+                    amount : 100*100,
+                    currency: 'inr'
+                },
+                success_url:`http://${process.env.HOSTNAME}/thanks`,
+                cancel_url: `http://${process.env.HOSTNAME}/cancel`,
+            })
             res.statusCode = 200;
         }
     }

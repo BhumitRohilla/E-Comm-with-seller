@@ -8,14 +8,13 @@ async function placeOrder(product,userName){
     // query += `insert into Order_Item(sellerName,OrderId,ProductId,quantity,resolve,status,price) values`;
     for(key in product){
         // query += `((select sellerName from Product where ProductId = ${key}),${orderId},${key},${product[key].quantity},0,0,0),`; 
-        let query = `exec PlaceOrder ${key}`;
+        console.log(product[key]);
+        let query = `exec insertIntoOrderHolder ${orderId},${key},${product[key].quantity},'${userName}'`;
+        await newConnectionSQL(query);
     }
     // query = query.substring(0,query.length-1);
     // query += `DeleteCartForSpecificUser ${userName}`;
     // query += `commit`;
-    console.log(query);
-    await newConnectionSQL(query);
-    return newConnectionSQL(query);
 }
 
 

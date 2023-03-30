@@ -83,7 +83,7 @@ end
 
 -------------------------
 
-
+--! FOR TESTING PURPOSE ONLY
 create procedure DeleteCartForSpecificUser @userName varchar(50)
 as
 begin
@@ -97,7 +97,15 @@ end
 alter procedure deleteFromCart @userName varchar(50), @pid int
 as
 begin
-	delete cart_item where cartId = (select cartId from cart where userName = @userName) and ProductId = @pid;
+	begin transaction
+	begin try
+		update Product set stock = ((select stock from Product as p2 where Product.ProductId = p2.ProductId) + (select quantity from Cart_Item where cartId = (select cartId from cart where userName = @userName and ProductId = @pid) and ProductId = @pid)) where ProductId = @pid;
+		delete cart_item where cartId = (select cartId from cart where userName = @userName) and ProductId = @pid;
+		commit;
+	end try
+	begin catch
+		rollback transaction;
+	end catch
 end
 
 -------------------------

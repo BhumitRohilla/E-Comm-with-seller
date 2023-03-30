@@ -80,7 +80,7 @@ app.use('/product',homeAuth,product);
 
 
 //* mongo 
-app.get('/thanks',orderSuccess);
+app.use('/thanks',orderSuccess);
 
 app.use('/sellerPage',sellerAuth,sellerPage);
 
@@ -99,6 +99,7 @@ app.use('/myOrder',homeAuth,order);
 
 
 app.get('*',(req,res)=>{
+    // console.log(req.hostname,req.url);
     res.render('errPage',{userType:req.session.userType,user:req.session.user,error:"PAGE NOT FOUND!"});
 })
 

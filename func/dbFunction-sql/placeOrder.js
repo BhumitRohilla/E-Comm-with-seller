@@ -4,10 +4,15 @@ const crypt = require('crypto');
 async function placeOrder(product,userName){
     let orderId = await getOrderId(userName);
     orderId = orderId[0][''];
+    let failedItem = [];
     for(key in product){
-        console.log(product[key]);
-        let query = `exec insertIntoOrderHolder ${orderId},${key},${product[key].quantity},'${userName}'`;
-        await newConnectionSQL(query);
+        try{
+            let query = `exec insertIntoOrderItem ${orderId},${key},${product[key].quantity},'${userName}'`;
+            await newConnectionSQL(query);
+        }
+        catch(err){
+            failedItem.push(key);
+        }
     }
 
     let paymentKey = crypt.randomBytes(20).toString('hex');
@@ -17,7 +22,7 @@ async function placeOrder(product,userName){
 
     query = `exec getPriceOfOrder ${orderId}`;
     let price = await newConnectionSQL(query);
-    return {"orderId":paymentKey,price:price[0][""]};
+    return {"orderId":paymentKey,price:price[0][""],failedItem};
 }
 
 

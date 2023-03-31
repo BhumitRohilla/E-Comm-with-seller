@@ -12,5 +12,14 @@ function rejectOrder(key){
     return result;
 }
 
+function paymentSuccess(key){
+    let result;
+    if(process.env.USESQL == 'true' ){
+        result = sqlOrderFunction.paymentSuccess(key);
+    }else{
+        result = mongoOrderFunction.paymentSuccess(key);
+    }
+    return result;
+}
 
-module.exports = {rejectOrder};
+module.exports = {rejectOrder,paymentSuccess};

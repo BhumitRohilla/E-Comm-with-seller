@@ -69,29 +69,34 @@ router.post('/orderPlacement',async (req,res)=>{
         {
             res.statusCode = 202;
         }else{
-            let {orderId,price} = await placeOrder(productQuantity,userName);
-            const session = await stripe.checkout.sessions.create({
-                payment_method_types: ['card'],
-                mode:'payment',
-                line_items:[
-                    {
-                        price_data:{
-                            currency:'inr',
-                            product_data:{
-                                name:"Total"
-                            },
-                            unit_amount : price
-                        },
-                        quantity:1
-                    }
-                ],
-                success_url:`http://${process.env.HOSTNAME}:${process.env.PORT}/thanks/${orderId}`,
-                cancel_url: `http://${process.env.HOSTNAME}:${process.env.PORT}/orderCancel/${orderId}`,
-            })
-            res.statusCode = 200;
-            console.log(session.url);
-            res.setHeader('Content-Type','text/plain');
-            res.send(session.url);
+            let {orderId,price,failedItem} = await placeOrder(productQuantity,userName);
+            if(price == 0){
+                res.statusCode = 200;
+                res.setHeader('Content-Type','text/plain');    
+                res.send(`http://${process.env.HOSTNAME}:${process.env.PORT}/thanks/${orderId}`);
+            }else{
+                const session = await stripe.checkout.sessions.create({
+                        payment_method_types: ['card'],
+                        mode:'payment',
+                        line_items:[
+                            {
+                                price_data:{
+                                    currency:'inr',
+                                    product_data:{
+                                        name:"Total"
+                                    },
+                                    unit_amount : price *100
+                                },
+                                quantity:1
+                            }
+                        ],
+                        success_url:`http://${process.env.HOSTNAME}:${process.env.PORT}/thanks/${orderId}`,
+                        cancel_url: `http://${process.env.HOSTNAME}:${process.env.PORT}/orderCancel/${orderId}`,
+                    })
+                res.statusCode = 200;
+                res.setHeader('Content-Type','text/plain');
+                res.send(session.url);
+            }
         }
     }
     catch(err){

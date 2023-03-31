@@ -5,4 +5,11 @@ function rejectOrder(key){
     return newConnectionSQL(query);
 }
 
-module.exports = {rejectOrder};
+async function paymentSuccess(key){
+    let query = `exec paymentSuccess '${key}'`;
+    let result = await newConnectionSQL(query);
+    return result[0][''];
+}
+
+module.exports = {rejectOrder,paymentSuccess};
+

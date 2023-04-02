@@ -1,4 +1,4 @@
-const mailAPI = require('./mailAPI');
+const mailAPI = require('../Services/mailAPI');
 //email,subject,text,html,callback
 function sendMail(user,subject,text,html,callback){
     mailAPI(user.email,subject,text,html,callback);

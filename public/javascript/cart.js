@@ -12,16 +12,15 @@ function increaseQuantity(id){
     request.send();
     request.addEventListener('load',function(){
         if(request.status == 201 ){
+            updatePrice();
             let quantitySpan = element.getElementsByClassName('item-quantity')[0];
             // console.log(quantitySpan);
             quantitySpan.innerText = parseInt(quantitySpan.innerText) + 1;
-            updatePrice();
         }
         if(request.status == 204){
             alert('Out of stocks');
         }
     })
-    updatePrice();
 }
 
 function decreaseQuantity(id){
@@ -47,8 +46,9 @@ function orderBtn(){
     request.send();
     request.addEventListener('load',function(){
         console.log(request.response);
-        if(request.status == 200){
-            window.location.href=request.response;
+        if(request.status == 303){
+            window.history.pushState("", "", "/");
+            window.location.replace(request.response);
         }
         if(request.status == 202){
             alert("No Product In The Cart");

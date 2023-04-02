@@ -1,4 +1,4 @@
-<div class="admin-item-container">
+<div class="admin-item-container"  id = '<%=id%>'>
     <img class="item-img" src=<%=`/image/product/${item.img}`%> alt="">
     <div class="table">
       <div class="tr">
@@ -23,11 +23,11 @@
       </div>
       <div class="tr">
         <div class="td">Quantity</div>
-        <div class="td"><%=item.quantity%></div>
+        <div class="td"><%=quantity%></div>
       </div>
     </div>
     <div class="admin-btn-cluster">
-      <button class="update-btn admin-btn" onclick="">SHIPPED</button>
+      <button class="update-btn admin-btn" onclick="acceptOrder('<%=id%>','<%=quantity%>')">SHIPPED</button>
       <button class="delete-btn admin-btn" onclick="rejectOrder('<%=id%>')">REJECT</button>
     </div>
 </div>

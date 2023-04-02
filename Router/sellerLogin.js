@@ -1,11 +1,10 @@
 const express = require('express');
+const post = require('../Controller/POST/login.controller');
 const userAuth = require('../middleware/userAuth');
 const router = express.Router();
 // const {getOneSeller} = require('../func/dbFunction/sellerFunc');
 
 // const {getOneSeller} = require('../func/dbFunction-sql/sellerFunc');
-
-const {getOneSeller} = require('../func/common/sellerFunc');
 
 //* select * from user where userName = '' and password = '' and role = 'seller';
 
@@ -14,28 +13,7 @@ router.route('/')
 .get(userAuth,(req,res)=>{
     res.render('sellerLogin',{'userType':req.session.userType,"user":req.session.user});
 })
-.post(async (req,res)=>{
-    let {userName,password} = req.body;
-    try{
-        let data = await getOneSeller({userName,password})
-        if(data == null){
-            res.statusCode = 401;
-            res.end();
-            return ;
-        }
-        req.session.is_logged_in=true;
-        req.session.userType = 'seller';
-        req.session.user = data;
-        res.statusCode = 200;
-        res.setHeader('Content-Type','text/plain')
-        res.end();
-    }
-    catch(err){
-        console.log(err);
-        res.statusCode = 401;
-        res.setHeader('Content-Type','text/plain')
-        res.end();
-    }
-})
+.post(post.loginSeller)
+
 
 module.exports = router;

@@ -8,9 +8,17 @@ alter table Orders add paymentKey varchar(50);
 
 create table Order_Item( sellerName varchar(50) not null,OrderId int not null,ProductId int not null,quantity int not null,resolve bit,[status] bit,price decimal(12,2), foreign key(sellerName) references users(userName),foreign key (OrderId) references Orders(OrderId),foreign key(ProductId) references Product(ProductId));
 alter table Order_Item add SubOrderId int identity(1,1);
+alter table Order_Item add constraint UK_SUBORDERID_ORDERITEM unique(SubOrderId);
 
 --! depricated table
 create table Order_Holder (OrderId int foreign key references Orders(OrderId) not null, ProductId int foreign key references Product(ProductId) not null, quantity int not null , price int not null, check(quantity > 0), check (price >= 0),primary key (OrderId,ProductId));
+
+
+
+
+create table Product_Key (SubOrderId int, ProductKey varchar(20) not null, foreign key(SubOrderId) references Order_Item(SubOrderId) );
+
+
 
 =========================================================
 

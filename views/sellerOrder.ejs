@@ -14,7 +14,7 @@
     <div>
         <div class="product-container">
             <% for(key in order){ %>
-                        <%- include('partials/sellerOrderItem',({"item":order[key].product,id:key})); %>
+                        <%- include('partials/sellerOrderItem',({"item":order[key].product,id:order[key].SubOrderId,quantity:order[key].quantity})); %>
             <%}%>
         </div>
     </div>

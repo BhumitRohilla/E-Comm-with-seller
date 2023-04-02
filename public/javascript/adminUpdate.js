@@ -24,7 +24,9 @@ submitBtn.addEventListener('click',function(evt){
     let stock = stockInput.value
     let about = aboutInput.value.trim();
     let img = imgInput.value.trim();
-    if( url=="/adminDashboard/addNewProduct" && (title == "" || tag == "" || date == "" || statusProduct == "" || userReviews == "" /*|| price == ""*/ || stock == ""  || about == "" || img == "")){
+    let baseUrl = findBaseUrl(url);
+    console.log(baseUrl);
+    if( baseUrl=="/sellerPage/addNewProduct" && (title == "" || tag == "" || date == "" || statusProduct == "" || userReviews == "" || price == "" || stock == ""  || about == "" || img == "")){
         alert("Please Enter all the arguments");
         return ;
     }else if(userReviews < 0 || stock  < 0){
@@ -53,8 +55,15 @@ submitBtn.addEventListener('click',function(evt){
                 break;
             }
             case 404:{
-                alert("Server Time Out");
+                alert("Enter all the values");
             }
         }
     })
 })
+
+
+function findBaseUrl(urlToParse){
+    let result = urlToParse.split('/');
+    result = '/'+result[1]+'/'+result[2];
+    return result;
+}

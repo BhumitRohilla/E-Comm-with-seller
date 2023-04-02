@@ -303,8 +303,8 @@ header{
 .blur-back{
     overflow: scroll;
     position: fixed;
-    width: 100vw;
-    height: 100vh;
+    width: 101vw;
+    height: 101vh;
     filter: blur(200px);
     top: 50%;
     left: 50%;
@@ -366,7 +366,6 @@ header{
 
 .blue-btn:hover{
     color: white;
-    
 }
 
 .blur-loading-div{
@@ -382,6 +381,54 @@ header{
     z-index: 4;
 }
 
+.pop-up-div{
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    z-index: 5;
+    width: 100%;
+    height: 100%;
+    max-height: 300px;
+    height: fit-content;
+    background-color: #171a21;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.back-forth-animation{
+    width: 3px;
+    height: 3px;
+    background-color: white;
+    position: relative;
+    animation: line-loading 1s infinite linear;
+}
+
+@keyframes line-loading {
+    0%{
+        left: 0px;
+    }
+    25%{
+        left: 10px;
+    }
+    50%{
+        left: 0px;
+    }
+    75%{
+        left: -10px;
+    }
+    100%{
+        left: 0px;
+    }
+}
+
+
 @media only screen and (max-width: 620px){
     #hamburger-btn{
         display:initial;
@@ -393,3 +440,4 @@ header{
         display: none;
     }
 }
+

@@ -27,6 +27,8 @@ const sellerPage = require('./Router/sellerPage');
 const newSeller = require('./Router/newSeller');
 const order = require('./Router/order');
 const orderSuccess = require('./Router/orderSuccess');
+const orederFail = require('./Router/orderFail');
+
 
 app.set('view engine','ejs');
 app.use(express.static('public'));
@@ -38,68 +40,53 @@ app.use(session({
     resave: false 
 }))
 
+//* sql
 app.get('/',(req,res)=>{
     res.render('root',{'userType': req.session.userType ,"user": req.session.user});
 });
-
 
 app.get('/home',homeAuth,(req,res)=>{
     res.redirect('product');
 });
 
-
 app.use('/login',userAuth,login);
-
 
 app.use('/sellerLogin',sellerLogin);
 
-
 app.use('/signup',signup);
 
-
 app.use('/verify',verifyUser);
-
 
 app.get('/logout',(req,res)=>{
     req.session.destroy();
     res.redirect('/');
 })
 
-
-//TODO: In generlizing need to pay attention as seller and user table is seperate in mongo
 app.use('/changePassword',changePasswordAuth,changePassword);
-
 
 app.use('/forgetPassword',forgetPasswordAuth,forgetPassword);
 
-
 app.use('/forgetPasswordSeller',forgetPasswordAuth,forgetPasswordSeller);
 
-//--TODO: Mongo Code is broken fix it
 app.use('/product',homeAuth,product);
-
-
-//* mongo 
-app.use('/thanks',orderSuccess);
 
 app.use('/sellerPage',sellerAuth,sellerPage);
 
-//TODO: Check delete product and seller
 app.use('/adminDashboard',adminAuth,adminDashboard);
-
 
 app.use('/newSeller',newSeller);
 
-//* sql ;
-
 app.use('/myCart',homeAuth,cart);
 
+app.use('/thanks',orderSuccess);
+
+app.use('/cancelled',orederFail);
+
+//* mongo
 app.use('/myOrder',homeAuth,order);
 
 
-
 app.get('*',(req,res)=>{
-    // console.log(req.hostname,req.url);
     res.render('errPage',{userType:req.session.userType,user:req.session.user,error:"PAGE NOT FOUND!"});
 })
 

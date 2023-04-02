@@ -101,7 +101,7 @@ function closeDiv(){
 
 function deleteElementFromAdmin(id){
     let request = new XMLHttpRequest;
-    request.open('POST','adminDashboard/deleteProduct');
+    request.open('POST','/adminDashboard/deleteProduct');
     request.setRequestHeader('Content-Type','application/JSON');
     let data = JSON.stringify({id});
     request.send(data);

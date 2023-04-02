@@ -2,9 +2,9 @@
 
 --* Table
 
---create table cart (userName varchar(50) primary key, cartId int unique identity(1,1),foreign key(userName) references users(userName));
+create table cart (userName varchar(50) primary key, cartId int unique identity(1,1),foreign key(userName) references users(userName));
 
---create table cart_item (cartId int not null, ProductId int not null, quantity int not null default 1, foreign key(cartId) references cart(cartId), foreign key (ProductId) references Product(ProductId));
+create table cart_item (cartId int not null, ProductId int not null, quantity int not null default 1, foreign key(cartId) references cart(cartId), foreign key (ProductId) references Product(ProductId));
 
 
 -------------------
@@ -83,6 +83,7 @@ end
 
 -------------------------
 
+
 --! FOR TESTING PURPOSE ONLY
 create procedure DeleteCartForSpecificUser @userName varchar(50)
 as
@@ -93,6 +94,7 @@ end
 
 
 -------------------------
+
 
 alter procedure deleteFromCart @userName varchar(50), @pid int
 as
@@ -109,6 +111,7 @@ begin
 end
 
 -------------------------
+
 
 alter procedure getTotalPrice @userName varchar(50)
 as

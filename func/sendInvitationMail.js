@@ -1,5 +1,5 @@
 require('dotenv').config();
-const mailAPI = require('./mailAPI');
+const mailAPI = require('../Services/mailAPI');
 //email,subject,text,html,callback
 function sendInvitationMail(email,userCreateKey,callback){
     const subject = 'Invitation'

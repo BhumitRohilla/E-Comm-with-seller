@@ -23,12 +23,14 @@ function acceptOrder(id,quantity){
    blurDiv.addEventListener('click',function(){
       blurDiv.remove();
       popUpDiv.remove();
+      document.body.style.overflow='scroll';
    })
 
    //popUp Div
    let popUpDiv = document.createElement('div');
    popUpDiv.setAttribute('class','pop-up-div');
    document.body.appendChild(popUpDiv);
+   document.body.style.overflow='hidden';
    
    //textArea to enter keys
    let textArea = document.createElement('textarea');
@@ -83,9 +85,12 @@ function sendToServer(id,quantity){
       request.setRequestHeader('Content-Type','application/JSON');
       request.send(JSON.stringify(keyArray));
       request.addEventListener('load',function(){
+         submitBtn.innerText = 'Send';
+         
          switch(request.status){
             case 200:{
                let element = document.getElementById(`${id}`);
+               removePopUpDiv();
                element.remove();
                break;
             }
@@ -93,7 +98,7 @@ function sendToServer(id,quantity){
                errorShow('quantity and keys are not matching');
                break;
             }
-            case 404:{
+            default:{
                errorShow('Server error Occure');
                break;
             }
@@ -116,4 +121,11 @@ function errorShow(errMsg){
    setTimeout(()=>{
       errorDiv.style.visibility = 'hidden';
    },3000);
+}
+
+
+function removePopUpDiv(){
+   document.getElementsByClassName('blur-back')[0].remove();
+   document.getElementsByClassName('pop-up-div')[0].remove();
+   document.body.style.overflow = 'scroll';
 }

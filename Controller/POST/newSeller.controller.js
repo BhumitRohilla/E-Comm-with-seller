@@ -1,4 +1,5 @@
-const {createNewSellerFinal} = require('../../Services/common/sellerFunc');
+const {createNewSellerFinal, getOneSeller} = require('../../Services/common/sellerFunc');
+
 
 async function newSellerPage(req,res){
     let {key} = req.params;

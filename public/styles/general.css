@@ -249,6 +249,11 @@ header{
     visibility: hidden;
 }
 
+.product-key{
+    width: 100%;
+    height: 30px;
+}
+
 @keyframes loading {
     25%{
         transform: rotate(90deg);

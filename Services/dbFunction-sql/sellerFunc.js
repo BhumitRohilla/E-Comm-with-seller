@@ -2,8 +2,14 @@ let crypto = require('crypto');
 
 const { newConnectionSQL } = require("../db/dbConnectionSQL");
 
-const {updatePasswordChangeToken,removePasswordChangeToken} = require("../dbFunction-sql/userFunc");
+const {removePasswordChangeToken} = require("../dbFunction-sql/userFunc");
 
+async function updatePasswordChangeToken(email){
+    let passwordChange = crypto.randomBytes(6).toString('hex');
+    let query = `update users set passwordChange = '${passwordChange}' where email = '${email}' and role = 'seller' `;
+    await newConnectionSQL(query);
+    return passwordChange;
+}
 
 async function getOneSeller(user){
     let query;

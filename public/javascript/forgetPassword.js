@@ -12,11 +12,20 @@ button.addEventListener("click",function(evt){
         button.setAttribute('disabled','true');
     }
     requestServerNoDelay("POST",window.location.href,{"email":emailVal},function(request){
-        if(request.status == 403){
-            errShow('Email does not exists');
-        }else{
-            errShow('Check Your mail');
-        }       
+        switch(request.status){
+            case 200:{
+                errShow('Check Your Mail');
+                break;
+            }
+            case 403:{
+                errShow('Email does not exists');
+                break;
+            }
+            case 500:{
+                errShow('Server Error');
+                break;
+            }
+        }    
     })
 })
 

@@ -46,15 +46,24 @@ function orderBtn(){
     request.send();
     request.addEventListener('load',function(){
         console.log(request.response);
-        if(request.status == 303){
-            window.history.pushState("", "", "/");
-            window.location.replace(request.response);
+        switch(request.status){
+            case 303:{
+                window.history.pushState("", "", "/");
+                window.location.replace(request.response);
+                break;
+            }
+            case 202:{
+                alert("No Product In The Cart");
+                blurDiv.remove();
+                loadingDiv.remove();
+                break;
+            }
+            default :{
+                blurDiv.remove();
+                loadingDiv.remove();
+                break;
+            }
         }
-        if(request.status == 202){
-            alert("No Product In The Cart");
-        }
-        blurDiv.remove();
-        loadingDiv.remove();
     })
     blurDiv = document.createElement('div');
     loadingDiv = document.createElement('div');

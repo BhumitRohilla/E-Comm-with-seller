@@ -28,8 +28,7 @@ router.route('/updateProduct/:pid')
 
 router.post('/deleteProduct',sellerPagePost.deleteProduct);
 
-router.route('/order')
-.get(sellerPageGet.showOrders)
+router.route('/order').get(sellerPageGet.showOrders)
 
 router.post('/order/reject/:key',sellerPagePost.orderRejected)
 

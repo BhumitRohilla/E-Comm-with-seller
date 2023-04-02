@@ -24,9 +24,10 @@ async function getSellerOrder(sellerName){
     let length = (orderItem).length;
 
     for(let i=0;i<length;++i){
-        orderItem[i].product = await getSingleProduct(orderItem[i].ProductId);
+        let product = await getSingleProduct(orderItem[i].ProductId);
+        orderItem[i].img = product.img;
+        orderItem[i].title = product.title;
     }
-
     return orderItem;
 }
 
@@ -39,4 +40,9 @@ function rejectOrder(SubOrderId){
     return updateOne(collection,{SubOrderId},{resolve:true,status:false});
 }
 
-module.exports = {insertOrderItem,getAllOrderItem,getSellerOrder,rejectOrder,getSubOrderFromSubOrderId};
+
+function resolvePositive(SubOrderId){
+    return updateOne(collection,{SubOrderId},{resolve:true,status:true});
+}
+
+module.exports = {insertOrderItem,getAllOrderItem,getSellerOrder,rejectOrder,getSubOrderFromSubOrderId,resolvePositive};

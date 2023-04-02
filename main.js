@@ -40,7 +40,6 @@ app.use(session({
     resave: false 
 }))
 
-//* sql
 app.get('/',(req,res)=>{
     res.render('root',{'userType': req.session.userType ,"user": req.session.user});
 });
@@ -70,26 +69,25 @@ app.use('/forgetPasswordSeller',forgetPasswordAuth,forgetPasswordSeller);
 
 app.use('/product',homeAuth,product);
 
-app.use('/sellerPage',sellerAuth,sellerPage);
-
-app.use('/adminDashboard',adminAuth,adminDashboard);
-
-app.use('/newSeller',newSeller);
-
 app.use('/myCart',homeAuth,cart);
 
 app.use('/thanks',orderSuccess);
 
 app.use('/cancelled',orederFail);
 
-//* mongo
 app.use('/myOrder',homeAuth,order);
 
+//* mongo
+app.use('/newSeller',newSeller);
 
+app.use('/adminDashboard',adminAuth,adminDashboard);
+
+app.use('/sellerPage',sellerAuth,sellerPage);
+
+//* sql
 app.get('*',(req,res)=>{
     res.render('errPage',{userType:req.session.userType,user:req.session.user,error:"PAGE NOT FOUND!"});
 })
-
 
 app.listen(process.env.PORT,process.env.HOSTNAME,function(){
     console.log(`server running at http://${process.env.HOSTNAME}:${process.env.PORT}`);

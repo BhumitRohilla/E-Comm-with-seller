@@ -1,34 +1,9 @@
 <div class="admin-item-container">
-    <img class="item-img" src=<%=`/image/product/${item.img}`%> alt="">
+    <img class="item-img" src=<%=`/image/product/${img}`%> alt="">
     <div class="table">
       <div class="tr">
         <div class="td">Title</div>
-        <div class="td"><%=item.title%></div>
-      </div>
-      <div class="tr">
-        <div class="td">Price</div>
-        <div class="td">
-          <% if (item.price == 0){ %>
-            <%='FREE'%>
-          <%}else{%>
-            <%='₹ '+item.price%>
-          <%}%></div>
-      </div>
-      <div class="tr">
-        <div class="td">Tag</div>
-        <div class="td"><%=item.tag.join(' ')%></div>
-      </div>
-      <div class="tr">
-        <div class="td">Date</div>
-        <div class="td"><%=item.date%></div>
-      </div>
-      <div class="tr">
-        <div class="td">Status</div>
-        <div class="td"><%=item.status%></div>
-      </div>
-      <div class="tr">
-        <div class="td">UserReviews</div>
-        <div class="td"><%=item.userReviews%></div>
+        <div class="td"><%=title%></div>
       </div>
       <div class="tr">
         <div class="td">Quantity</div>
@@ -37,9 +12,14 @@
     </div>
     <% if(resolve == true){%>
       <% if(status == true){ %>
-        <div class="tr">
-          <div class="td">Delivery</div>
-          <div class="td"><%=ExpectedDate%>></div>
+        <div class="seller-msg seller-msg-rejected">
+          <p>
+            <select class="product-key">
+              <%for(let i = 0;i<ProductKey.length;++i){ %>
+                <option><%=ProductKey[i]%></option>
+              <%}%>
+            </select>
+          </p>
         </div>
       <%}else{%>
         <div class="seller-msg seller-msg-rejected">

@@ -106,7 +106,7 @@ async function addProduct(obj){
 
 function updateProduct(pid,data){
     if(data.tag){
-        data = data.tag.split(' ');
+        data.tag = data.tag.split(' ');
     }
     return updateOne(collection,{"ProductId":pid,'active':true},data);
 }

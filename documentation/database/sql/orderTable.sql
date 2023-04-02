@@ -181,6 +181,62 @@ begin
 end
 
 
+----------------------------------------
+
+alter procedure paymentFail @paymentKey varchar(50)
+as
+begin
+	declare @OrderId int;
+	select @OrderId = OrderId from Orders where paymentKey = @paymentKey;
+	if @OrderId is not null
+	begin
+		update Orders set PaymentStatus = -1, paymentKey = null where paymentKey = @paymentKey;
+		select 1;
+		exec restockCancelOrderStock @OrderId;
+	end
+	else
+		select 0;
+end
+
+----------------------------------------
+
+--! Depricated
+create procedure paymentFail @paymentKey varchar(50)
+as
+begin
+	update Orders set PaymentStatus = -1, paymentKey = null where paymentKey = @paymentKey
+	select @@ROWCOUNT
+end
+
+
+---------------------------------------
+
+
+alter procedure restockCancelOrderStock @OrderId int
+as
+begin
+	begin transaction;
+	begin try
+	declare @cur cursor;
+	declare @quantity int;
+	declare @pid int;
+
+	set @cur = cursor for select quantity , ProductId from Order_Item where OrderId = @OrderId;
+	open @cur;
+	fetch next from @cur into @quantity,@pid;
+	
+	while @@FETCH_STATUS = 0
+	begin
+		update Product set stock = ((select stock from Product where ProductId = @pid )+ @quantity) where ProductId = @pid;
+		fetch next from @cur into @quantity,@pid;
+	end
+	commit;
+	end try
+	begin catch
+		rollback transaction;
+	end catch
+end
+
 
 ----------------------------------------
 

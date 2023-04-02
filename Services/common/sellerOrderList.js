@@ -1,5 +1,3 @@
-// const mongo = require('../dbFunction/sellerOrderList');
-// const sql   = require('../dbFunction-sql/sellerOrderList');
 const mongoOrderItem = require('../dbFunction/orderItemFunction');
 const sqlOrderItem   = require('../dbFunction-sql/orderFunction');
 

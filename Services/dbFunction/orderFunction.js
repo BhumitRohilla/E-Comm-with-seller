@@ -2,6 +2,7 @@ const {findOne, updateOne, findAll} = require('../db/dbFunction');
 const { getAllOrderItem } = require('./orderItemFunction');
 const { getSingleProduct } = require('./productFunc');
 const { updateProduct } = require('./productFunc');
+const { getProdutKey } = require('./ProductKey');
 
 const collection = 'order';
 
@@ -22,7 +23,7 @@ async function paymentSuccess(key){
 async function paymentFail(key){
     let result = await findAll(collection,{paymentKey:key});
     if(result.length > 0){
-        await restockCancelOrderStock(result[0].OrderId);
+        await restockCancelOrderStock(result[0].payment);
         await updateOne(collection,{paymentKey:key},{paymentKey:null,PaymentStatus:-1})
         return true;
     }
@@ -47,7 +48,13 @@ async function getUserOrder(userName){
     for(let i=0;i<length;++i){
         let orderItem = await getAllOrderItem(allOrderIdOfUser[i].OrderId);
         for(let i=0;i<orderItem.length;++i){
-            orderItem[i].product = await getSingleProduct(orderItem[i].ProductId);
+            // Object.assign(orderItem[i],await getSingleProduct(orderItem[i].ProductId));
+            let product= await getSingleProduct(orderItem[i].ProductId);
+            orderItem[i].img = product.img;
+            orderItem[i].title = product.tilte;
+            let ProductKey = await getProdutKey(orderItem[i].SubOrderId);
+            if(ProductKey)
+                orderItem[i].ProductKey = ProductKey.ProductKey.split(',');
             orderItems.push(orderItem[i]);
         }
     }

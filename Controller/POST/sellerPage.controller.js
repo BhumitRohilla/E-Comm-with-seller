@@ -1,6 +1,6 @@
-const { rejectOrder, getSubOrderFromSubOrderId } = require('../../Services/common/orderFunction');
+const { rejectOrder, getSubOrderFromSubOrderId, resolvePositive } = require('../../Services/common/orderFunction');
 const {addProduct,getSingleProduct,updateProduct,deleteSingleProduct} = require('../../Services/common/productFunc');
-
+const {insertProductKeys } = require('../../Services/common/ProductKey');
 
 async function addNewProduct(req,res){
     let {key} = req.params;
@@ -177,11 +177,11 @@ async function orderAccepted(req,res){
     try{
         let subOrder = await getSubOrderFromSubOrderId(key);
         let quantityOfOrder = subOrder.quantity;
-        console.log(Object.keys(ProductKey));
         if(ProductKey.length != quantityOfOrder){
             throw new Error('quantity and product key not matching');
         }
         await insertProductKeys(key,ProductKey);
+        await resolvePositive(key);
         res.statusCode = 200;
     }
     catch(err){

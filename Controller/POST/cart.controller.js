@@ -1,12 +1,14 @@
 
 const stripe = require('stripe')(process.env.STRIPEKEY);
 const {getUserCart} = require('../../Services/common/cartFunc');
+const { paymentFail } = require('../../Services/common/orderFunction');
 const {placeOrder} = require('../../Services/common/placeOrder');
 
 
 
 async function orderPlacement(req,res){
     let userName = req.session.user.userName;
+    let paymentKey;
     try{
         let cart = await getUserCart(userName);
         let productQuantity = cart.product;
@@ -15,6 +17,7 @@ async function orderPlacement(req,res){
             res.statusCode = 202;
         }else{
             let {orderId,price,failedItem} = await placeOrder(productQuantity,userName);
+            paymentKey = orderId;
             if(price == 0){
                 res.statusCode = 303;
                 res.setHeader('Content-Type','text/plain');    
@@ -45,6 +48,7 @@ async function orderPlacement(req,res){
     }
     catch(err){
         console.log(err);
+        await paymentFail(paymentKey);
         res.statusCode = 500;
         res.send();
     }

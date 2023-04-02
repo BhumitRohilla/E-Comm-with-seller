@@ -6,9 +6,19 @@ const mongoOrderItemFunction = require('../dbFunction/orderItemFunction');
 function getSubOrderFromSubOrderId(SubOrderId){
     let result;
     if(process.env.USESQL == 'true' ){
-        result = sqlProduct.getSubOrderFromSubOrderId(SubOrderId);
+        result = sqlOrderFunction.getSubOrderFromSubOrderId(SubOrderId);
     }else{
         result = mongoOrderItemFunction.getSubOrderFromSubOrderId(SubOrderId);
+    }
+    return result;
+}
+
+function resolvePositive(SubOrderId){
+    let result;
+    if(process.env.USESQL == 'true'){
+        result = sqlOrderFunction.resolvePositive(SubOrderId);
+    }else{
+        result = mongoOrderItemFunction.resolvePositive(SubOrderId);
     }
     return result;
 }
@@ -44,4 +54,5 @@ function paymentFail(key){
     return result;
 }
 
-module.exports = {rejectOrder,paymentSuccess,paymentFail,getSubOrderFromSubOrderId};
+
+module.exports = {rejectOrder,paymentSuccess,paymentFail,getSubOrderFromSubOrderId,resolvePositive};

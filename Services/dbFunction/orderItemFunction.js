@@ -3,8 +3,11 @@ const  crypto = require('crypto');
 const { insertOne, findAll, updateOne, findOne } = require("../db/dbFunction");
 const { deleteFromCart } = require("./cartFunction");
 const { getSingleProduct } = require("./productFunc");
+const {isPayed} = require('./helperOrderFunction');
 
 const collection = 'order_item';
+
+
 
 async function insertOrderItem(OrderId,ProductId,quantity,userName){
     let productDetails = await getSingleProduct(key);
@@ -24,9 +27,14 @@ async function getSellerOrder(sellerName){
     let length = (orderItem).length;
 
     for(let i=0;i<length;++i){
-        let product = await getSingleProduct(orderItem[i].ProductId);
-        orderItem[i].img = product.img;
-        orderItem[i].title = product.title;
+        let paymentStatus = await isPayed(orderItem[i].OrderId);
+        if(paymentStatus){
+            let product = await getSingleProduct(orderItem[i].ProductId);
+            orderItem[i].img = product.img;
+            orderItem[i].title = product.title;
+        }else{
+            delete orderItem[i];
+        }
     }
     return orderItem;
 }

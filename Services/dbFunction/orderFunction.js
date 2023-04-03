@@ -6,9 +6,10 @@ const { getProdutKey } = require('./ProductKey');
 
 const collection = 'order';
 
-function getOrderFromOrderId(orderId){
-    return findOne(collection,{orderId});
+function getOrderFromOrderId(OrderId){
+    return findOne(collection,{OrderId});
 }
+
 
 
 async function paymentSuccess(key){

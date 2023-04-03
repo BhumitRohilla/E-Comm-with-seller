@@ -1,0 +1,28 @@
+
+.main-container{
+    box-sizing: border-box;
+    max-width: 900px;
+    margin: 0 auto;
+    color: white;
+    padding: 20px;
+    height: calc(100vh - 58px);
+    display: flex;
+    /* align-items: center; */
+}
+
+.inner-container{
+    max-height: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.img{
+    max-width: 200px;
+    width: 40vw;
+}
+
+h1{
+    color: rgb(122, 118, 118);
+    margin-bottom: 30px;
+}

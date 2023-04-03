@@ -13,7 +13,6 @@ async function showProductInitial(req,res){
         res.render('errPage',{'userType':req.session.userType,'user': req.session.user ,"error":"Server Error Occure"});
         return ;
     }
-    console.log(data);
     req.session.index = data.length;
     
     res.render('product',{'userType':req.session.userType,'user': req.session.user ,"data":data});

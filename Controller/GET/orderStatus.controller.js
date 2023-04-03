@@ -3,11 +3,10 @@ const { paymentSuccess,paymentFail } = require("../../Services/common/orderFunct
 
 async function  orderSuccess(req,res){
     let {key} = req.params;
-    console.log(key);
     try{
         let successOrder = await paymentSuccess(key);
         if(successOrder){
-            res.render('thanks');
+            res.render('thanks',({'userType':req.session.userType,"user":req.session.user}));
         }else{
             res.render('errPage',({userType:req.session.userType,user:req.session.user,error:"Invalid Link"}));
         }
@@ -22,7 +21,7 @@ async function orderFail(req,res){
     try{
         let orderFail = await paymentFail(key);
         if(orderFail){
-            res.render('cancelled');
+            res.render('errPage',({userType:req.session.userType,user:req.session.user,error:"Payment Failed"}));
         }else{
             res.render('errPage',({userType:req.session.userType,user:req.session.user,error:"Invalid Link"}));
         }

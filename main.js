@@ -77,14 +77,12 @@ app.use('/cancelled',orederFail);
 
 app.use('/myOrder',homeAuth,order);
 
-//* mongo
 app.use('/newSeller',newSeller);
 
 app.use('/adminDashboard',adminAuth,adminDashboard);
 
 app.use('/sellerPage',sellerAuth,sellerPage);
 
-//* sql
 app.get('*',(req,res)=>{
     res.render('errPage',{userType:req.session.userType,user:req.session.user,error:"PAGE NOT FOUND!"});
 })

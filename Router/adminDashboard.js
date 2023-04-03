@@ -1,7 +1,4 @@
 const express = require('express');
-// const { getAllProductArrayForm, deleteMultipleProduct, getSingleProduct, deleteSingleProduct } = require('../func/dbFunction/productFunc');
-// const { getAllSellers, deleteOneSeller, getOneSeller, createNewSeller } = require('../func/dbFunction/sellerFunc');
-const sendMail = require('../func/sendMail');
 const router = express.Router();
 
 

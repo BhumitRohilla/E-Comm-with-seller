@@ -85,8 +85,8 @@ function sendToServer(id,quantity){
       request.setRequestHeader('Content-Type','application/JSON');
       request.send(JSON.stringify(keyArray));
       request.addEventListener('load',function(){
-         submitBtn.innerText = 'Send';
-         
+         submitBtn.innerHTML = 'Send';
+         submitBtn.setAttribute('onclick',`sendToServer('${id}','${quantity}')`);
          switch(request.status){
             case 200:{
                let element = document.getElementById(`${id}`);
@@ -100,14 +100,15 @@ function sendToServer(id,quantity){
             }
             default:{
                errorShow('Server error Occure');
+               submitBtn.innerHTML = 'Send';
                break;
-            }
+            } 
          }
       });
    }else{
       errorShow('quantity and keys are not matching');
       submitBtn.innerHTML = 'Send';
-      submitBtn.setAttribute('onclick',`sendToServer(${id},${quantity})`);
+      submitBtn.setAttribute('onclick',`sendToServer('${id}','${quantity}')`);
    }
 }
 

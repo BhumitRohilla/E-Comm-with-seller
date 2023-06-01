@@ -118,8 +118,8 @@
             <h3 class="title"><%= item.title %></h3>
             <div>
                 <% item.tag.forEach((element)=>{ %>
-                <span class="tag"><%=  element %></span>
-                <% }); %>
+                <span class="tag"><%=element %></span>
+                <%}); %>
             </div>
             <div style="display: flex; align-items: flex-end;gap: 3px">
                 <div> <%=item.date.toDateString()%></div>

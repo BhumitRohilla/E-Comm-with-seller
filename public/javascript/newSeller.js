@@ -34,6 +34,11 @@ submitBtn.addEventListener('click',function(){
             }
             case 303:{
                 errDisp("Provide all details");
+                break;
+            }
+            case 400:{
+                errDisp(request.response);
+                break;
             }
             case 409:{
                 errDisp("UserName Already Taken");

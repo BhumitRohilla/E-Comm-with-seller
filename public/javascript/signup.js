@@ -62,6 +62,9 @@ submitBtn.addEventListener('click',function(){
                 case 303:{
                     errThrough("Email cant be sent",5);
                 }
+                case 400:{
+                    errThrough(request.response,4);
+                }
             }
         })
         submitBtn.setAttribute("disabled","true");

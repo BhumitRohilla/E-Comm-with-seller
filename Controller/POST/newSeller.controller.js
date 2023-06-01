@@ -1,4 +1,5 @@
 const {createNewSellerFinal, getOneSeller} = require('../../Services/common/sellerFunc');
+const { validUserName, validPassword } = require('../../Validation/validation');
 
 
 async function newSellerPage(req,res){
@@ -8,6 +9,12 @@ async function newSellerPage(req,res){
     try{
         if(userName == "" || name == "" || password == "" ){
             res.statusCode = 303;
+        }
+        else if(!validUserName(userName)){
+            return res.status(400).send('Username is invalid');
+        }
+        else if(!validPassword(password)){
+            return res.status(400).send('Password is invalid');
         }
         else if(userName == 'admin'){
             throw 409;

@@ -43,6 +43,10 @@ function submit(evt){
     request.addEventListener('load',function(){
         submitBtn.removeAttribute('disabled');
         switch(request.status){
+            case 400:{
+                errorShow(request.response);
+                break;
+            }
             case 409:{
                 errorShow("User Already Exists");
                 break;

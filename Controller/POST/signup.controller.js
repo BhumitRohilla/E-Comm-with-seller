@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const sendVerificationMail = require('../../func/sendVerificationMail');
 
 const {insertUser} = require('../../Services/common/userFunction');
+const { validEmail, validPassword, validUserName } = require('../../Validation/validation');
 
 
 async function SignUp(req,res){
@@ -9,6 +10,19 @@ async function SignUp(req,res){
     let user={
         name,userName,password,email,isVarified: false,key: crypto.randomBytes(6).toString('hex'),passwordChange: null
     }
+    
+    if(!validEmail(user.email)){
+        return res.status(400).send('Email is inValid');
+    }
+
+    if(!validUserName(user.userName)){
+        return res.status(400).send('Username is invalid');
+    }
+    
+    if(!validPassword(user.password)){
+        return res.status(400).send('Password is invalid');
+    }
+
     if(!checkPass(name,userName,password,email)){
         res.statusCode = 401;
         res.send();

@@ -2,6 +2,7 @@ const {getSingleProduct, deleteSingleProduct,} = require('../../Services/common/
 const {createNewSeller,getOneSellerUserNameOnly,deleteOneSeller} = require('../../Services/common/sellerFunc');
 const sendMail = require('../../func/sendMail');
 const sendInvitationMail = require('../../func/sendInvitationMail');
+const { validEmail } = require('../../Validation/validation');
 
 async function deleteProductController(req,res){
     let {id} = req.body;
@@ -47,7 +48,13 @@ async function deleteSellerController(req,res){
 
 async function newSellerController(req,res){
     let {email} = req.body;
-    let  userCreateKey
+    
+    if(!validEmail(email)){
+        return res.status(400).send('Email is invalid.');
+    }
+
+    let  userCreateKey;
+
     try{
         userCreateKey = await createNewSeller(email);
         if(userCreateKey!=null){

@@ -27,6 +27,7 @@ async function getSellerOrder(sellerName){
     let length = (orderItem).length;
 
     for(let i=0;i<length;++i){
+        //TODO: Very In-efficient way to get the status
         let paymentStatus = await isPayed(orderItem[i].OrderId);
         if(paymentStatus){
             let product = await getSingleProduct(orderItem[i].ProductId);

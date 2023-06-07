@@ -110,12 +110,6 @@ function navDivOpen(){
 
     openDiv.appendChild(innerDiv);
 
-    for(let i =0;i<allOption.length;++i){
-        console.log(allOption[i].innerHTML);
-    }
-
-    console.log("Test");
-
     let i = 0;
 
     allOption.forEach((element)=>{
@@ -123,9 +117,6 @@ function navDivOpen(){
         element.classList.remove('nav-collapse-btn');
     })
     
-
-    console.log(allOption);
-
     closeBtn.addEventListener('click',navDivClose);
 
 }
@@ -151,7 +142,6 @@ function navDivClose(){
 }
 
 function logoutFun(){
-    // console.log('test');
     window.location.href = "/logout";
 }
 </script>

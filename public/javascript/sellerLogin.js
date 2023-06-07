@@ -11,12 +11,10 @@ loginBtn.addEventListener('click',function(){
     }
     let obj ={"userName":userValue,"password":pass};
     requestServer('POST','/sellerLogin',obj,function(request){
-        console.log(obj);
         loginBtn.classList.remove('submitted');
         loginBtn.classList.add('submit');
         loginBtn.innerHTML = `Sign in`;
         loginBtn.removeAttribute("disabled");
-        console.log(request.status);
         switch(request.status){
             case 200:{
                 window.location.href = '/home';

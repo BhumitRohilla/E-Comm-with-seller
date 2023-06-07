@@ -355,6 +355,18 @@ header{
     width: 15px;
 }
 
+@media only screen and (max-width: 620px){
+    .svg-window{
+        width: 8px !important;
+    }
+}
+
+@media only screen and (max-width: 420px){
+    .svg-window{
+        width: 4px !important;
+    }
+}
+
 .blue-btn{
     background-color: #264963;
     color: #6abcf0;

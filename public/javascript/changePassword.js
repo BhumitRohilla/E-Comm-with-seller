@@ -14,7 +14,6 @@ submitBtn.addEventListener('click',function(){
         alert("Password are not matching");
     }else{
         requestServerNoDelay('POST','/changePassword',{"password":p1},function(request){
-            console.log(request);
             if(request.status == 200){
                 showErr('Password Changed check your mail');
                 setTimeout(function(){

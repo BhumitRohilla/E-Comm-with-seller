@@ -2,7 +2,6 @@ let errorDiv;
 let errorTimeOut = null;
 
 function rejectOrder(id){
-   console.log(id);
    let request = new XMLHttpRequest;
    request.open('POST',`/sellerPage/order/reject/${id}`);
    request.send();

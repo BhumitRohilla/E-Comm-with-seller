@@ -14,7 +14,6 @@ function increaseQuantity(id){
         if(request.status == 201 ){
             updatePrice();
             let quantitySpan = element.getElementsByClassName('item-quantity')[0];
-            // console.log(quantitySpan);
             quantitySpan.innerText = parseInt(quantitySpan.innerText) + 1;
         }
         if(request.status == 204){
@@ -45,7 +44,6 @@ function orderBtn(){
     request.open('POST','/myCart/orderPlacement');
     request.send();
     request.addEventListener('load',function(){
-        console.log(request.response);
         switch(request.status){
             case 303:{
                 window.history.pushState("", "", "/");

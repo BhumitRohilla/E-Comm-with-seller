@@ -2,17 +2,14 @@ import {requestServerNoDelay} from '/javascript/general.js'
 const showMore = document.getElementById('show-more');
 const itemList = document.getElementById('item-container');
 let errMsg;
-console.log(showMore);
 
 
 
 
 
 showMore.addEventListener('click',function(){
-    console.log(itemList);
     
     requestServerNoDelay('GET','/product/showMore',null,function(request){
-        console.log(request.response);
         if(request.status == 403){
             showMore.style.visibility = "hidden";
         }else{    

@@ -8,7 +8,6 @@ async function findAll(collection,filter){
     }else{
         query = `select * from ${collection} where ${filterString}`;
     }
-    console.log(query);
     return newConnectionSQL(query);
 }
 
@@ -20,7 +19,6 @@ async function findOne(collection,filter){
     }else{
         query = `select TOP(1) * from ${collection} where ${filterString}`;
     }
-    console.log(query);
     return newConnectionSQL(query);
 }
 
@@ -28,10 +26,8 @@ async function findOne(collection,filter){
 async function insertOne(collection,data){
     let keysToAdd = getKeys(data);
     let valuesToAdd = getData(data);
-    console.log(valuesToAdd);
     let query = `insert into ${collection}${keysToAdd} values${valuesToAdd}`;
-    console.log(query);
-    // return newConnectionSQL(query);
+    return newConnectionSQL(query);
 }
 
 function toStringOfObject(obj){

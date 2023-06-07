@@ -20,7 +20,6 @@ submitBtn.addEventListener('click',function(){
     let userName = userNameInput.value.trim();
     let password1 = password1Input.value.trim();
     let password2 = password2Input.value.trim();
-    console.log(email,name,userName,password1,password2);
     if(email == "" || name == "" || userName == "" || password1 == ""|| password2 == ""){
         errThrough("Please enter all the fields",1);
     }
@@ -45,7 +44,6 @@ submitBtn.addEventListener('click',function(){
             submitBtn.classList.add('submit');
             submitBtn.innerHTML = `Submit`;
             submitBtn.removeAttribute("disabled");
-            console.log(request.status);
             switch(request.status){
                 case 200:{
                     errThrough("Account Create Please Varify your email. Redirecting to login page",0);

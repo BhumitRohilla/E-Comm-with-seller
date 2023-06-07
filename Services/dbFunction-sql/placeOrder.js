@@ -16,7 +16,6 @@ async function placeOrder(product,userName){
     }
 
     let paymentKey = crypt.randomBytes(20).toString('hex');
-    console.log(paymentKey);
     let query = `update Orders set paymentKey = '${paymentKey}' where OrderId = ${orderId}`;
     await newConnectionSQL(query);
 

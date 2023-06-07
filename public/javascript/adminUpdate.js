@@ -25,7 +25,6 @@ submitBtn.addEventListener('click',function(evt){
     let about = aboutInput.value.trim();
     let img = imgInput.value.trim();
     let baseUrl = findBaseUrl(url);
-    console.log(baseUrl);
     if( baseUrl=="/sellerPage/addNewProduct" && (title == "" || tag == "" || date == "" || statusProduct == "" || userReviews == "" || price == "" || stock == ""  || about == "" || img == "")){
         alert("Please Enter all the arguments");
         return ;

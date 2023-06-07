@@ -4,34 +4,28 @@ const { getSingleProduct } = require('../dbFunction-sql/productFunc');
 async function getQuantity(pid,userName){
     let query = `select dbo.getQuantity(${pid},'${userName}');`
     let result = await newConnectionSQL(query);
-    console.log(result);
     return result[0][''];
 }
 
 async function addToCartAndRemoveStock(pid,userName){
     let query = `exec addToCartAndRemoveStock ${userName},${pid}`;
     let result = await newConnectionSQL(query);
-    console.log(result);
 }
 
 async function addToCart(pid,userName){
-    //console.log(pid,userName);
     let query = `exec increaseQuantityByOne ${userName}, ${pid}`;
     let result = await newConnectionSQL(query);
-    console.log(result);
 }
 
 async function removeFromCart(pid,userName){
     let query = `exec decreaseQuantityByOne '${userName}', ${pid};`;
     let result = await newConnectionSQL(query);
-    console.log(result);
 }
 
 
 async function getUserCart(userName){
     let query = `select * from cart_item where cartId = (select cartId from cart where userName = '${userName}')`;
     let result = await newConnectionSQL(query);
-    console.log(result);
     let objToReturn = {};
     objToReturn.userName = userName;
     objToReturn.product = {};
@@ -41,7 +35,6 @@ async function getUserCart(userName){
         obj.quantity = element.quantity;
         objToReturn.product[element.ProductId] = obj;
     })
-    // console.log(objToReturn);
     return objToReturn;
 }
 

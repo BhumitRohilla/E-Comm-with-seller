@@ -12,7 +12,7 @@ async function SignUp(req,res){
     }
     
     if(!validEmail(user.email)){
-        return res.status(400).send('Email is inValid');
+        return res.status(400).send('Email is invalid');
     }
 
     if(!validUserName(user.userName)){

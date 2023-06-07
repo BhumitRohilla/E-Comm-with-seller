@@ -169,7 +169,6 @@ function showDetails(element){
     document.body.appendChild(blur);
     element = document.getElementById(element);
     previousData = element.innerHTML;
-    console.log(element);
     
     element.classList.add('onPressed');
     element.classList.remove('container-hover');
@@ -179,7 +178,6 @@ function showDetails(element){
     blur.setAttribute('onclick',`removeDetails('${element.id}')`);
     document.body.style.overflow= "hidden";
     let img = element.getElementsByClassName('img-container')[0];
-    console.log(img);
     let data = element.getElementsByClassName('text-container')[0];
     img.style.width = '70%';
     let aboutGame = element.getElementsByClassName('about-game')[0];
@@ -201,11 +199,9 @@ function showDetails(element){
     errMsg.innerText = "This Is Dummy Text";
     element.appendChild(errMsg);
     element.appendChild(button);
-    console.log(button);
 }
 
 function buy(element,quantitySpan){
-    console.log(element.id);
     let request = new XMLHttpRequest;
     request.open("GET",`/product/buyProduct/${element.id}`);
     request.send();
@@ -221,7 +217,6 @@ function buy(element,quantitySpan){
 }
 
 function removeDetails(element){
-    console.log(element);
     element = document.getElementById(element);
     element.classList.add('container-hover');
     element.classList.remove('onPressed');

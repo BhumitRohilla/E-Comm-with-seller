@@ -60,7 +60,6 @@ function submit(evt){
 
 function deleteSellerBtn(userName){
     let data = JSON.stringify({userName});
-    console.log(data);
     let request = new XMLHttpRequest;
     request.open('POST','/adminDashboard/deleteSeller');
     request.setRequestHeader('Content-Type','application/JSON');

@@ -13,19 +13,15 @@ async function getUser(user){
         query = `select * from users where passwordChange = '${user.passwordChange}'  and role = 'user'`;
     }
     let result = await newConnectionSQL(query);
-    // console.log(query);
-    // console.log(result);
     return result[0];
 }
 
 async function insertUser(user){
-    console.log(user);
     let query = `insert into users([name],userName,password,email,isVarified,[key],role,active) values('${user.name}','${user.userName}','${user.password}','${user.email}',0,'${user.key}','user',1)`;
     try{
         await newConnectionSQL(query);
     }
     catch(err){
-        console.log(err);
         if(err.number){
             throw 401;
         }else{
@@ -53,7 +49,6 @@ async function removePasswordChangeToken(email){
 
 
 async function changePassword(userName,password){
-    console.log(userName,password);
     let query = `update users set password = '${password}' where userName = '${userName}'  and role = 'user'`;
     return newConnectionSQL(query);
 }
